@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    <title>用户信息</title>
+    <link href="../js/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/home.css" rel="stylesheet">
+</head>
+<body>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-12 titleDIV">用户信息</div>
+		</div>
+		<!--  
+		<div class="row">
+			<div class="col-md-12">
+				<button type="button" class="btn btn-success" onclick="download();">导出Excel</button>
+			</div>
+		</div>
+		-->
+		<div class="row">
+			<div class="col-md-12 queryDIV">
+				<form class="form-inline" style="text-align: center;">
+				    <div class="form-group td">
+				    	<label for="userName" class="t1">用户名</label>
+				    	<input type="text" class="form-control t2" id="userName" placeholder="输入要查询的用户名">
+				  	</div>				  
+				  	<div class="form-group td">
+				    	<label for="realName" class="t1">真实姓名</label>
+				    	<input type="text" class="form-control t2" id="realName" placeholder="请输入要查询的真实姓名">
+				  	</div>				 	
+				    <div class="clearfix"></div>
+				    
+				  	<button type="button" class="btn btn-primary" onclick="load('1')">查询</button>
+				  	<button type="reset" class="btn btn-default">清空</button>
+				</form>
+		    </div>
+		</div>
+		<div class="row">
+			<div class="col-md-12 listDIV">
+				<table class="table table-striped table-bordered table-hover">
+					<thead style="background-color: #EEEEEE;">
+						<tr>
+							<th class="col-md-1">序号</th>
+							<th class="col-md-1">用户名</th>
+							<th class="col-md-1">真实姓名</th>
+							<th class="col-md-2">手机号</th>
+							<th class="col-md-2">qq</th>
+							<th class="col-md-2">操作</th>
+						</tr>
+					</thead>
+					<tbody id = "tbody">
+					</tbody>
+				</table>
+				<div id="page" style="float: right;" class="tr"></div>
+			</div>
+		</div>
+	</div>
+    <script src="../js/dist/js/jquery.min.js"></script>
+	<script src="../js/dist/js/bootstrap.min.js"></script>
+	<script src="../js/userInfo/userInfo_list.js"></script>
+</body>
+</html>

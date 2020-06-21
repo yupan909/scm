@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="shortcut icon" href="image/favicon.ico" type="image/x-icon" />
+    <meta http-equiv="Pragma" content="no-cache" />   
+	<meta http-equiv="Cache-Control" content="no-cache" />
+	<meta http-equiv="Expires" content="0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    <title>登录页</title>
+    <link href="js/dist/css/bootstrap.min.css" rel="stylesheet">
+<style type="text/css">
+body{
+	margin:0px 0px;
+	padding: 0px 0px;
+}
+.bg-top{
+ width:100%;
+ margin-top:1px;
+ background-color: #10498c;
+ display: none;
+}
+.bg-main{
+	margin:0px 0px;
+	padding: 0px 0px;
+	width:1260px;
+	height:736px;
+	float:left;
+	background:url("image/gkrl_bj.jpg") no-repeat top center;
+}
+.bg-add{
+  height:736px;
+  float:left;
+  background: url("image/gkrl_bj_01.jpg");
+  display: none;
+}
+.frm{
+	width:400px;
+	margin: 0 auto;
+	margin-top: 320px;
+}
+.left{
+	float: left;
+}
+.right{
+	float: left;
+	margin-left: 2px;
+}
+.login-input_user {
+	background: url("image/gkrl_input_user.png") no-repeat;
+	width: 282px;
+	height: 49px;
+	line-height: 49px;
+}
+.login-input_pw {
+	background: url("image/gkrl_input_pw.png") no-repeat;
+	width: 282px;
+	height: 49px;
+	line-height: 49px;
+}
+.tr{
+	outline:none;
+	border: 0px;
+	height: 40px;
+	line-height: 49px;
+	width: 234px;
+	margin-left: 47px;
+	background: none;
+	font-family: "微软雅黑", Helvetica, sans-serif;
+	font-size: 18px;
+	color: #FFF;
+}
+.register{
+	text-align:center;
+	margin: 0 auto;
+	margin-top: 430px;
+}
+.register a{
+	color:#FFF;
+	cursor: pointer;
+}
+.bq{
+	text-align:center;
+	margin: 0 auto;
+	margin-top: 200px;
+	color:#FFF;
+}
+.bg-notice{
+	height:50px;
+	width:100%;
+	font-size:30px;
+	padding-top: 15px;
+	font-weight: bold;
+}
+.bg-notice > a{
+	cursor:pointer;
+	color: #FFF;
+}
+</style>
+</head>
+<body>
+	<div class="bg-top"></div>
+	<div class="bg-add"></div>
+	<div class="bg-main">
+		<div class="bg-notice">
+			<a onclick="window.open('html/notice/notice_login.html');"><span class="glyphicon glyphicon-bell"></span> 系统通知</a>
+		</div>
+		<form id="frm" action="" class="frm">
+			<div class="left">
+				<div class="login-input_user">
+					<input type="text" class="tr" id="userName" name="userName" value="">
+				</div>
+				<div class="login-input_pw">
+					<input type="password" class="tr" id="password" name="password" value="">
+				</div>
+			</div>
+			<div class="right">
+				<div>
+					<img src="image/gkrl_btn.png" width="98" height="98" style="cursor:pointer" onclick="login();"/>
+				</div>
+			</div>
+		</form>
+		
+		<div class="register">
+			 <a onclick="window.open('register.html');">注册账号</a> ｜  <a onclick="window.open('password.html');">找回密码</a>
+		</div>
+		
+		<div class="bq">
+		</div>
+	</div>
+	<div class="bg-add"></div>
+</body>
+<script src="js/dist/js/jquery.min.js"></script>
+<script src="js/dist/js/bootstrap.min.js"></script>
+<script src="js/layer/layer.js"></script>
+<script src="js/Public.js"></script>
+<script src="js/login.js"></script>
+</html>

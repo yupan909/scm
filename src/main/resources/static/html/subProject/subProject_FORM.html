@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="shortcut icon" href="../../image/favicon.ico" type="image/x-icon" />
+    <meta http-equiv="Pragma" content="no-cache" />   
+	<meta http-equiv="Cache-Control" content="no-cache" />
+	<meta http-equiv="Expires" content="0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    <title>子 课 题</title>
+    <link href="../../js/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../../js/dist/css/bootstrapValidator.min.css" rel="stylesheet">
+    <link href="../../css/form.css" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+	<form id="frm" class="form-inline">
+			
+		  <div class="row">
+			  <div class="col-md-12 title">
+			    	<label>子课题申请 • 评审表</lable>
+			  </div>
+		  </div>	
+		  
+		  <div class="row">
+			  <div class="col-md-12 title2">
+			    	<label>一、基本情况</lable>
+			  </div>
+		  </div>	
+		  
+		  <div class="row">
+		  	  <div class="col-md-2 control-label">
+			    	<label for="year"><label style="color: red;">*</label>课题年份</label>
+		  	  </div>
+			  <div class="col-md-10 form-group">
+			      	<input type="text" class="form-control" style="width: 8% !important;cursor: pointer;" id="year" name = "year" placeholder="" readonly="readonly">
+			  	    <label style="color: red;font-size: 15px;font-weight: normal;">（默认为当前年份，如有修改请点击左侧输入框）</label>
+			  </div>  
+		  </div>
+		  
+		  <div class="row">
+			  	<div class="col-md-2 control-label">
+			    	<label for="ktmc"><label style="color: red;">*</label>课题名称</label>
+				</div>
+			    <div class="col-md-10 form-group">
+			      <input type="text" class="form-control" id="ktmc" name = "ktmc" placeholder="">
+			    </div>
+		  </div>
+		  
+		  <div class="row">
+			  	<div class="col-md-2 control-label">
+			    	<label for="ztc"><label style="color: red;">*</label>主题词</label>
+			  	</div>
+			    <div class="col-md-10 form-group">
+			      <input type="text" class="form-control" id="ztc" name = "ztc" placeholder="">
+			    </div>
+		  </div>
+		  
+		  <div class="row">
+			  <div  class="col-md-2 control-label">
+			    <label for="fzrxm"><label style="color: red;">*</label>负责人姓名</label>
+			  </div>
+			  <div class="col-md-2 form-group">
+			      <input type="text" class="form-control" id="fzrxm" name = "fzrxm" placeholder="">
+			  </div>
+			  
+			  <div class="col-md-1 control-label">
+			    <label for="xb">性别</label>
+			  </div>
+			  <div class="col-md-1 form-group">
+			      <input type="text" class="form-control" id="xb" name = "xb" placeholder="">
+			    	<!-- <select class="form-control" id="xb" name="xb">
+			    		<option>--请选择--</option>
+			    		<option value="1">男</option>
+			    		<option value="2">女</option>
+			    	</select> -->
+			  </div>
+			  
+			  <div class="col-md-1 control-label">
+			    <label for="mz">民族</label>
+			  </div>
+			  <div class="col-md-2 form-group">
+			      <input type="text" class="form-control" id="mz" name = "mz" placeholder="">
+			  </div>
+			  
+			  <div class="col-md-1 control-label">
+			    <label for="csrq">出生日期</label>
+			  </div>
+			  <div class="col-md-2 form-group">
+			      <input type="text" class="form-control" id="csrq" name = "csrq" placeholder="" readonly="readonly">
+			  </div>
+		  </div>
+		  
+		  <div class="row">
+			  <div class="col-md-2 control-label">
+			    <label for="xzzz">行政职务</label>
+			  </div>
+			  <div class="col-md-5 form-group">
+			      <input type="text" class="form-control" id="xzzz" name = "xzzz" placeholder="">
+			  </div>
+			  
+			  <div class="col-md-1 control-label">
+			    <label for="zyzw">专业职务</label>
+			  </div>
+		      <div class="col-md-4 form-group">
+			      <input type="text" class="form-control" id="zyzw" name = "zyzw" placeholder="">
+			  </div>
+		  </div>
+		  
+		  <div class="row">
+		  		<div class="col-md-2 control-label">
+				    <label for="zhxl">最后学历</label>
+		  		</div>
+			    <div class="col-md-5 form-group">
+			      <input type="text" class="form-control" id="zhxl" name = "zhxl" placeholder="">
+			    </div>
+			    
+			    <div class="col-md-1 control-label">
+				    <label for="ssxk">所属学科</label>
+			    </div>
+			    <div class="col-md-4 form-group">
+			      <input type="text" class="form-control" id="ssxk" name = "ssxk" placeholder="">
+			    </div>
+		  </div>
+		  
+		  <div class="row">
+		  		<div class="col-md-3 control-label">
+			    	<label for="szs">所在省（自治区、直辖市）</label>
+		  		</div>
+			    <div class="col-md-9 form-group">
+			      <input type="text" class="form-control" id="szs" name="szs" placeholder="">
+			    </div>
+		  </div>
+		  
+		  <div class="row">
+		  		<div class="col-md-2 control-label">
+				    <label for="gzdw">工作单位</label>
+		  		</div>
+			    <div class="col-md-6 form-group">
+			      <input type="text" class="form-control" id="gzdw" name="gzdw" placeholder="">
+			    </div>
+			    
+			    <div class="col-md-1 control-label">
+				    <label for="dzyx">电子信箱</label>
+			    </div>
+			    <div class="col-md-3 form-group">
+			      <input type="text" class="form-control" id="dzyx" name="dzyx" placeholder="">
+			    </div>
+		  </div>
+		  
+		  <div class="row">
+				<div class="col-md-2 control-label">
+				    <label for="txdz">通讯地址</label>
+				</div>
+			    <div class="col-md-6 form-group">
+			      <input type="text" class="form-control" id="txdz" name="txdz" placeholder="">
+			    </div>
+			    
+			    <div class="col-md-1 control-label">
+				    <label for="yzbm">邮政编码</label>
+			    </div>
+			    <div class="col-md-3 form-group">
+			      <input type="text" class="form-control" id="yzbm" name="yzbm" placeholder="">
+			    </div>
+		  </div>
+		  
+		  <div class="row">
+			  	<div class="col-md-2 control-label">
+				    <label for="lxdh_qh">联系电话（区号）</label>
+			  	</div>
+			    <div class="col-md-1 form-group">
+			      <input type="text" class="form-control" id="lxdh_qh" name="lxdh_qh" placeholder="">
+			    </div>
+			    
+			    <div class="col-md-1 control-label">
+				    <label for="lxdh_dw">（单位）</label>
+			    </div>
+			    <div class="col-md-2 form-group">
+			      <input type="text" class="form-control" id="lxdh_dw" name="lxdh_dw" placeholder="">
+			    </div>
+			    
+			    <div class="col-md-1 control-label">
+				    <label for="lxdh_jt">（家庭）</label>
+			    </div>
+			    <div class="col-md-2 form-group">
+			      <input type="text" class="form-control" id="lxdh_jt" name="lxdh_jt" placeholder="">
+			    </div>
+			    
+			    <div class="col-md-1 control-label">
+				    <label for="lxdh_sj">（手机）</label>
+			    </div>
+			    <div class="col-md-2 form-group">
+			      <input type="text" class="form-control" id="lxdh_sj" name="lxdh_sj" placeholder="">
+			    </div>
+		  </div>
+		  
+		  
+		  <div class="row">
+			  <div class="col-md-12 title3">
+			  	 <label>主 要 参 加 者</label>
+			  </div>
+		  </div>
+		  
+		  <div class="div-tab">
+			  	<div class="row">
+				  	<div class="col-md-1 control-label text_center">
+					    <label>姓名</label>
+				  	</div>
+				  	<div class="col-md-1 control-label text_center" style="width:6% !important;">
+					    <label>性别</label>
+				  	</div>
+				  	<div class="col-md-1 control-label text_center" style="width:12% !important;">
+					    <label>出生年月</label>
+				  	</div>
+				  	<div class="col-md-2 control-label text_center">
+					    <label>专业职务</label>
+				  	</div>
+				  	<div class="col-md-2 control-label text_center">
+					    <label>研究专长</label>
+				  	</div>
+				  	<div class="col-md-1 control-label text_center">
+					    <label>学历</label>
+				  	</div>
+				  	<div class="col-md-1 control-label text_center">
+					    <label>学位</label>
+				  	</div>
+				  	<div class="col-md-3 control-label text_center" style="width:23% !important;">
+					    <label>工  作  单  位</label>
+				  	</div>
+		  		</div>
+			  	<div id="party">
+			  		<div class="row">
+				  		<div class="col-md-1 form-group">
+					      <input type="text" class="form-control" name="partyXm" placeholder="">
+				  		</div>
+					  	<div class="col-md-1 form-group" style="width:6% !important;">
+					      <input type="text" class="form-control" name="partyXb" placeholder="">
+					    </div>
+					  	<div class="col-md-1 form-group" style="width:12% !important;">
+					      <input type="text" class="form-control" name="partyCsny" placeholder="">
+					    </div>
+					  	<div class="col-md-2 form-group">
+					      <input type="text" class="form-control" name="partyZyzw" placeholder="">
+					    </div>
+					  	<div class="col-md-2 form-group">
+					      <input type="text" class="form-control" name="partyYjzc" placeholder="">
+					    </div>
+					  	<div class="col-md-1 form-group">
+					      <input type="text" class="form-control" name="partyXl" placeholder="">
+					    </div>
+					  	<div class="col-md-1 form-group">
+					      <input type="text" class="form-control" name="partyXw" placeholder="">
+					    </div>
+					  	<div class="col-md-3 form-group" style="width:23% !important;">
+					      <input type="text" class="form-control" style="width:90% !important;display:inline;" name="partyGzdw" placeholder="">
+					      <span class="glyphicon glyphicon-plus" style="cursor: pointer;" onclick="Public.addLine(this);"></span>
+					    </div>
+			  		</div>
+			  	</div>
+		  </div>
+		  
+		  <div class="row">
+		  		<div class="col-md-2 control-label">
+				    <label for="password2">预期最终成果</label>
+		  		</div>
+			    <div class="col-md-10 form-group">
+			    	<label class="checkbox-inline">
+	     				 <input type="checkbox" name="yqcg" value="A.专著" style="cursor: pointer;"> A.专著
+	    			</label>
+			    	<label class="checkbox-inline">
+	     				 <input type="checkbox" name="yqcg" value="B.论文" style="cursor: pointer;"> B.论文
+	    			</label>
+			    	<label class="checkbox-inline">
+	     				 <input type="checkbox" name="yqcg" value="C.课堂实录" style="cursor: pointer;"> C.课堂实录
+	    			</label>
+			    	<label class="checkbox-inline">
+	     				 <input type="checkbox" name="yqcg" value="D.研究报告" style="cursor: pointer;"> D.研究报告
+	    			</label>
+			    	<label class="checkbox-inline">
+	     				 <input type="checkbox" name="yqcg" value="E.其他" style="cursor: pointer;"> E.其他
+	    			</label>
+			    </div>
+		  </div>
+		  
+		  <div class="row">
+		  		<div class="col-md-2 control-label">
+				    <label for="jflyjse">经费来源及数额</label>
+		  		</div>
+			    <div class="col-md-5 form-group">
+			      <input type="text" class="form-control" id="jflyjse" name="jflyjse" placeholder="">
+			    </div>
+			    
+			    <div class="col-md-2 control-label">
+				    <label for="yjwcsj">预计完成时间</label>
+			    </div>
+			    <div class="col-md-3 form-group">
+			      <input type="text" class="form-control" id="yjwcsj" name="yjwcsj" placeholder="" readonly="readonly">
+			    </div>
+		  </div>
+		  
+		  <div class="row">
+			  <div class="col-md-12 title2">
+			    	<label>二、课题论证（课题实施方案）</lable>
+			  </div>
+		  </div>
+		  
+		  <div class="row">
+			  <div class="col-md-12 control-label" style="text-align: left !important;">
+			    <label for="ktlz">1、对研究课题的论证：本课题研究的基本内容、重点和难点。</label>
+			  </div>
+		  </div>
+		  <div class="row">
+			    <div class="col-md-12 form-group">
+			    	<textarea class="form-control" rows="3" id="ktlz" name = "ktlz" placeholder=""></textarea>
+			    </div>
+		   </div>
+		  
+		  <div class="row">
+			  <div class="col-md-12 control-label" style="text-align: left !important;">
+			    <label for="sshwctjdlz">2、对课题实施和完成条件的论证：负责人的研究水平、组织能力和时间保证；参加者的研究水平和时间保证；资料设备、科研手段；校内课题组人员分工。</label>
+			  </div>
+		  </div>
+		  <div class="row">
+		    	<div class="col-md-12 form-group">
+		    		<textarea class="form-control" rows="3" id="sshwctjdlz" name = "sshwctjdlz" placeholder=""></textarea>
+		    	</div>
+		  </div>
+		  
+		  <div class="row">
+			  <div class="col-md-12 title2">
+			    	<label >三、预期研究成果</lable>
+			  </div>
+		  </div>
+		  
+		  <div class="row">
+			  <div class="col-md-12 title3">
+			    	<label>主 要 阶 段 性 成 果</lable>
+			  </div>
+		  </div>
+		  
+		  <div class="div-tab">
+			  <div class="row">
+			  	  <!-- 
+			  	 <div class="col-md-1 control-label text_center">
+				    <label>序号</label>
+			  	 </div>
+			  	  -->
+			  	 <div class="col-md-4 control-label text_center">
+				    <label>研究阶段（起止时间）</label>
+			  	 </div>
+			  	 <div class="col-md-3 control-label text_center">
+				    <label>阶段成果名称</label>
+			  	 </div>
+			  	 <div class="col-md-3 control-label text_center">
+				    <label>成果形式</label>
+			  	 </div>
+			  	 <div class="col-md-2 control-label text_center">
+				    <label>承担人</label>
+			  	 </div>
+		  	  </div>
+		  	
+			  <div id="ach-expect">
+			  		<div class="row">
+					  	<input type="hidden" name="achType" value="1">
+					  	<!-- 
+					  	<div class="col-md-1 form-group">
+					      <input type="text" class="form-control" name="achRank" placeholder="">
+					    </div>
+					  	 -->
+					  	<div class="col-md-4 form-group">
+					      <input type="text" class="form-control" name="achYjjd" placeholder="">
+					    </div>
+					  	<div class="col-md-3 form-group">
+					      <input type="text" class="form-control" name="achCgmc" placeholder="">
+					    </div>
+					  	<div class="col-md-3 form-group">
+					      <input type="text" class="form-control" name="achCgxs" placeholder="">
+					    </div>
+					  	<div class="col-md-2 form-group">
+					      <input type="text" class="form-control" name="achCdr" placeholder="" style="width:82% !important;display:inline;">
+					      <span class="glyphicon glyphicon-plus" style="cursor: pointer;" onclick="Public.addLine(this);"></span>
+					    </div>
+			  		</div>
+			  </div>
+		  </div> 	  
+		  
+		  
+		  <div class="row">
+			  <div class="col-md-12 title3">
+			    	<label>最 终 研 究 成 果</lable>
+			  </div>
+		  </div>
+		  
+		  <div class="div-tab">
+		  		<div class="row">
+		  			<!--
+		  			 <div class="col-md-1 control-label text_center">
+					    <label>序号</label>
+				  	 </div>
+				  	 -->
+		  			 <div class="col-md-4 control-label text_center">
+					    <label>完成时间</label>
+				  	 </div>
+		  			 <div class="col-md-3 control-label text_center">
+					    <label>最终成果名称</label>
+				  	 </div>
+		  			 <div class="col-md-3 control-label text_center">
+					    <label>成果形式</label>
+				  	 </div>
+		  			 <div class="col-md-2 control-label text_center">
+					    <label>承担人</label>
+				  	 </div>
+		  		</div>
+				<div id="ach-real">
+			  		<div class="row">
+					  	<input type="hidden" name="achType" value="2">
+					  	<!-- 
+					  	<div class="col-md-1 form-group">
+					      <input type="text" class="form-control" name="achRank" placeholder="">
+					    </div>
+					  	 -->
+					  	<div class="col-md-4 form-group">
+					      <input type="text" class="form-control" name="achYjjd" placeholder="">
+					    </div>
+					  	<div class="col-md-3 form-group">
+					      <input type="text" class="form-control" name="achCgmc" placeholder="">
+					    </div>
+					  	<div class="col-md-3 form-group">
+					      <input type="text" class="form-control" name="achCgxs" placeholder="">
+					    </div>
+					  	<div class="col-md-2 form-group">
+					      <input type="text" class="form-control" name="achCdr" placeholder="" style="width:82% !important;display:inline;">
+					      <span class="glyphicon glyphicon-plus" style="cursor: pointer;" onclick="Public.addLine(this);"></span>
+					    </div>
+			  		</div>
+				</div>
+		  </div>	  
+		  
+		  <input type="hidden" id = "status" name = "status">
+		  <input type="hidden" id = "id" name = "id">
+		  
+		  <div class="row">
+		    	<div class="col-md-12 btnDiv">
+			 		<button type="button" class="btn btn-primary" onclick="saveOrSubmit('0')">保存</button>
+			 		<button type="button" class="btn btn-success" onclick="saveOrSubmit('1')">提交</button>
+			 		<button type="button" class="btn btn-info" onclick="download();">下载</button>
+			 		<button type="button" class="btn btn-default" onclick="window.close();">关闭</button>
+		 	   </div>
+		  </div>
+		  
+	</form>
+</div>
+<script src="../../js/dist/js/jquery.min.js"></script>
+<script src="../../js/dist/js/bootstrap.min.js"></script>
+<script src="../../js/dist/js/bootstrapValidator.min.js"></script>
+<script src="../../js/calendar/WdatePicker.js"></script>
+<script src="../../js/layer/layer.js"></script>
+<script src="../../js/Public.js"></script>
+<script src="../../js/subProject/subProject_pul.js"></script>
+</body>
+</html>

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    <title>消息列表</title>
+    <link href="../../js/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../../css/home.css" rel="stylesheet">
+</head>
+<body>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-12 titleDIV">消 息 列 表</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				<button type="button" class="btn btn-success" onclick="download();">导出Excel</button>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12 queryDIV">
+				<form class="form-inline" style="text-align: center;">
+				    <div class="form-group td">
+				    	<label for="username" class="t1">员工姓名</label>
+				    	<input type="text" class="form-control t2" id="username" placeholder="输入要查询的员工姓名">
+				  	</div>
+				  	<div class="form-group td">
+				    	<label for="approveType" class="t1">审批类型</label>
+				    	<select class="form-control t2" id="approveType">
+					   	 	<option value="">--选择类型--</option>
+					   	 	<option value="01">采购申请单</option>
+					   	 	<option value="02">费用报销申请单</option>
+					   	 </select>
+				 	</div>
+				 	
+				  	<div class="clearfix"></div>
+				  
+				  	<div class="form-group td">
+				    	<label for="creDate" class="t1">创建时间</label>
+				    	<input type="text" class="form-control t2" id="creDate" placeholder="选择时间区间">
+				  	</div>
+				  	<div class="form-group td">
+				    	<label for="subflag" class="t1">状态</label>
+				    	<select class="form-control t2" id="subflag">
+					   	 	<option value="">--选择类型--</option>
+					   	 	<option value="01">审批中</option>
+					   	 	<option value="02">已通过</option>
+					   	 </select>
+				 	</div>
+				 	
+				    <div class="clearfix"></div>
+				    
+				  	<button type="submit" class="btn btn-primary">查询</button>
+				  	<button type="reset" class="btn btn-default">清空</button>
+				</form>
+		    </div>
+		</div>
+		<div class="row">
+			<div class="col-md-12 listDIV">
+				<table class="table table-striped table-bordered table-hover">
+					<thead style="background-color: #EEEEEE;">
+						<tr>
+							<th class="col-md-1">序号</th>
+							<th class="col-md-1">员工</th>
+							<th class="col-md-1">部门</th>
+							<th class="col-md-2">审批类型</th>
+							<th class="col-md-2">创建时间</th>
+							<th class="col-md-2">结束时间</th>
+							<th class="col-md-1">状态</th>
+							<th class="col-md-2">操作</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>1</td>
+							<td>余攀</td>
+							<td>移动办公</td>
+							<td>费用报销申请单</td>
+							<td>2017年02月24日 14:58:40</td>
+							<td>2017年02月24日 14:58:40</td>
+							<td><span class="label label-info">审批中</span></td>
+							<td><button class="btn btn-primary btn-xs" onclick="view();">查看明细</button>  <button class="btn btn-default btn-xs">打印</button></td>
+						</tr>
+						<tr>
+							<td>2</td>
+							<td>余攀</td>
+							<td>移动办公</td>
+							<td>费用报销申请单</td>
+							<td>2017年02月24日 14:58:40</td>
+							<td>2017年02月24日 14:58:40</td>
+							<td><span class="label label-info">审批中</span></td>
+							<td><button class="btn btn-primary btn-xs" onclick="view();">查看明细</button>  <button class="btn btn-default btn-xs">打印</button></td>
+						</tr>
+						<tr>
+							<td>3</td>
+							<td>余攀</td>
+							<td>移动办公</td>
+							<td>费用报销申请单</td>
+							<td>2017年02月24日 14:58:40</td>
+							<td>2017年02月24日 14:58:40</td>
+							<td><span class="label label-success">已通过</span></td>
+							<td><button class="btn btn-primary btn-xs" onclick="view();">查看明细</button>  <button class="btn btn-default btn-xs">打印</button></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+    <script src="../../js/dist/js/jquery.min.js"></script>
+	<script src="../../js/dist/js/bootstrap.min.js"></script>
+	<script src="../../js/lhgdialog/lhgdialog.min.js"></script>
+	<script src="../../js/message/message_list.js"></script>
+</body>
+</html>

@@ -1,0 +1,218 @@
+/* home.html 专用css */
+
+body {
+  padding-top: 60px;
+  font-size: 15px;
+  font-family: "Open Sans", "Microsoft YaHei", "\5FAE\8F6F\96C5\9ED1", "Microsoft JhengHei", "\534E\6587\7EC6\9ED1", STHeiti, MingLiu, sans-serif;
+  background:url("../image/formBackground.png") repeat scroll !important;
+}
+
+.navbar{
+	min-height: 60px;
+}
+/*导航栏背景颜色*/
+.navbar-inverse{
+	background:url("../image/nav.jpg") repeat scroll !important;
+	background-color: #428bca;
+	border-color: #428bca;
+}
+
+.navbar-fixed-top {
+  border: 0;
+}
+
+.div-left{
+	float:left;
+	min-height: 60px;
+	width: 50%;
+	text-align: left;
+	vertical-align: middle;
+	font-size: 24px;
+	padding-top: 10px;
+	color: #fff;
+	font-weight: bold;
+}
+.div-center{
+	float:left;
+	min-height: 60px;
+	width: 25%;
+	text-align: center;
+	font-size: 21px;
+	padding-top: 10px;
+	color: #000;
+}
+.div-right{
+	float:right;
+	min-height: 60px;
+	width: 25%;
+	text-align: right;
+	vertical-align: middle;
+	font-size: 22px;
+	padding-top: 10px;
+	color: #fff;
+	font-weight: bold;
+}
+
+/*
+ * Sidebar
+ */
+.sidebar {
+  position: fixed;
+  top: 61px;
+  bottom: 0;
+  left: 0;
+  z-index: 1000;
+  display: block;
+  padding: 0px 20px;
+  overflow-x: hidden;
+  overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
+  background-color: #f5f5f5;
+  border-right: 1px solid #eee;
+}
+
+/* Sidebar navigation */
+.nav-sidebar {
+  margin-right: -21px; /* 20px padding + 1px border */
+  margin-bottom: 20px;
+  margin-left: -20px;
+}
+.nav-sidebar > li{
+  cursor:pointer;
+  border-bottom: 1px solid #ddd;
+}
+.nav-sidebar > li > a {
+  padding-right: 20px;
+  padding-left: 25px;
+  font-size: 18px;
+}
+.nav-sidebar > .active > a,
+.nav-sidebar > .active > a:hover,
+.nav-sidebar > .active > a:focus {
+  color: #fff;
+  background-color: #428bca;
+}
+
+/*
+  子列表
+*/
+.child_li > a {
+  padding-left: 45px !important;
+  font-size: 17px !important;
+}
+
+/*
+ * Main content
+ */
+
+.main {
+   padding-right: 20px;
+   padding-left: 20px;
+ }
+.main .page-header {
+  margin-top: 0;
+}
+
+
+/*****所有列表公共样式  ************/
+.titleDIV{ /*标题*/
+	padding-top:30px;
+	font-size: 30px;
+	text-align: center;
+	margin-bottom: 20px;
+}
+
+.title2DIV{ /*标题2级*/
+	font-size: 26px;
+	text-align: center;
+}
+
+.newDIV{ /*标题2级*/
+	margin-bottom: 10px;
+}
+
+.queryDIV{ /*查询框*/
+	margin-bottom: 20px;
+}
+.queryDIV form{
+	border: #EEEEEE 2px dashed;
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+.td{
+	width: 40%;
+	text-align: left;
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+.t1{
+	width: 25%;
+	text-align: right;
+}
+.t2{
+	width: 70% !important;
+}
+.date-Input{
+	width: 32% !important;
+}
+
+.listDIV{ /*列表框*/
+	
+}
+.table{
+	text-align: center;
+	vertical-align: middle;
+}
+.table thead tr th{
+	background-color: #428bca;
+	text-align: center;
+	vertical-align: middle;
+	color: #FFF;
+}
+.table tbody tr td{
+	font-size: 13px;
+	text-align: center;
+	vertical-align: middle;
+}
+
+.spz{ /*审批中*/
+	background-color: #35aa47;
+}
+.ytg{ /*已通过*/
+	background-color: #35aa47;
+}
+
+/*通知*/
+.notice-title{
+	padding-top:20px;
+	text-align:center;
+	border-bottom:#FF0000 3px solid;
+	font-size: 45px;
+	font-family: 黑体;
+	font-weight:bold;
+	color:#FF0000;
+}
+.bh{
+	font-size: 24px;
+	font-family: 仿宋;
+	font-weight:normal;
+	color:#000;
+}
+.notice-title2{
+	padding-top:10px;
+	font-size: 30px;
+	font-family: 黑体;
+	font-weight:bold;
+	text-align:center;
+}
+.notice-title3{
+	padding-top:10px;
+	font-size: 22px;
+	font-family: 黑体;
+	font-weight:bold;
+}
+.notice-main{
+	font-size: 20px;
+	font-family: 仿宋;
+	font-weight:normal;
+}
+
