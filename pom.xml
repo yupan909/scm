@@ -6,9 +6,10 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>2.1.4.RELEASE</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <relativePath/> <!--f lookup parent from repository -->
     </parent>
 
+    <packaging>jar</packaging>
     <groupId>com.java</groupId>
     <artifactId>scm</artifactId>
     <version>0.0.1-SNAPSHOT</version>
@@ -69,12 +70,20 @@
             <version>1.2.47</version>
         </dependency>
 
+        <!-- lombok -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.16.18</version>
             <scope>provided</scope>
         </dependency>
+
+        <!-- tk-->
+        <dependency>
+            <groupId>tk.mybatis</groupId>
+            <artifactId>mapper-spring-boot-starter</artifactId>
+            <version>2.0.2</version>
+        </dependency>
+
     </dependencies>
 
     <build>
