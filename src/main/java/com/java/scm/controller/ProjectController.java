@@ -4,10 +4,7 @@ import com.java.scm.bean.Project;
 import com.java.scm.bean.base.BaseResult;
 import com.java.scm.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * todo
@@ -24,7 +21,25 @@ public class ProjectController {
 
     @GetMapping("/getProject/{id}")
     public BaseResult getProject(@PathVariable("id") Long id) {
-        Project project = projectService.getProject(id);
-        return new BaseResult(project);
+        return  projectService.getProject(id);
+    }
+
+    @PostMapping("/save")
+    public BaseResult saveProject(@RequestBody Project project){
+        return null;
+    }
+
+    @PostMapping("/modify")
+    public BaseResult modifyProject(@RequestBody Project project){
+        return null;
+    }
+    @GetMapping("/delete/{id}")
+    public BaseResult deleteProject(@PathVariable("id") Long id){
+        return null;
+    }
+
+    @GetMapping("/list")
+    public BaseResult listProject(String name,int pageNum,int pageSize){
+        return null;
     }
 }
