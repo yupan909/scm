@@ -52,14 +52,14 @@ function login(){
 	$.ajax({
         cache: true,
         type: "POST",
-        url:"userLogin.do",
+        url:"user/login",
         data:$('#frm').serialize(),
         async: false,
         error: function(request) {
         	Public.alert(2,"登录失败，服务器出现异常！");
         },
         success: function(data) {
-        	if(data.status =="ok"){
+        	if(data.flag == true){
         		window.location.href = "html/home.html";
         	}else{
         		Public.alert(2,"用户名或密码有误，登录失败！");

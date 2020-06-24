@@ -37,7 +37,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public BaseResult login(String mobile, String password) {
-        if(StringUtil.isEmpty(mobile) && StringUtil.isNotEmpty(password)){
+        if(StringUtil.isNotEmpty(mobile) && StringUtil.isNotEmpty(password)){
             User query = new User();
             query.setMobile(mobile);
             query.setPassword(password);

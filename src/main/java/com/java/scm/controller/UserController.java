@@ -4,10 +4,12 @@ import com.alibaba.fastjson.JSONObject;
 import com.java.scm.bean.User;
 import com.java.scm.bean.base.BaseResult;
 import com.java.scm.service.UserService;
+import com.java.scm.util.RequestUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * 用户相关 控制器
@@ -24,13 +26,13 @@ public class UserController {
 
     /**
      * 用户登录
-     * @param params
      * @return
      */
     @PostMapping("/login")
-    public BaseResult login(JSONObject params){
-        String mobile = params.getString("mobile");
-        String password = params.getString("password");
+    public BaseResult login(){
+        HttpServletRequest request = RequestUtil.getRequest();
+        String mobile = request.getParameter("mobile");
+        String password = request.getParameter("password");
         return userService.login(mobile,password);
     }
 
