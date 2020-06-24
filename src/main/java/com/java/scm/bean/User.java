@@ -26,7 +26,9 @@ public class User {
 
     private String password;
 
-    private Boolean state;
+    private Byte state;
+
+    private Byte admin;
 
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date createTime;

@@ -3,12 +3,15 @@ package com.java.scm.bean;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
- * 出入库
+ * 出入库表
  *
  * @author yupan
  * @date 2020/6/23 10:44
@@ -23,17 +26,30 @@ import java.util.Date;
 public class InoutStock {
 
     /**
-     *
+     * 出入库Id
      */
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    /**
+     * 仓库id
+     */
     private Integer warehouseId;
 
+    /**
+     * 工程名称
+     */
     private String project;
 
+    /**
+     * 物资名称
+     */
     private String product;
 
+    /**
+     * 物资型号
+     */
     private String model;
 
     private String unit;
@@ -43,6 +59,8 @@ public class InoutStock {
     private String handle;
 
     private String source;
+
+    private BigDecimal price;
 
     private String remark;
 

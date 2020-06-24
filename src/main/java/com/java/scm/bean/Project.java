@@ -2,14 +2,15 @@ package com.java.scm.bean;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
-import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.util.Date;
 
 /**
- * todo
+ * 工程表
  *
  * @author yupan
  * @date 2020-06-23 22:08
@@ -22,18 +23,37 @@ import java.util.Date;
 @Table(name = "project")
 public class Project {
 
+    /**
+     * 工程ID
+     */
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    /**
+     * 工程名称
+     */
     private String name;
 
+    /**
+     * 设计内容
+     */
     private String content;
 
+    /**
+     * 状态 0：启用 1：禁用
+     */
     private Byte state;
 
+    /**
+     * 创建时间
+     */
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date createTime;
 
+    /**
+     * 修改时间
+     */
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date updateTime;
 }

@@ -15,6 +15,7 @@ CREATE TABLE `scm`.`user`(
   `mobile` varchar(11) DEFAULT NULL COMMENT '手机号',
   `password` varchar(20) DEFAULT NULL COMMENT '登陆密码',
   `state` tinyint(1) DEFAULT 0 COMMENT '状态 0：启用 1：禁用',
+  `admin` tinyint(1) DEFAULT 0 COMMENT '状态 0：非管理员 1：管理员',
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间'
 ) COMMENT='用户表';
@@ -40,6 +41,7 @@ CREATE TABLE `scm`.`inout_stock`(
   `count` int(11) DEFAULT NULL COMMENT '数量',
   `handle` varchar(50) DEFAULT NULL COMMENT '经手人',
   `source` varchar(50) DEFAULT NULL COMMENT '物资来源',
+  `price` decimal(10,2) DEFAULT 0 COMMENT '物资单价（元）',
   `remark` varchar(500) DEFAULT NULL COMMENT '备注',
   `type` tinyint(1) DEFAULT 0 COMMENT '类别 0：入库 1：出库',
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
@@ -74,3 +76,7 @@ CREATE TABLE `scm`.`stock_record`(
   `create_user` varchar(50) DEFAULT NULL COMMENT '创建人',
   KEY `idx_stock_id` (`stock_id`)
 ) COMMENT='库存变更记录表';
+
+-- 初始化数据
+insert into `scm`.`user`(name, password, admin) values ('admin', 'admin', 1);
+insert into `scm`.`warehouse`(name) values ('武汉市东西湖区电力设备安装有限公司'), ('湖北得力电气有限公司');
