@@ -1,4 +1,4 @@
-package com.java.scm.config;
+package com.java.scm.bean.base;
 
 /**
  * 返回数据基类

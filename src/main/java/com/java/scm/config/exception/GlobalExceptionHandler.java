@@ -1,6 +1,6 @@
 package com.java.scm.config.exception;
 
-import com.java.scm.config.BaseResult;
+import com.java.scm.bean.base.BaseResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.ControllerAdvice;

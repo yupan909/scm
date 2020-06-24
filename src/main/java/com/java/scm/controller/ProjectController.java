@@ -1,7 +1,7 @@
 package com.java.scm.controller;
 
 import com.java.scm.bean.Project;
-import com.java.scm.config.BaseResult;
+import com.java.scm.bean.base.BaseResult;
 import com.java.scm.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;

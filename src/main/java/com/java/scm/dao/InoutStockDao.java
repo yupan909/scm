@@ -1,16 +1,15 @@
 package com.java.scm.dao;
 
-import com.java.scm.bean.Project;
+import com.java.scm.bean.InoutStock;
 import com.java.scm.tk.TkMapper;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
- * 工程
+ * 出入库
  *
  * @author yupan
- * @date 2020-06-23 22:08
+ * @date 2020-06-24 12:04
  */
 @Mapper
-public interface ProjectDao extends TkMapper<Project> {
-
+public interface InoutStockDao extends TkMapper<InoutStock> {
 }
