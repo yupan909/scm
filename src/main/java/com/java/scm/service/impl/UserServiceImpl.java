@@ -22,7 +22,6 @@ import java.util.List;
 @Slf4j
 @Service
 public class UserServiceImpl implements UserService {
-    private static final String USER = "user";
 
     private static final Byte STOP_USING = (byte) 1;
 
@@ -47,7 +46,7 @@ public class UserServiceImpl implements UserService {
                 if(STOP_USING.equals(user.getState())){
                     throw  new BusinessException("账号已被停用");
                 }else{
-                    RequestUtil.getSession().setAttribute(USER,user);
+                    RequestUtil.setLoginUser(user);
                     BaseResult result = new BaseResult(user);
                     result.setMessage("登录成功");
                     return result;
@@ -62,7 +61,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public BaseResult logout() {
-        RequestUtil.getSession().removeAttribute(USER);
+        RequestUtil.removeLoginUser();
         return new BaseResult(true,"退出登录");
     }
 

@@ -56,6 +56,11 @@
             <version>1.0.0</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
+
         <!--使用阿里的Druid连接池-->
         <dependency>
             <groupId>com.alibaba</groupId>
