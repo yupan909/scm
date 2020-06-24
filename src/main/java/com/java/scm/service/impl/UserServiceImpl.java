@@ -24,7 +24,7 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
     private static final String USER = "user";
 
-    private static final Byte STOP_USING = '1';
+    private static final Byte STOP_USING = (byte) 1;
 
     private static final String NAME = "name";
 
@@ -44,10 +44,14 @@ public class UserServiceImpl implements UserService {
             List<User> users = userDao.select(query);
             if(users !=null && !users.isEmpty()){
                 User user = users.get(0);
-                RequestUtil.getSession().setAttribute(USER,user);
-                BaseResult result = new BaseResult(user);
-                result.setMessage("登录成功");
-                return result;
+                if(STOP_USING.equals(user.getState())){
+                    throw  new BusinessException("账号已被停用");
+                }else{
+                    RequestUtil.getSession().setAttribute(USER,user);
+                    BaseResult result = new BaseResult(user);
+                    result.setMessage("登录成功");
+                    return result;
+                }
             }else{
                 throw  new BusinessException("账号或密码错误");
             }
