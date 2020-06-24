@@ -91,7 +91,7 @@ public class UserController {
      * @return
      */
     @PostMapping("/resetPassword")
-    public BaseResult resetPassword(JSONObject params){
+    public BaseResult resetPassword(@RequestBody JSONObject params){
         Integer id = params.getInteger("id");
         String password = params.getString("password");
         return userService.resetPassword(id,password);
