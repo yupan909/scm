@@ -1,11 +1,16 @@
 package com.java.scm.bean.base;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * 返回数据基类
  *
  * @author yupan
  * @date 2020/6/23 10:44
  */
+@Getter
+@Setter
 public class BaseResult<T> {
 
     /**
@@ -23,6 +28,8 @@ public class BaseResult<T> {
      */
     private String message;
 
+    private int totalCount;
+
     public BaseResult() {
     }
 
@@ -31,35 +38,16 @@ public class BaseResult<T> {
         this.flag = true;
     }
 
+    public BaseResult(T data,int totalCount) {
+        this.data = data;
+        this.totalCount = totalCount;
+        this.flag = true;
+    }
+
     public BaseResult(Boolean flag, String message) {
         this.flag = flag;
         this.message = message;
     }
-
-    public T getData() {
-        return data;
-    }
-
-    public void setData(T data) {
-        this.data = data;
-    }
-
-    public Boolean getFlag() {
-        return flag;
-    }
-
-    public void setFlag(Boolean flag) {
-        this.flag = flag;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
     /**
      * 成功返回
      *
