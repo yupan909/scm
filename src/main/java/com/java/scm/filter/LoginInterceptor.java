@@ -1,12 +1,16 @@
 package com.java.scm.filter;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.java.scm.bean.User;
+import com.java.scm.bean.base.BaseResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 
 /**
  * 登录过滤器
@@ -26,12 +30,32 @@ public class LoginInterceptor  implements HandlerInterceptor{
             if(user!=null){
                 return true;
             }
-            response.sendRedirect(request.getContextPath()+"/login.html");
-        } catch (IOException e) {
+            response.setHeader("sessionstatus","timeout");
+            BaseResult result = new BaseResult(false,"用户未登录");
+            responseOutWithJson(response,result);
+            //response.sendRedirect(request.getContextPath()+"/login.html");
+        } catch (Exception e) {
             log.error(e.getMessage(),e);
-            e.printStackTrace();
         }
         //如果设置为false时，被请求时，拦截器执行到此处将不会继续操作
         return false;
+    }
+
+    /**
+     * 以JSON格式输出
+     * @param response
+     */
+    protected void responseOutWithJson(HttpServletResponse response,
+                                       Object responseObject) {
+        //将实体对象转换为JSON Object转换
+        String re = JSON.toJSONString(responseObject);
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("application/json; charset=utf-8");
+        try (PrintWriter out  = response.getWriter()){
+            out.append(re);
+            out.flush();
+        }catch (IOException e){
+            log.error(e.getMessage(),e);
+        }
     }
 }

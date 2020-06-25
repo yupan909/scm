@@ -116,4 +116,10 @@ public class UserController {
     public BaseResult list(String name,String mobile,int pageNum,int pageSize){
         return userService.list(name,mobile,pageNum,pageSize);
     }
+
+    @GetMapping("/authority")
+    public BaseResult authority(){
+        User user = RequestUtil.getCurrentUser();
+        return  new BaseResult(user);
+    }
 }

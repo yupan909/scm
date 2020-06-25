@@ -67,12 +67,42 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public BaseResult addUser(User user) {
+        User queryMobile = new User();
+        queryMobile.setMobile(user.getMobile());
+        int mobileCount = userDao.selectCount(queryMobile);
+        if(mobileCount > 0){
+            throw new BusinessException("电话号码已存在，电话号码作为用户登陆账号，不可重复");
+        }
+        User queryName = new User();
+        queryMobile.setName(user.getName());
+        int nameCount = userDao.selectCount(queryName);
+        if(nameCount >0){
+            throw new BusinessException("用户姓名已存在，若用户存在重名情况，请使用姓名+编号进行区分");
+        }
         userDao.insert(user);
         return new BaseResult(true,"新增成功");
     }
 
     @Override
     public BaseResult modifyUser(User user) {
+        Example example = new Example(User.class);
+        Example.Criteria criteria =  example.createCriteria();
+        criteria.andNotEqualTo("id",user.getId());
+        criteria.andEqualTo("name",user.getName());
+        int nameCount = userDao.selectCountByExample(example);
+        if(nameCount >0){
+            throw new BusinessException("用户姓名："+user.getName()+"已存在，请修改成其他姓名");
+        }
+
+        Example mobileExample = new Example(User.class);
+        Example.Criteria mobileCriteria =  mobileExample.createCriteria();
+        mobileCriteria.andNotEqualTo("id",user.getId());
+        mobileCriteria.andEqualTo("mobile",user.getMobile());
+        int mobileCount = userDao.selectCountByExample(mobileExample);
+        if(mobileCount >0){
+            throw new BusinessException("电话号码："+user.getMobile()+"已存在，无法使用该电话号码");
+        }
+
         userDao.updateByPrimaryKeySelective(user);
         return new BaseResult(true,"修改成功");
     }
