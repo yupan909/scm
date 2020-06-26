@@ -7,7 +7,7 @@
 	<meta http-equiv="Cache-Control" content="no-cache" />
 	<meta http-equiv="Expires" content="0" />
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
-    <title>入库列表</title>
+    <title>出库列表</title>
 </head>
 <body>
 	<div class="container-fluid">
@@ -16,7 +16,7 @@
 				<button type="button" class="btn btn-primary" onclick="exportTemplate();"><span class="glyphicon glyphicon-save"></span>下载模版</button>
 				<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#importModal"><span class="glyphicon glyphicon-open"></span>导入</button>
 			</div>
-			<div class="col-md-12 titleDIV">入 库 列 表</div>
+			<div class="col-md-12 titleDIV">出 库 列 表</div>
 		</div>
 		<div class="row">
 			<div class="col-md-12 queryDIV">
@@ -30,7 +30,7 @@
 				    	<input type="text" class="form-control t2" id="product" placeholder="输入要查询的物资名称">
 				  	</div>
 				  	<div class="form-group col-md-4">
-				    	<label class="t1">入库时间</label>
+				    	<label class="t1">出库时间</label>
 				    	<input type="text" class="form-control date-Input" id="startDate" name="createtime" placeholder="开始时间" readonly="readonly" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:'#F{$dp.$D(\'endDate\')}'})">
 				    	至 <input type="text" class="form-control date-Input" id="endDate" name="createtime" placeholder="结束时间" readonly="readonly" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'startDate\')}'})">
 				  	</div>
@@ -59,7 +59,7 @@
 							<th class="col-md-1">物资来源</th>
 							<th class="col-md-1">经手人</th>
 							<th class="col-md-1">备注</th>
-							<th class="col-md-1">入库时间</th>
+							<th class="col-md-1">出库时间</th>
 						</tr>
 					</thead>
 					<tbody id="tbody">
@@ -102,6 +102,6 @@
 		</div><!-- /.modal -->
 	</div>
 	
-	<script src="../js/inStock/inStock_list.js"></script>
+	<script src="../js/inStock/outStock_list.js"></script>
 </body>
 </html>

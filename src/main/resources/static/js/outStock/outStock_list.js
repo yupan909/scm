@@ -14,7 +14,7 @@ $.ajaxSetup({
 var curr = 1;
 var pageSize = 20;
 // 出入库区分
-var stockType = 0;
+var stockType = 1;
 $(function(){
 	load(curr);
 });
