@@ -4,7 +4,6 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.java.scm.bean.User;
 import com.java.scm.bean.base.BaseResult;
-import com.java.scm.bean.vo.UserVo;
 import com.java.scm.config.exception.BusinessException;
 import com.java.scm.dao.UserDao;
 import com.java.scm.enums.AdminEnum;
@@ -13,7 +12,6 @@ import com.java.scm.service.UserService;
 import com.java.scm.util.RequestUtil;
 import com.java.scm.util.StringUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.aspectj.weaver.ast.Test;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
@@ -31,12 +29,6 @@ import java.util.Map;
 public class UserServiceImpl implements UserService {
 
     private static final Byte STOP_USING = (byte) 1;
-
-    private static final String NAME = "name";
-
-    private static final String MOBILE = "mobile";
-
-    private static final String ADMIN = "admin";
 
     @Resource
     private UserDao userDao;
