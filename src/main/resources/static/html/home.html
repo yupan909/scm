@@ -9,10 +9,11 @@
 	<meta http-equiv="Expires" content="0" />
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     <title>首页</title>
-    <link href="../js/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="../js/dist/css/bootstrapValidator.min.css" rel="stylesheet">
+    <link href="../js/plugin/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../js/plugin/dist/css/bootstrapValidator.min.css" rel="stylesheet">
     <link href="../css/home.css" rel="stylesheet">
-    <link href="../js/laypage-v1.3/laypage/skin/laypage.css" rel="stylesheet">
+    <link href="../js/plugin/laypage-v1.3/laypage/skin/laypage.css" rel="stylesheet">
+    <link href="../js/plugin/File-Upload/css/jquery.fileupload.css" rel="stylesheet">
 </head>
 <body>
 	<!-- 导航栏 -->
@@ -30,11 +31,11 @@
         <div class="col-md-1 sidebar">
           <ul class="nav nav-sidebar">
 
-            <li name="inStock" class="normal" id="inStock/inStock_list.html"><a><span class="glyphicon glyphicon-th-list"></span> 入库管理</a></li>
-            <li name="outStock" class="normal" id="outStock/outStock_list.html"><a><span class="glyphicon glyphicon-th-list"></span> 出库管理</a></li>
-            <li name="stock" class="normal" id="stock/stock_list.html"><a><span class="glyphicon glyphicon-th-list"></span> 库存管理</a></li>
-            <li name="project" class="normal" id="project/project_list.html"><a><span class="glyphicon glyphicon-th-list"></span> 工程管理</a></li>
+            <li name="inStock" class="normal" id="inStock/inStock_list.html"><a><span class="glyphicon glyphicon-list-alt"></span> 入库管理</a></li>
+            <li name="outStock" class="normal" id="outStock/outStock_list.html"><a><span class="glyphicon glyphicon-file"></span> 出库管理</a></li>
+            <li name="stock" class="normal" id="stock/stock_list.html"><a><span class="glyphicon glyphicon-align-justify"></span> 库存管理</a></li>
             <li name="report" class="normal" id="report/report_list.html"><a><span class="glyphicon glyphicon-th-list"></span> 报表管理</a></li>
+            <li name="project" class="normal" id="project/project_list.html"><a><span class="glyphicon glyphicon-th-large"></span> 工程管理</a></li>
             <li name="user" class="admin" id="userInfo/userInfo_list.html"><a><span class="glyphicon glyphicon-user"></span> 人员管理</a></li>
           </ul>
         </div>
@@ -46,13 +47,16 @@
       </div>
     </div>
     
-    <script src="../js/dist/js/jquery.min.js"></script>
-	<script src="../js/dist/js/bootstrap.min.js"></script>
-	<script src="../js/dist/js/bootstrapValidator.min.js"></script>
-	<script src="../js/calendar/WdatePicker.js"></script>
-	<script src="../js/layer/layer.js"></script>
+    <script src="../js/plugin/dist/js/jquery.min.js"></script>
+	<script src="../js/plugin/dist/js/bootstrap.min.js"></script>
+	<script src="../js/plugin/dist/js/bootstrapValidator.min.js"></script>
+	<script src="../js/plugin/calendar/WdatePicker.js"></script>
+	<script src="../js/plugin/layer/layer.js"></script>
+	<script src="../js/plugin/laypage-v1.3/laypage/laypage.js"></script>
+    <script src="../js/plugin/File-Upload/js/vendor/jquery.ui.widget.js"></script>
+    <script src="../js/plugin/File-Upload/js/jquery.iframe-transport.js"></script>
+    <script src="../js/plugin/File-Upload/js/jquery.fileupload.js"></script>
 	<script src="../js/Public.js"></script>
 	<script src="../js/home.js"></script>
-	<script src="../js/laypage-v1.3/laypage/laypage.js"></script>
 </body>
 </html>

@@ -2,7 +2,7 @@
 
 body {
   padding-top: 60px;
-  font-size: 12px;
+  font-size: 13px;
   font-family: "Open Sans", "Microsoft YaHei", "\5FAE\8F6F\96C5\9ED1", "Microsoft JhengHei", "\534E\6587\7EC6\9ED1", STHeiti, MingLiu, sans-serif;
   background:url("../image/formBackground.png") repeat scroll !important;
 }
@@ -105,8 +105,8 @@ body {
  */
 
 .main {
-   padding-right: 20px;
-   padding-left: 20px;
+   padding-right: 10px;
+   padding-left: 10px;
  }
 .main .page-header {
   margin-top: 0;
@@ -115,7 +115,7 @@ body {
 
 /*****所有列表公共样式  ************/
 .titleDIV{ /*标题*/
-	padding-top:10px;
+	padding-top:5px;
 	font-size: 25px;
 	text-align: center;
 	margin-bottom: 10px;
@@ -132,15 +132,13 @@ body {
 
 .queryDIV{ /*查询框*/
 	margin-bottom: 10px;
+	text-align: center;
 }
 .queryDIV form{
-	border: #EEEEEE 2px dashed;
 	padding-top: 5px;
 	padding-bottom: 5px;
 }
 .td{
-	width: 40%;
-	text-align: left;
 	padding-top: 10px;
 	padding-bottom: 10px;
 }
@@ -155,8 +153,17 @@ body {
 	width: 32% !important;
 }
 
+.optDIV {
+	text-align: left;
+	padding-top: 10px;
+}
+.buttonDIV { /*按钮框*/
+	text-align: center;
+	padding-top: 10px;
+}
+
 .listDIV{ /*列表框*/
-	
+
 }
 .table{
 	text-align: center;
@@ -214,5 +221,8 @@ body {
 	font-size: 20px;
 	font-family: 仿宋;
 	font-weight:normal;
+}
+.modal-form{
+	padding: 5% 15%;
 }
 

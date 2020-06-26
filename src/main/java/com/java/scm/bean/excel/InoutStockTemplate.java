@@ -17,13 +17,13 @@ public class InoutStockTemplate {
     @Excel(name = "序号", orderNum = "0")
     private String num;
 
-    @Excel(name = "工程名称", orderNum = "1")
+    @Excel(name = "工程名称", orderNum = "1", width = 40.0D)
     private String project;
 
-    @Excel(name = "物资名称", orderNum = "2")
+    @Excel(name = "物资名称", orderNum = "2", width = 30.0D)
     private String product;
 
-    @Excel(name = "物资型号", orderNum = "3")
+    @Excel(name = "物资型号", orderNum = "3", width = 20.0D)
     private String model;
 
     @Excel(name = "单位", orderNum = "4")
@@ -32,10 +32,10 @@ public class InoutStockTemplate {
     @Excel(name = "数量", orderNum = "5")
     private String count;
 
-    @Excel(name = "物资单价（元）", orderNum = "6")
+    @Excel(name = "物资单价（元）", orderNum = "6", width = 20.0D)
     private String price;
 
-    @Excel(name = "物资来源", orderNum = "7")
+    @Excel(name = "物资来源", orderNum = "7", width = 20.0D)
     private String source;
 
     @Excel(name = "经手人", orderNum = "8")

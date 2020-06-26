@@ -1,7 +1,6 @@
 package com.java.scm.dao;
 
 import com.java.scm.bean.User;
-import com.java.scm.bean.vo.UserVo;
 import com.java.scm.tk.TkMapper;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Component;

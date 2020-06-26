@@ -12,32 +12,35 @@
 <body>
 	<div class="container-fluid">
 		<div class="row">
+			<div class="col-md-12 optDIV">
+				<button type="button" class="btn btn-primary" onclick="exportTemplate();"><span class="glyphicon glyphicon-save"></span>下载模版</button>
+				<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#importModal"><span class="glyphicon glyphicon-open"></span>导入</button>
+			</div>
 			<div class="col-md-12 titleDIV">入 库 列 表</div>
 		</div>
 		<div class="row">
 			<div class="col-md-12 queryDIV">
-				<form class="form-inline" style="text-align: center;">
-				    <div class="form-group td">
+				<form class="form-inline">
+				    <div class="form-group col-md-4">
 				    	<label for="project" class="t1">工程名称</label>
 				    	<input type="text" class="form-control t2" id="project" placeholder="输入要查询的工程名称">
 				  	</div>
-				    <div class="form-group td">
+				    <div class="form-group col-md-4">
 				    	<label for="product" class="t1">物资名称</label>
 				    	<input type="text" class="form-control t2" id="product" placeholder="输入要查询的物资名称">
 				  	</div>
-				 	
-				  	<div class="clearfix"></div>
-				  
-				  	<div class="form-group td">
+				  	<div class="form-group col-md-4">
 				    	<label class="t1">入库时间</label>
 				    	<input type="text" class="form-control date-Input" id="startDate" name="createtime" placeholder="开始时间" readonly="readonly" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:'#F{$dp.$D(\'endDate\')}'})">
 				    	至 <input type="text" class="form-control date-Input" id="endDate" name="createtime" placeholder="结束时间" readonly="readonly" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'startDate\')}'})">
 				  	</div>
-				 	
+
 				    <div class="clearfix"></div>
-				    
-				  	<button type="button" class="btn btn-primary" onclick="load('1')">查询</button>
-				  	<button type="reset" class="btn btn-default">清空</button>
+
+					<div class="buttonDIV">
+						<button type="button" class="btn btn-primary" onclick="load('1')">查询</button>
+						<button type="reset" class="btn btn-default">清空</button>
+					</div>
 				</form>
 		    </div>
 		</div>
@@ -65,6 +68,38 @@
 				<div id="page" style="float: right;" class="tr"></div>
 			</div>
 		</div>
+	</div>
+
+	<!-- 导入文件模态框 -->
+	<div class="modal fade" id="importModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+						&times;
+					</button>
+					<h4 class="modal-title" id="myModalLabel">
+						导入文件
+					</h4>
+				</div>
+				<div class="modal-body">
+
+					<form id="uploadForm" class="modal-form" enctype="multipart/form-data">
+						<div class="form-group">
+							<div class="col-md-12">
+								<input type="file" class="form-control" id="file" name="file" accept=".xls, .xlsx">
+							</div>
+						</div>
+					</form>
+
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+					<button type="button" class="btn btn-primary" onclick="importFile()">导入</button>
+				</div>
+			</div><!-- /.modal-content -->
+		</div><!-- /.modal -->
 	</div>
 	
 	<script src="../js/inStock/inStock_list.js"></script>

@@ -72,21 +72,36 @@ function load(cnt){
     });
 }
 
-//查看
-function view(id){
-	if(id==""||id=="undefined"){
-		Public.alert(2,"查看出现异常！");   
-	}else{
-		window.open("region/region_FORM.html?id="+id);
-	}
+/**
+ * 下载模版
+ */
+function exportTemplate(){
+    window.location.href="../inoutStock/exportTemplate/0";
 }
 
-//下载
-function download(id){
-	if(id==""||id=="undefined"){
-		Public.alert(2,"下载出现异常！");   
-	}else{
-		window.location.href="../downloadRegion.do?id="+id;	
-	}
+/**
+ * 导入
+ */
+function importFile() {
+    var formData = new FormData($('#uploadForm')[0]);
+    $.ajax({
+        type: "POST",
+        url:"../inoutStock/import/0",
+        data: formData,
+        processData: false,
+        contentType: false,
+        async: false,
+        error: function(request) {
+            Public.alert(2,"上传出现异常！");
+        },
+        success: function(data) {
+            if(data.flag == true){
+                $('#importModal').modal('hide');
+                Public.alert(1,"导入成功！");
+                load(1);
+            }else{
+                Public.alert(2, data.message);
+            }
+        }
+    });
 }
-
