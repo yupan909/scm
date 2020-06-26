@@ -13,7 +13,7 @@ import com.java.scm.bean.so.InoutStockSO;
 public interface InoutStockService {
 
     /**
-     * 出入库列表
+     * 查询出入库列表
      * @return
      */
     PageInfo<InoutStock> listInoutStock(InoutStockSO inoutStockSO);
@@ -21,6 +21,6 @@ public interface InoutStockService {
     /**
      * 新增出入库
      */
-    void insertInoutStock(InoutStock inoutStock);
+    Long insertInoutStock(InoutStock inoutStock);
 
 }
