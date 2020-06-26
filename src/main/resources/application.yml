@@ -6,6 +6,11 @@ spring:
   application:
     name: scm # 应用名称
 
+  # excel导入导出功能需要此配置，不然启动报错
+  main:
+    allow-bean-definition-overriding: true
+
+
   # ========= 数据源配置
   datasource:
     # 基本配置

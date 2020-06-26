@@ -62,9 +62,8 @@ function login(){
         	if(data.flag == true){
         		window.location.href = "html/home.html";
         	}else{
-        		Public.alert(2,"用户名或密码有误，登录失败！");
+        		Public.alert(2, data.message);
         	}
-        	
         }
     });
 	

@@ -18,7 +18,7 @@
 	<!-- 导航栏 -->
 	<nav class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container-fluid">
-			<div class="div-left"><span class="glyphicon glyphicon-home"></span> 中国教育装备行业协会创造教育分会课题申报系统</div>
+			<div class="div-left"><span class="glyphicon glyphicon-home"></span> XX仓库管理系统</div>
 			<div class="div-center" id = "currentTimeInfo"></div>
 			<div class="div-right"><span style="padding-right: 5px" id = "currentUserName"></span>欢迎您！<a href="javascript:void(0)" onclick="loginOut()" style="color: #CCC;">退出</a></div>
 		</div>
@@ -27,51 +27,20 @@
 	<div class="container-fluid">
       <div class="row">
       	<!-- 左侧列表 -->
-        <div class="col-md-2 sidebar">
+        <div class="col-md-1 sidebar">
           <ul class="nav nav-sidebar">
-              <!--
-            <li class="active" id="notice/notice.html"><a><span class="glyphicon glyphicon-comment"></span> 系统通知</a></li>
-            
-            <li id="message/message_list.html"><a><span class="glyphicon glyphicon-envelope"></span> 我的消息 <span id="msg_count" class="badge" style="display:none; background-color: red;">0</span></a></li>
-            -->
-              <!--
-            <li name="subProject"><a><span class="glyphicon glyphicon-list-alt"></span> 申报子课题<span style="margin-left: 28px;" class="glyphicon glyphicon-menu-down"></span></a></li>
-            	<li name="subProject" class="child_li normal" style="display: none;" id="subProject/subProject_normal_cg_list.html"><a><span class="glyphicon glyphicon-minus"></span> 草稿箱列表</a></li>
-            	<li name="subProject" class="child_li normal" style="display: none;" id="subProject/subProject_normal_db_list.html"><a><span class="glyphicon glyphicon-minus"></span> 审核不通过</a></li>
-            	<li name="subProject" class="child_li normal" style="display: none;" id="subProject/subProject_normal_notpass_list.html"><a><span class="glyphicon glyphicon-minus"></span> 已提交列表</a></li>
-            	<li name="subProject" class="child_li normal" style="display: none;" id="subProject/subProject_normal_pass_list.html"><a><span class="glyphicon glyphicon-minus"></span> 已通过列表</a></li>
-            	<li name="subProject" class="child_li admin" style="display: none;" id="subProject/subProject_admin_db_list.html"><a><span class="glyphicon glyphicon-minus"></span> 待审核列表</a></li>
-            	<li name="subProject" class="child_li admin" style="display: none;" id="subProject/subProject_admin_notpass_list.html"><a><span class="glyphicon glyphicon-minus"></span> 审核不通过</a></li>
-            	<li name="subProject" class="child_li admin" style="display: none;" id="subProject/subProject_admin_pass_list.html"><a><span class="glyphicon glyphicon-minus"></span> 审核已通过</a></li>
-            	-->
-           <!-- 
-            <li name="school"><a><span class="glyphicon glyphicon-list-alt"></span> 申报实验学校&nbsp;&nbsp;<span class="glyphicon glyphicon-menu-down"></span></a></a></li>
-            	<li name="school" class="child_li normal" style="display: none;" id="school/school_normal_cg_list.html"><a><span class="glyphicon glyphicon-minus"></span> 草稿箱列表</a></li>
-            	<li name="school" class="child_li normal" style="display: none;" id="school/school_normal_db_list.html"><a><span class="glyphicon glyphicon-minus"></span> 审核不通过</a></li>
-            	<li name="school" class="child_li normal" style="display: none;" id="school/school_normal_notpass_list.html"><a><span class="glyphicon glyphicon-minus"></span> 已提交列表</a></li>
-            	<li name="school" class="child_li normal" style="display: none;" id="school/school_normal_pass_list.html"><a><span class="glyphicon glyphicon-minus"></span> 已通过列表</a></li>
-            	<li name="school" class="child_li admin" style="display: none;" id="school/school_admin_db_list.html"><a><span class="glyphicon glyphicon-minus"></span> 待审核列表</a></li>
-            	<li name="school" class="child_li admin" style="display: none;" id="school/school_admin_notpass_list.html"><a><span class="glyphicon glyphicon-minus"></span> 审核未通过</a></li>
-            	<li name="school" class="child_li admin" style="display: none;" id="school/school_admin_pass_list.html"><a><span class="glyphicon glyphicon-minus"></span> 审核已通过</a></li>
-             -->
-              <!--
-            <li name="region"><a><span class="glyphicon glyphicon-list-alt"></span> 申报实验区<span style="margin-left: 28px;" class="glyphicon glyphicon-menu-down"></span></a></a></li>
-            	<li name="region" class="child_li normal" style="display: none;" id="region/region_normal_cg_list.html"><a><span class="glyphicon glyphicon-minus"></span> 草稿箱列表</a></li>
-            	<li name="region" class="child_li normal" style="display: none;" id="region/region_normal_db_list.html"><a><span class="glyphicon glyphicon-minus"></span> 审核不通过</a></li>
-            	<li name="region" class="child_li normal" style="display: none;" id="region/region_normal_notpass_list.html"><a><span class="glyphicon glyphicon-minus"></span> 已提交列表</a></li>
-            	<li name="region" class="child_li normal" style="display: none;" id="region/region_normal_pass_list.html"><a><span class="glyphicon glyphicon-minus"></span> 已通过列表</a></li>
-            	<li name="region" class="child_li admin" style="display: none;" id="region/region_admin_db_list.html"><a><span class="glyphicon glyphicon-minus"></span> 待审核列表</a></li>
-            	<li name="region" class="child_li admin" style="display: none;" id="region/region_admin_notpass_list.html"><a><span class="glyphicon glyphicon-minus"></span> 审核不通过</a></li>
-            	<li name="region" class="child_li admin" style="display: none;" id="region/region_admin_pass_list.html"><a><span class="glyphicon glyphicon-minus"></span> 审核已通过</a></li>
 
-            <li class="normal" id="userInfo/userInfo_form.html"><a><span class="glyphicon glyphicon-user"></span> 个人信息</a></li>
-           -->
-            <li class="admin" id="userInfo/userInfo_list.html"><a><span class="glyphicon glyphicon-th-list"></span> 用户信息</a></li>
+            <li name="inStock" class="normal" id="inStock/inStock_list.html"><a><span class="glyphicon glyphicon-th-list"></span> 入库管理</a></li>
+            <li name="outStock" class="normal" id="outStock/outStock_list.html"><a><span class="glyphicon glyphicon-th-list"></span> 出库管理</a></li>
+            <li name="stock" class="normal" id="stock/stock_list.html"><a><span class="glyphicon glyphicon-th-list"></span> 库存管理</a></li>
+            <li name="project" class="normal" id="project/project_list.html"><a><span class="glyphicon glyphicon-th-list"></span> 工程管理</a></li>
+            <li name="report" class="normal" id="report/report_list.html"><a><span class="glyphicon glyphicon-th-list"></span> 报表管理</a></li>
+            <li name="user" class="admin" id="userInfo/userInfo_list.html"><a><span class="glyphicon glyphicon-user"></span> 人员管理</a></li>
           </ul>
         </div>
         
         <!-- 右侧主内容 -->
-        <div class="col-md-10 col-md-offset-2 main">
+        <div class="col-md-11 col-md-offset-1 main">
         </div>
         
       </div>

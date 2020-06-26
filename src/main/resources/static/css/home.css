@@ -2,7 +2,7 @@
 
 body {
   padding-top: 60px;
-  font-size: 15px;
+  font-size: 12px;
   font-family: "Open Sans", "Microsoft YaHei", "\5FAE\8F6F\96C5\9ED1", "Microsoft JhengHei", "\534E\6587\7EC6\9ED1", STHeiti, MingLiu, sans-serif;
   background:url("../image/formBackground.png") repeat scroll !important;
 }
@@ -81,9 +81,9 @@ body {
   border-bottom: 1px solid #ddd;
 }
 .nav-sidebar > li > a {
-  padding-right: 20px;
-  padding-left: 25px;
-  font-size: 18px;
+  padding-right: 15px;
+  padding-left: 15px;
+  font-size: 15px;
 }
 .nav-sidebar > .active > a,
 .nav-sidebar > .active > a:hover,
@@ -97,7 +97,7 @@ body {
 */
 .child_li > a {
   padding-left: 45px !important;
-  font-size: 17px !important;
+  font-size: 15px !important;
 }
 
 /*
@@ -115,14 +115,14 @@ body {
 
 /*****所有列表公共样式  ************/
 .titleDIV{ /*标题*/
-	padding-top:30px;
-	font-size: 30px;
+	padding-top:10px;
+	font-size: 25px;
 	text-align: center;
-	margin-bottom: 20px;
+	margin-bottom: 10px;
 }
 
 .title2DIV{ /*标题2级*/
-	font-size: 26px;
+	font-size: 20px;
 	text-align: center;
 }
 
@@ -131,12 +131,12 @@ body {
 }
 
 .queryDIV{ /*查询框*/
-	margin-bottom: 20px;
+	margin-bottom: 10px;
 }
 .queryDIV form{
 	border: #EEEEEE 2px dashed;
-	padding-top: 10px;
-	padding-bottom: 10px;
+	padding-top: 5px;
+	padding-bottom: 5px;
 }
 .td{
 	width: 40%;
@@ -169,7 +169,7 @@ body {
 	color: #FFF;
 }
 .table tbody tr td{
-	font-size: 13px;
+	font-size: 14px;
 	text-align: center;
 	vertical-align: middle;
 }
