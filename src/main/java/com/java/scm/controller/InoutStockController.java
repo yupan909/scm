@@ -81,7 +81,7 @@ public class InoutStockController {
         }
 
         // 获取当前登陆用户
-        User user = RequestUtil.getLoginUser();
+        User user = RequestUtil.getCurrentUser();
 
         // 保存数据
         for (InoutStockTemplate template : importList) {
