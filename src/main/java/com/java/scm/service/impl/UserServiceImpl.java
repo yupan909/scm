@@ -22,9 +22,8 @@ import java.util.List;
 @Slf4j
 @Service
 public class UserServiceImpl implements UserService {
-    private static final String USER = "user";
 
-    private static final Byte STOP_USING = '1';
+    private static final Byte STOP_USING = (byte) 1;
 
     private static final String NAME = "name";
 
@@ -44,10 +43,14 @@ public class UserServiceImpl implements UserService {
             List<User> users = userDao.select(query);
             if(users !=null && !users.isEmpty()){
                 User user = users.get(0);
-                RequestUtil.getSession().setAttribute(USER,user);
-                BaseResult result = new BaseResult(user);
-                result.setMessage("登录成功");
-                return result;
+                if(STOP_USING.equals(user.getState())){
+                    throw  new BusinessException("账号已被停用");
+                }else{
+                    RequestUtil.setLoginUser(user);
+                    BaseResult result = new BaseResult(user);
+                    result.setMessage("登录成功");
+                    return result;
+                }
             }else{
                 throw  new BusinessException("账号或密码错误");
             }
@@ -58,18 +61,48 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public BaseResult logout() {
-        RequestUtil.getSession().removeAttribute(USER);
+        RequestUtil.removeLoginUser();
         return new BaseResult(true,"退出登录");
     }
 
     @Override
     public BaseResult addUser(User user) {
+        User queryMobile = new User();
+        queryMobile.setMobile(user.getMobile());
+        int mobileCount = userDao.selectCount(queryMobile);
+        if(mobileCount > 0){
+            throw new BusinessException("电话号码已存在，电话号码作为用户登陆账号，不可重复");
+        }
+        User queryName = new User();
+        queryMobile.setName(user.getName());
+        int nameCount = userDao.selectCount(queryName);
+        if(nameCount >0){
+            throw new BusinessException("用户姓名已存在，若用户存在重名情况，请使用姓名+编号进行区分");
+        }
         userDao.insert(user);
         return new BaseResult(true,"新增成功");
     }
 
     @Override
     public BaseResult modifyUser(User user) {
+        Example example = new Example(User.class);
+        Example.Criteria criteria =  example.createCriteria();
+        criteria.andNotEqualTo("id",user.getId());
+        criteria.andEqualTo("name",user.getName());
+        int nameCount = userDao.selectCountByExample(example);
+        if(nameCount >0){
+            throw new BusinessException("用户姓名："+user.getName()+"已存在，请修改成其他姓名");
+        }
+
+        Example mobileExample = new Example(User.class);
+        Example.Criteria mobileCriteria =  mobileExample.createCriteria();
+        mobileCriteria.andNotEqualTo("id",user.getId());
+        mobileCriteria.andEqualTo("mobile",user.getMobile());
+        int mobileCount = userDao.selectCountByExample(mobileExample);
+        if(mobileCount >0){
+            throw new BusinessException("电话号码："+user.getMobile()+"已存在，无法使用该电话号码");
+        }
+
         userDao.updateByPrimaryKeySelective(user);
         return new BaseResult(true,"修改成功");
     }

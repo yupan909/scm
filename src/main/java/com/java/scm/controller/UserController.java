@@ -1,6 +1,7 @@
 package com.java.scm.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.java.scm.aop.anno.AdminRight;
 import com.java.scm.bean.User;
 import com.java.scm.bean.base.BaseResult;
 import com.java.scm.service.UserService;
@@ -52,6 +53,7 @@ public class UserController {
      * @return
      */
     @PostMapping("/add")
+    @AdminRight
     public BaseResult addUser(@RequestBody User user){
         return userService.addUser(user);
     }
@@ -62,6 +64,7 @@ public class UserController {
      * @return
      */
     @PostMapping("/modify")
+    @AdminRight
     public BaseResult modifyUser(@RequestBody User user){
         return userService.modifyUser(user);
     }
@@ -71,6 +74,7 @@ public class UserController {
      * @return
      */
     @GetMapping("/stopUsing/{id}")
+    @AdminRight
     public BaseResult stopUsing(@PathVariable("id") Integer id){
         return userService.stopUsing(id);
     }
@@ -81,6 +85,7 @@ public class UserController {
      * @return
      */
     @GetMapping("/delete/{id}")
+    @AdminRight
     public BaseResult deleteUser(@PathVariable("id") Integer id){
         return userService.deleteUser(id);
     }
@@ -91,6 +96,7 @@ public class UserController {
      * @return
      */
     @PostMapping("/resetPassword")
+    @AdminRight
     public BaseResult resetPassword(@RequestBody JSONObject params){
         Integer id = params.getInteger("id");
         String password = params.getString("password");
@@ -106,7 +112,14 @@ public class UserController {
      * @return
      */
     @GetMapping("/list")
+    @AdminRight
     public BaseResult list(String name,String mobile,int pageNum,int pageSize){
         return userService.list(name,mobile,pageNum,pageSize);
+    }
+
+    @GetMapping("/authority")
+    public BaseResult authority(){
+        User user = RequestUtil.getCurrentUser();
+        return  new BaseResult(user);
     }
 }

@@ -16,6 +16,8 @@ import javax.servlet.http.HttpSession;
 @Slf4j
 public class RequestUtil {
 
+    private static final String USER = "user";
+
     public static HttpServletRequest getRequest() {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         return request;
@@ -27,11 +29,19 @@ public class RequestUtil {
         return session;
     }
 
-    public static User getLoginUser() {
-         User user = (User)getSession().getAttribute("user");
-         if (user == null) {
-             throw new BusinessException("获取用户信息失败！");
-         }
-         return user;
+    public static User getCurrentUser(){
+        User user = (User)getSession().getAttribute(USER);
+        if (user == null) {
+            throw new BusinessException("获取用户信息失败！");
+        }
+        return user;
+    }
+
+    public static void setLoginUser(User user){
+        getSession().setAttribute(USER,user);
+    }
+
+    public static void removeLoginUser(){
+        getSession().removeAttribute(USER);
     }
 }

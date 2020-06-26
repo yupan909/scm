@@ -2,7 +2,7 @@ $.ajaxSetup({
     contentType:"application/x-www-form-urlencoded;charset=utf-8",     
     complete:function(XMLHttpRequest,textStatus){   
      //通过XMLHttpRequest取得响应头，sessionstatus，    
-      var sessionstatus=XMLHttpRequest.getResponseHeader("sessionstatus");   
+      var sessionstatus=XMLHttpRequest.getResponseHeader("sessionstatus");
              if(sessionstatus=="timeout"){  
             	 Public.alert(3,"用户信息过期,请重新登录！",function(){
  					window.location.href="../login.html";
@@ -15,8 +15,8 @@ $.ajaxSetup({
 function loginOut(){
 	$.ajax({
         cache: true,
-        type: "POST",
-        url:"../loginOut.do",
+        type: "GET",
+        url:"../user/logout",
         async: false,
         error: function(request) {
         	Public.alert(2,"服务器出现异常！");
@@ -35,26 +35,26 @@ $(function(){
      */
 	$.ajax({
         cache: true,
-        type: "POST",
-        url:"../authority.do",
+        type: "GET",
+        url:"../user/authority",
         async: false,
         error: function(request) {
         	Public.alert(2,"服务器出现异常！");
         },
         success: function(data) {
-        	if(data.isAdmin == "Y"){
-        		$(".normal").remove();
-        	}else if(data.isAdmin == "N"){
-        		$(".admin").remove();
-        	}
-        	$("#currentUserName").html(data.realName);
-        	var now = new Date();
-        	var weekNum = now.getDay(); //当月第一天星期几
-        	var week = new Array("星期日","星期一","星期二","星期三","星期四","星期五","星期六");
-        	var dateHtml = now.getFullYear()+"年"+(now.getMonth()+1)+"月"+now.getDate()+"日   "+week[weekNum];
-        	$("#currentTimeInfo").html(dateHtml);
-        	
-        	
+            if(data.flag ){
+                if(data.data.admin == "1"){
+                    $(".normal").remove();
+                }else if(data.data.admin == "0"){
+                    $(".admin").remove();
+                }
+                $("#currentUserName").html(data.data.name);
+                var now = new Date();
+                var weekNum = now.getDay(); //当月第一天星期几
+                var week = new Array("星期日","星期一","星期二","星期三","星期四","星期五","星期六");
+                var dateHtml = now.getFullYear()+"年"+(now.getMonth()+1)+"月"+now.getDate()+"日   "+week[weekNum];
+                $("#currentTimeInfo").html(dateHtml);
+            }
         }
     });
 	
@@ -89,7 +89,7 @@ $(function(){
 	
 	
 	//我的消息--待读提醒
-	getMsgCount();
+	//getMsgCount();
 	
 });
 
