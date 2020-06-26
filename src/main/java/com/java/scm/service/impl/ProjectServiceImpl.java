@@ -1,16 +1,22 @@
 package com.java.scm.service.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.java.scm.bean.Project;
 import com.java.scm.bean.User;
 import com.java.scm.bean.base.BaseResult;
 import com.java.scm.dao.ProjectDao;
+import com.java.scm.enums.StateEnum;
 import com.java.scm.service.ProjectService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -22,6 +28,8 @@ import java.util.List;
 @Slf4j
 @Service
 public class ProjectServiceImpl implements ProjectService {
+
+    private static final Byte STOP_USING = (byte) 1;
 
     @Autowired
     private ProjectDao projectDao;
@@ -35,12 +43,15 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public BaseResult saveProject(Project project) {
+        project.setCreateTime(new Date());
+        project.setUpdateTime(new Date());
         projectDao.insert(project);
         return new BaseResult(true,"新增成功");
     }
 
     @Override
     public BaseResult modifyProject(Project project) {
+        project.setUpdateTime(new Date());
         projectDao.updateByPrimaryKeySelective(project);
         return new BaseResult(true,"修改成功");
     }
@@ -57,9 +68,29 @@ public class ProjectServiceImpl implements ProjectService {
         example.setOrderByClause(" create_time DESC ");
         Example.Criteria criteria =  example.createCriteria();
         criteria.andLike("name","%"+name+"%");
-        int totalCount = projectDao.selectCountByExample(example);
         PageHelper.startPage(pageNum,pageSize);
         List<Project> projects = projectDao.selectByExample(example);
-        return new BaseResult(projects,totalCount);
+        PageInfo<Project> pageInfo = new PageInfo<>(projects);
+        JSONArray data = JSONArray.parseArray(JSON.toJSONString(projects));
+        for (int i = 0 ; i < data.size(); i ++){
+            JSONObject one = data.getJSONObject(i);
+            one.put("stateInfo", StateEnum.getEnumByValue(one.getByte("state")));
+        }
+        return new BaseResult(data,pageInfo.getTotal());
+    }
+
+    @Override
+    public BaseResult stopUsing(Long id) {
+        Project project = projectDao.selectByPrimaryKey(id);
+        String msg ;
+        if(STOP_USING.equals(project.getState())){
+            project.setState((byte)0);
+            msg = "工程已启用";
+        }else{
+            project.setState(STOP_USING);
+            msg = "工程已停用";
+        }
+        projectDao.updateByPrimaryKey(project);
+        return new BaseResult(true,msg);
     }
 }

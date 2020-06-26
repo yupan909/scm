@@ -4,20 +4,15 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
-    <title>用户信息</title>
+    <title>用户管理</title>
+    <link href="../js/plugin/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/home.css" rel="stylesheet">
 </head>
 <body>
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col-md-12 titleDIV">用户信息</div>
         </div>
-		<!--  
-		<div class="row">
-			<div class="col-md-12">
-				<button type="button" class="btn btn-success" onclick="download();">导出Excel</button>
-			</div>
-		</div>
-		-->
 
 		<div class="row ">
 			<div class="col-md-12 queryDIV form-inline">
@@ -120,7 +115,7 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-default" id = "save-close-btn" data-dismiss="modal">关闭</button>
                     <button type="button" class="btn btn-primary" onclick="save()">保存</button>
                 </div>
             </div><!-- /.modal-content -->
@@ -178,12 +173,14 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-default" id = "edit-close-btn" data-dismiss="modal">关闭</button>
                     <button type="button" class="btn btn-primary" onclick="editSave()">修改</button>
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal -->
     </div>
+    <script src="../js/plugin/dist/js/jquery.min.js"></script>
+	<script src="../js/plugin/dist/js/bootstrap.min.js"></script>
 	<script src="../js/userInfo/userInfo_list.js"></script>
 </body>
 </html>

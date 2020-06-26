@@ -26,20 +26,24 @@ public class ProjectController {
 
     @PostMapping("/save")
     public BaseResult saveProject(@RequestBody Project project){
-        return null;
+        return projectService.saveProject(project);
     }
 
     @PostMapping("/modify")
     public BaseResult modifyProject(@RequestBody Project project){
-        return null;
+        return projectService.modifyProject(project);
     }
     @GetMapping("/delete/{id}")
     public BaseResult deleteProject(@PathVariable("id") Long id){
-        return null;
+        return projectService.deleteProject(id);
     }
 
     @GetMapping("/list")
     public BaseResult listProject(String name,int pageNum,int pageSize){
-        return null;
+        return projectService.listProject(name,pageNum,pageSize);
+    }
+    @GetMapping("/stopUsing/{id}")
+    public BaseResult stopUsing(@PathVariable("id") Long id){
+        return projectService.stopUsing(id);
     }
 }

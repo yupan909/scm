@@ -102,9 +102,10 @@ function save(){
         data: data,
         success: function (data) {
             if(data.flag){
-                $('#saveModal').modal('hide');
-                $('.modal-backdrop').remove();
-                Public.alert(1,"新增成功！");
+                $("#saveModal input").val("");
+                $("#saveModal select option:first").prop("selected", 'selected');
+                document.getElementById("save-close-btn").click();
+                Public.alert(1,"新增成功");
                 load(1);
             }else{
                 Public.alert(2,data.message);
@@ -203,8 +204,9 @@ function editSave(){
         data: data,
         success: function (data) {
             if(data.flag){
-                $('#editModal').modal('hide');
-                $('.modal-backdrop').remove();
+                $("#editModal input").val("");
+                $("#editModal select option:first").prop("selected", 'selected');
+                document.getElementById("edit-close-btn").click();
                 Public.alert(1,"修改成功！");
                 load(curr);
             }else{
@@ -212,11 +214,6 @@ function editSave(){
             }
         }
     });
-}
-
-
-function view(id) {
-	window.open('userInfo/userInfo_detail.html?id='+id);
 }
 
 

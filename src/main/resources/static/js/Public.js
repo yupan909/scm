@@ -244,5 +244,30 @@ var Public = {
 			}catch(e){
 			}
 			return bool;
-		}
+		},
+
+		storeInfo:function(key,value){
+            var storage = window.sessionStorage;
+            if(typeof value == "object"){//如果要存储对象，则先转为json串
+                value = window.JSON.stringify(value);
+            }
+            storage.setItem(key, value);
+        },
+        getInfo:function (key) {
+            var storage = window.sessionStorage;
+            var value = storage.getItem(key);
+            var json = window.JSON.parse(value);//json串转为js对象
+            if(typeof json == "object" && json){//利用了一点，当符合json格式，串会成功转为js对象，否则为null
+                return json;
+            }
+            return value;
+
+        },
+        getCurrentUser:function () {
+            return Public.getInfo("user");
+        },
+        setCurrentUser:function (user) {
+            Public.storeInfo("user",user);
+        }
+
 }

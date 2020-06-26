@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    <title>工程信息</title>
+    <link href="../js/plugin/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/home.css" rel="stylesheet">
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12 titleDIV">工程管理</div>
+    </div>
+
+    <div class="row ">
+        <div class="col-md-12 queryDIV form-inline">
+            <div style=" float: left;" class="admin">
+                <button class="btn btn-primary" data-toggle="modal" data-target="#saveModal">
+                    <span class="glyphicon glyphicon-plus"></span>
+                    新增工程
+                </button>
+            </div>
+            <div  style=" float: right;">
+                <input type="text" class="form-control" id="key" placeholder="按工程名称搜索">
+                <button type="button" class="btn btn-primary" onclick="load('1')"><span class="glyphicon glyphicon-search"></span>查询</button>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 listDIV">
+            <table class="table table-striped table-bordered table-hover">
+                <thead style="background-color: #EEEEEE;">
+                <tr>
+                    <th class="col-md-1">序号</th>
+                    <th class="col-md-1">工程名称</th>
+                    <th class="col-md-2">设计内容</th>
+                    <th class="col-md-1">是否启用</th>
+                    <th class="col-md-2 admin">操作</th>
+                </tr>
+                </thead>
+                <tbody id = "tbody">
+                </tbody>
+            </table>
+            <div id="page" style="float: right;" class="tr"></div>
+        </div>
+    </div>
+</div>
+
+<!-- 新增工程模态框-->
+<div class="modal fade" id="saveModal" tabindex="-1" role="dialog" aria-labelledby="saveModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="saveModalLabel">
+                    新增工程
+                </h4>
+            </div>
+            <div class="modal-body">
+                <form id = "save-form"  class="form-horizontal" style="margin-right: 10%;">
+
+                    <div class="form-group">
+                        <label for="name" class="col-md-3 control-label">工程名称</label>
+                        <div class="col-md-9">
+                            <input type="text" class="form-control" id="name" name = "name" placeholder="工程名称" autocomplete="off">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="content" class="col-md-3 control-label">设计内容</label>
+                        <div class="col-md-9">
+                            <textarea class="form-control" id="content" name = "content" placeholder="设计内容"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="state" class="col-md-3 control-label">是否禁用</label>
+                        <div class="col-md-9">
+                            <select id="state" name="state" class="form-control selectpicker" data-live-search="true">
+                                <option value="0">开启</option>
+                                <option value="1">禁用</option>
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id = "save-close-btn" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" onclick="save()">保存</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+
+<!-- 新增用户模态框 -->
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title">
+                    修改工程
+                </h4>
+            </div>
+            <div class="modal-body">
+                <form id = "edit-form"  class="form-horizontal" style="margin-right: 10%;">
+                    <input type="hidden" id = "id_e">
+
+                    <div class="form-group">
+                        <label for="name_e" class="col-md-3 control-label">工程名称</label>
+                        <div class="col-md-9">
+                            <input type="text" class="form-control" id="name_e" name = "name_e" placeholder="工程名称" autocomplete="off">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="content_e" class="col-md-3 control-label">设计内容</label>
+                        <div class="col-md-9">
+                            <textarea class="form-control" id="content_e" name = "content_e" placeholder="设计内容"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="state_e" class="col-md-3 control-label">是否禁用</label>
+                        <div class="col-md-9">
+                            <select id="state_e" name="state_e" class="form-control selectpicker" data-live-search="true">
+                                <option value="0">开启</option>
+                                <option value="1">禁用</option>
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" id = "edit-close-btn" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" onclick="editSave()">修改</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<script src="../js/plugin/dist/js/jquery.min.js"></script>
+<script src="../js/plugin/dist/js/bootstrap.min.js"></script>
+<script src="../js/project/project_list.js"></script>
+
+</body>
+</html>

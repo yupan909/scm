@@ -48,4 +48,11 @@ public interface ProjectService {
      */
     BaseResult listProject(String name,int pageNum,int pageSize);
 
+    /**
+     * 停用启用工程
+     * @param id
+     * @return
+     */
+    BaseResult stopUsing( Long id);
+
 }
