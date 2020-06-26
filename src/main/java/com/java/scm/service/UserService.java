@@ -62,11 +62,17 @@ public interface UserService {
 
     /**
      * 用户列表展示
-     * @param name
-     * @param mobile
+     * @param key
      * @param pageNum
      * @param pageSize
      * @return
      */
-    BaseResult list(String name,String mobile,int pageNum,int pageSize);
+    BaseResult list(String key,int pageNum,int pageSize);
+
+    /**
+     * 根据主键获取用户信息
+     * @param id
+     * @return
+     */
+    BaseResult getUserById(Long id);
 }

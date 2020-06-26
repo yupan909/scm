@@ -44,7 +44,7 @@ $(function(){
         success: function(data) {
             if(data.flag ){
                 if(data.data.admin == "1"){
-                    $(".normal").remove();
+                    //$(".normal").remove();
                 }else if(data.data.admin == "0"){
                     $(".admin").remove();
                 }

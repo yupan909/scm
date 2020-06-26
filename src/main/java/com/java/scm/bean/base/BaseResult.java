@@ -28,7 +28,7 @@ public class BaseResult<T> {
      */
     private String message;
 
-    private int totalCount;
+    private long totalCount;
 
     public BaseResult() {
     }
@@ -38,7 +38,7 @@ public class BaseResult<T> {
         this.flag = true;
     }
 
-    public BaseResult(T data,int totalCount) {
+    public BaseResult(T data,long totalCount) {
         this.data = data;
         this.totalCount = totalCount;
         this.flag = true;

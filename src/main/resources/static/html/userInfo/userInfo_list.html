@@ -12,7 +12,7 @@
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col-md-12 titleDIV">用户信息</div>
-		</div>
+        </div>
 		<!--  
 		<div class="row">
 			<div class="col-md-12">
@@ -20,22 +20,18 @@
 			</div>
 		</div>
 		-->
-		<div class="row">
-			<div class="col-md-12 queryDIV">
-				<form class="form-inline" style="text-align: center;">
-				    <div class="form-group td">
-				    	<label for="name" class="t1">用户名</label>
-				    	<input type="text" class="form-control t2" id="name" placeholder="输入要查询的用户姓名">
-				  	</div>				  
-				  	<div class="form-group td">
-				    	<label for="mobile" class="t1">手机号</label>
-				    	<input type="text" class="form-control t2" id="mobile" placeholder="请输入要查询的手机号">
-				  	</div>				 	
-				    <div class="clearfix"></div>
-				    
-				  	<button type="button" class="btn btn-primary" onclick="load('1')">查询</button>
-				  	<button type="reset" class="btn btn-default">清空</button>
-				</form>
+
+		<div class="row ">
+			<div class="col-md-12 queryDIV form-inline">
+                <div style=" float: left;">
+                    <button class="btn btn-primary" data-toggle="modal" data-target="#saveModal">
+                        新增账号
+                    </button>
+                </div>
+                <div  style=" float: right;">
+                    <input type="text" class="form-control" id="key" placeholder="按姓名或电话进行搜索">
+                    <button type="button" class="btn btn-primary" onclick="load('1')">查询</button>
+                </div>
 		    </div>
 		</div>
 		<div class="row">
@@ -59,6 +55,136 @@
 			</div>
 		</div>
 	</div>
+
+    <!-- 新增用户模态框 -->
+    <div class="modal fade" id="saveModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">
+                        新增账号
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <form id = "save-form"  class="form-horizontal" style="margin-right: 10%;">
+
+                        <div class="form-group">
+                            <label for="name" class="col-md-3 control-label">用户姓名</label>
+                            <div class="col-md-9">
+                                <input type="text" class="form-control" id="name" name = "name" placeholder="用户姓名" autocomplete="off">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="mobile" class="col-md-3 control-label">电话号码</label>
+                            <div class="col-md-9">
+                                <input type="tel" class="form-control" id="mobile" name = "mobile" placeholder="电话号码" autocomplete="new-password">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="warehouseId" class="col-md-3 control-label">所属仓库</label>
+                            <div class="col-md-9">
+                                <select id="warehouseId" name="warehouseId" class="form-control selectpicker" data-live-search="true">
+
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="admin" class="col-md-3 control-label">是否为管理员</label>
+                            <div class="col-md-9">
+                                <select id="admin" name="admin" class="form-control selectpicker" data-live-search="true">
+                                    <option value="0">否</option>
+                                    <option value="1">是</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="password" class="col-md-3 control-label">输入密码</label>
+                            <div class="col-md-9">
+                                <input type="password" class="form-control" id="password" name = "password" placeholder="请输入密码，区分大小写，请尽量设得复杂一些" autocomplete="new-password">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="password2" class="col-md-3 control-label">确认密码</label>
+                            <div class="col-md-9">
+                                <input type="password" class="form-control" id="password2" name="password2" placeholder="请输入确认密码，两次密码必须保持一致">
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary" onclick="save()">保存</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+
+
+    <!-- 新增用户模态框 -->
+    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title">
+                        修改账号
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <form id = "edit-form"  class="form-horizontal" style="margin-right: 10%;">
+                        <input type="hidden" id = "id_e">
+                        <div class="form-group">
+                            <label for="name_e" class="col-md-3 control-label">用户姓名</label>
+                            <div class="col-md-9">
+                                <input type="text" class="form-control" id="name_e" name = "name_e" placeholder="用户姓名" autocomplete="off" disabled>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="mobile_e" class="col-md-3 control-label">电话号码</label>
+                            <div class="col-md-9">
+                                <input type="tel" class="form-control" id="mobile_e" name = "mobile_e" placeholder="电话号码" autocomplete="new-password">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="warehouseId_e" class="col-md-3 control-label">所属仓库</label>
+                            <div class="col-md-9">
+                                <select id="warehouseId_e" name="warehouseId_e" class="form-control selectpicker" data-live-search="true">
+
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="admin_e" class="col-md-3 control-label">是否为管理员</label>
+                            <div class="col-md-9">
+                                <select id="admin_e" name="admin_e" class="form-control selectpicker" data-live-search="true">
+                                    <option value="0">否</option>
+                                    <option value="1">是</option>
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary" onclick="editSave()">修改</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
     <script src="../js/dist/js/jquery.min.js"></script>
 	<script src="../js/dist/js/bootstrap.min.js"></script>
 	<script src="../js/userInfo/userInfo_list.js"></script>

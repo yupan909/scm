@@ -1,19 +1,26 @@
 package com.java.scm.service.impl;
 
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.java.scm.bean.User;
 import com.java.scm.bean.base.BaseResult;
+import com.java.scm.bean.vo.UserVo;
 import com.java.scm.config.exception.BusinessException;
 import com.java.scm.dao.UserDao;
+import com.java.scm.enums.AdminEnum;
+import com.java.scm.enums.StateEnum;
 import com.java.scm.service.UserService;
 import com.java.scm.util.RequestUtil;
 import com.java.scm.util.StringUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.aspectj.weaver.ast.Test;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author hujunhui
@@ -74,11 +81,14 @@ public class UserServiceImpl implements UserService {
             throw new BusinessException("电话号码已存在，电话号码作为用户登陆账号，不可重复");
         }
         User queryName = new User();
-        queryMobile.setName(user.getName());
+        queryName.setName(user.getName());
         int nameCount = userDao.selectCount(queryName);
         if(nameCount >0){
             throw new BusinessException("用户姓名已存在，若用户存在重名情况，请使用姓名+编号进行区分");
         }
+        user.setCreateTime(new Date());
+        user.setUpdateTime(new Date());
+        user.setState((byte)0);
         userDao.insert(user);
         return new BaseResult(true,"新增成功");
     }
@@ -109,11 +119,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public BaseResult stopUsing(Integer id) {
-        User query = new User();
-        query.setId(id);
-        query.setState(STOP_USING);
-        userDao.updateByPrimaryKeySelective(query);
-        return new BaseResult(true,"账号已停用");
+        User user = userDao.selectByPrimaryKey(id);
+        String msg ;
+        if(STOP_USING.equals(user.getState())){
+            user.setState((byte)0);
+            msg = "账号已启用";
+        }else{
+            user.setState(STOP_USING);
+            msg = "账号已停用";
+        }
+        userDao.updateByPrimaryKey(user);
+        return new BaseResult(true,msg);
     }
 
     @Override
@@ -132,16 +148,21 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public BaseResult list(String name, String mobile, int pageNum, int pageSize) {
-        Example example = new Example(User.class);
-        example.setOrderByClause(" create_time DESC ");
-        Example.Criteria criteria =  example.createCriteria();
-        criteria.andLike(NAME,"%"+name+"%");
-        criteria.andLike(MOBILE,"%"+mobile+"%");
-        criteria.andNotEqualTo(MOBILE,ADMIN);
-        int totalCount = userDao.selectCountByExample(example);
+    public BaseResult list(String key, int pageNum, int pageSize) {
         PageHelper.startPage(pageNum,pageSize);
-        List<User> users  = userDao.selectByExample(example);
-        return new BaseResult(users,totalCount);
+        List<Map> users  = userDao.getUserInfos(key);
+        for (Map one : users){
+            one.put("adminInfo", AdminEnum.getEnumByValue( Byte.valueOf(one.get("admin").toString())));
+            one.put("stateInfo", StateEnum.getEnumByValue( Byte.valueOf(one.get("state").toString())));
+        }
+        PageInfo<Map> pageInfo = new PageInfo(users);
+        return new BaseResult(users,pageInfo.getTotal());
     }
+
+    @Override
+    public BaseResult getUserById(Long id) {
+        User user = userDao.selectByPrimaryKey(id);
+        return  new BaseResult(user);
+    }
+
 }

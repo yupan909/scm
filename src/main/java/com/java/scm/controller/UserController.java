@@ -105,16 +105,26 @@ public class UserController {
 
     /**
      * 查询人员列表
-     * @param name
-     * @param mobile
+     * @param key  关键字，根据姓名，手机号
      * @param pageNum
      * @param pageSize
      * @return
      */
     @GetMapping("/list")
     @AdminRight
-    public BaseResult list(String name,String mobile,int pageNum,int pageSize){
-        return userService.list(name,mobile,pageNum,pageSize);
+    public BaseResult list(String key,int pageNum,int pageSize){
+        return userService.list(key,pageNum,pageSize);
+    }
+
+    /**
+     * 根据主键查询用户信息
+     * @param id
+     * @return
+     */
+    @GetMapping("/get/{id}")
+    @AdminRight
+    public BaseResult getOne(@PathVariable("id") Long id){
+        return userService.getUserById(id);
     }
 
     @GetMapping("/authority")
