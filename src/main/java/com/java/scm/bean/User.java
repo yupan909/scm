@@ -29,47 +29,47 @@ public class User implements Serializable {
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    protected Integer id;
+    private Integer id;
 
     /**
      * 仓库ID
      */
-    protected Integer warehouseId;
+    private Integer warehouseId;
 
     /**
      * 用户名
      */
-    protected String name;
+    private String name;
 
     /**
      * 手机号
      */
-    protected String mobile;
+    private String mobile;
 
     /**
      * 密码
      */
-    protected String password;
+    private String password;
 
     /**
      * 状态 0：启用 1：禁用
      */
-    protected Byte state;
+    private Byte state;
 
     /**
      * 状态 0：非管理员 1：管理员
      */
-    protected Byte admin;
+    private Byte admin;
 
     /**
      * 创建时间
      */
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    protected Date createTime;
+    private Date createTime;
 
     /**
      * 修改时间
      */
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    protected Date updateTime;
+    private Date updateTime;
 }
