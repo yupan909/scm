@@ -14,8 +14,20 @@ $.ajaxSetup({
 var curr = 1;
 var pageSize = 20;
 // 出入库区分
-var stockType = 0;
+var stockTypeMap = {0:"入库", 1:"出库"};
+var warehouseMap = {};
 $(function(){
+
+    // 类型下拉回显
+    var typeHtml = '<option value="">--请选择--</option>';
+    for(var key in stockTypeMap) {
+        typeHtml += '<option value="' + key + '">' + stockTypeMap[key] + '</option>';
+    }
+    $("#type").html(typeHtml);
+
+    // 加载仓库下拉列表
+    warehouseMap = Public.initWarehouse("warehouseId");
+
 	load(curr);
 });
 
@@ -25,26 +37,31 @@ function load(cnt){
 	var product = $("#product").val();
 	var startDate = $("#startDate").val();
 	var endDate = $("#endDate").val();
+	var type = $("#type").val();
+	var warehouseId = $("#warehouseId").val();
 	$.ajax({
         url: "../inoutStock/list",
         type: "POST",
 		contentType:"application/json;charset=utf-8",
         dataType: "json",
+        async: false,
         data: JSON.stringify({ "pageNum":cnt,
         		"pageSize":pageSize,
-        		"type":stockType,
+        		"type":type,
+        		"warehouseId":warehouseId,
         		"project":project,
         		"product":product,
         		"startTime":startDate,
         		"endTime":endDate
         		}),
-        async: false,
         success: function (data) {
             var html= "";
             if(data.flag == true){
                  $.each(data.data, function (i, item) {
                  html +="<tr>"+
                             "<td>"+(i+1)+"</td>"+
+                            "<td>"+item.typeText+"</td>"+
+                            "<td>"+item.warehouseName+"</td>"+
                             "<td>"+item.project+"</td>"+
                             "<td>"+item.product+"</td>"+
                             "<td>"+item.model+"</td>"+
@@ -80,33 +97,12 @@ function load(cnt){
 /**
  * 下载模版
  */
-function exportTemplate(){
-    window.location.href="../inoutStock/exportTemplate/" + stockType;
-}
-
-/**
- * 导入
- */
-function importFile() {
-    var formData = new FormData($('#uploadForm')[0]);
-    $.ajax({
-        type: "POST",
-        url:"../inoutStock/import/" + stockType,
-        data: formData,
-        processData: false,
-        contentType: false,
-        async: false,
-        error: function(request) {
-            Public.alert(2,"上传出现异常！");
-        },
-        success: function(data) {
-            if(data.flag == true){
-                $('#importModal').modal('hide');
-                Public.alert(1,"导入成功！");
-                load(1);
-            }else{
-                Public.alert(2, data.message);
-            }
-        }
-    });
+function exportExcel(){
+    var type = $("#type").val();
+    var warehouseId = $("#warehouseId").val();
+    var project = encodeURI($("#project").val());
+    var product = encodeURI($("#product").val());
+    var startDate = $("#startDate").val();
+    var endDate = $("#endDate").val();
+    window.location.href="../inoutStock/exportInoutStock?type="+type+"&warehouseId="+warehouseId+"&project="+project+"&product="+product+"&startTime="+startDate+"&endTime="+endDate;
 }

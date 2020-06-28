@@ -5,15 +5,20 @@ import com.github.pagehelper.PageInfo;
 import com.java.scm.bean.InoutStock;
 import com.java.scm.bean.so.InoutStockSO;
 import com.java.scm.dao.InoutStockDao;
+import com.java.scm.enums.InoutStockTypeEnum;
 import com.java.scm.service.InoutStockService;
+import com.java.scm.service.WarehouseService;
 import com.java.scm.util.PageUtils;
 import com.java.scm.util.StringUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * 出入库
@@ -27,6 +32,9 @@ public class InoutStockServiceImpl implements InoutStockService {
 
     @Autowired
     private InoutStockDao inoutStockDao;
+
+    @Autowired
+    private WarehouseService warehouseService;
 
     /**
      * 新增出入库
@@ -56,6 +64,16 @@ public class InoutStockServiceImpl implements InoutStockService {
         // 分页
         PageUtils.addPage(inoutStockSO.getPageNum(),inoutStockSO.getPageSize());
         List<InoutStock> list = inoutStockDao.selectByExample(example);
+        // 设置仓库名称和类型
+        if (!CollectionUtils.isEmpty(list)) {
+            // 查询仓库名称集合
+            List<Integer> warehouseIds = list.stream().map(p -> p.getWarehouseId()).distinct().collect(Collectors.toList());
+            Map<Integer, String> warehouseMap = warehouseService.getWarehouseMap(warehouseIds);
+            list.forEach(p -> {
+                p.setTypeText(InoutStockTypeEnum.getEnumByValue(p.getType()));
+                p.setWarehouseName(warehouseMap.get(p.getWarehouseId()));
+            });
+        }
         return new PageInfo<>(list);
     }
 

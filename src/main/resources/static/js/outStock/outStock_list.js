@@ -38,38 +38,41 @@ function load(cnt){
         		"startTime":startDate,
         		"endTime":endDate
         		}),
+        async: false,
         success: function (data) {
-                var html= "";
-                if(data.flag == true){
-                	 $.each(data.data, function (i, item) {
-                     html +="<tr>"+
-							    "<td>"+(i+1)+"</td>"+
-							    "<td>"+item.project+"</td>"+
-							    "<td>"+item.product+"</td>"+
-							    "<td>"+item.model+"</td>"+
-							    "<td>"+item.unit+"</td>"+
-							    "<td>"+item.count+"</td>"+
-							    "<td>"+item.price+"</td>"+
-							    "<td>"+item.source+"</td>"+
-							    "<td>"+item.handle+"</td>"+
-							    "<td>"+item.remark+"</td>"+
-							    "<td>"+item.createTime+"</td>"+
-						        "</tr>";
-                    });
-                    $("#tbody").html(html);
-                    laypage({
-                        cont: 'page', //容器。值支持id名、原生dom对象，jquery对象。【如该容器为】：<div id="page1"></div>
-                        pages: Math.ceil(data.totalCount / pageSize), //通过后台拿到的总页数
-                        skin: "#49afcd",
-                        curr: curr || 1, //当前页
-                        jump: function (obj, first) { //触发分页后的回调
-                            if (!first) { //点击跳页触发函数自身，并传递当前页：obj.curr
-                                curr = obj.curr;
-                                load(curr);
-                            }
+            var html= "";
+            if(data.flag == true){
+                 $.each(data.data, function (i, item) {
+                 html +="<tr>"+
+                            "<td>"+(i+1)+"</td>"+
+                            "<td>"+item.project+"</td>"+
+                            "<td>"+item.product+"</td>"+
+                            "<td>"+item.model+"</td>"+
+                            "<td>"+item.unit+"</td>"+
+                            "<td>"+item.count+"</td>"+
+                            "<td>"+item.price+"</td>"+
+                            "<td>"+item.source+"</td>"+
+                            "<td>"+item.handle+"</td>"+
+                            "<td>"+item.remark+"</td>"+
+                            "<td>"+item.createTime+"</td>"+
+                            "</tr>";
+                });
+                $("#tbody").html(html);
+                laypage({
+                    cont: 'page', //容器。值支持id名、原生dom对象，jquery对象。【如该容器为】：<div id="page1"></div>
+                    pages: Math.ceil(data.totalCount / pageSize), //通过后台拿到的总页数
+                    skin: "#49afcd",
+                    curr: curr || 1, //当前页
+                    jump: function (obj, first) { //触发分页后的回调
+                        if (!first) { //点击跳页触发函数自身，并传递当前页：obj.curr
+                            curr = obj.curr;
+                            load(curr);
                         }
-                    });
-                }
+                    }
+                });
+            }else{
+                Public.alert(2, data.message);
+            }
         }
     });
 }

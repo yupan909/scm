@@ -185,7 +185,7 @@ public class DateUtils {
      * @return
      */
     public static Date parseDateTime(String str) {
-        if (str == null) {
+        if (str == null || str.length() == 0) {
             return null;
         }
         LocalDateTime localDateTime = parseLocalDateTime(str);

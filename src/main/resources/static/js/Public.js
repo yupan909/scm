@@ -268,6 +268,29 @@ var Public = {
         },
         setCurrentUser:function (user) {
             Public.storeInfo("user",user);
-        }
+        },
+
+		// 加载仓库下拉列表
+		initWarehouse:function(val){
+			var warehouseMap = {};
+			// 仓库下拉回显
+			$.ajax({
+				url: "../warehouse/list",
+				type: "GET",
+				dataType: "json",
+				async: false,
+				success: function (data) {
+					var html = '<option value="">--请选择--</option>';;
+					if (data.flag == true) {
+						$.each(data.data, function (i, item) {
+							html += '<option value="' + item.id + '">' + item.name + '</option>';
+							warehouseMap[item.id] = item.name;
+						});
+						$("#" + val).html(html);
+					}
+				}
+			});
+			return warehouseMap;
+		}
 
 }

@@ -139,8 +139,8 @@ body {
 	padding-bottom: 5px;
 }
 .td{
-	padding-top: 10px;
-	padding-bottom: 10px;
+	padding-top: 5px;
+	padding-bottom: 5px;
 }
 .t1{
 	width: 25%;
@@ -225,4 +225,5 @@ body {
 .modal-form{
 	padding: 5% 15%;
 }
+
 

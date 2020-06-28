@@ -4,6 +4,7 @@ import com.java.scm.bean.Warehouse;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author hujunhui
@@ -15,4 +16,10 @@ public interface WarehouseService {
      * @return
      */
     List<Warehouse> getAllWarehouse();
+
+    /**
+     * 查询仓库id对应名称集合
+     * @return
+     */
+    Map<Integer, String> getWarehouseMap(List<Integer> ids);
 }

@@ -3,10 +3,7 @@ package com.java.scm.bean;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -35,6 +32,12 @@ public class InoutStock {
      * 仓库id
      */
     private Integer warehouseId;
+
+    /**
+     * 仓库名称
+     */
+    @Transient
+    private String warehouseName;
 
     /**
      * 工程名称
@@ -85,6 +88,12 @@ public class InoutStock {
      * 类别 0：入库 1：出库
      */
     private Byte type;
+
+    /**
+     * 类别名称
+     */
+    @Transient
+    private String typeText;
 
     /**
      * 创建时间
