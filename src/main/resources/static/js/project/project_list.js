@@ -79,6 +79,9 @@ function load(cnt){
                         handel+
                         "</tr>";
                 });
+                if(html == ""){
+                    html = "<tr><td colspan=\"5\">暂无数据</td></tr>";
+                }
                 $("#tbody").html(html);
                 laypage({
                     cont: 'page', //容器。值支持id名、原生dom对象，jquery对象。【如该容器为】：<div id="page1"></div>

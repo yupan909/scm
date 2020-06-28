@@ -90,6 +90,7 @@ public class ProjectServiceImpl implements ProjectService {
             project.setState(STOP_USING);
             msg = "工程已停用";
         }
+        project.setUpdateTime(new Date());
         projectDao.updateByPrimaryKey(project);
         return new BaseResult(true,msg);
     }

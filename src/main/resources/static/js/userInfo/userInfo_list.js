@@ -1,17 +1,17 @@
 /**
  * 用户信息
  */
-$.ajaxSetup({     
+$.ajaxSetup({
     contentType:"application/json;charset=utf-8",
-    complete:function(XMLHttpRequest,textStatus){   
-     //通过XMLHttpRequest取得响应头，sessionstatus，    
-      var sessionstatus=XMLHttpRequest.getResponseHeader("sessionstatus");   
-             if(sessionstatus=="timeout"){   
+    complete:function(XMLHttpRequest,textStatus){
+     //通过XMLHttpRequest取得响应头，sessionstatus，
+      var sessionstatus=XMLHttpRequest.getResponseHeader("sessionstatus");
+             if(sessionstatus=="timeout"){
             	 Public.alert(3,"用户信息过期,请重新登录！",function(){
    					window.location.href="../login.html";
-   				 }); 
-             }     
-       }     
+   				 });
+             }
+       }
 });
 var curr = 1;
 $(function(){
@@ -70,6 +70,9 @@ function load(cnt){
                              "<button class= \"btn btn-primary btn-xs btn-danger\" onclick=\"deleteById('"+item.id+"');\">删除</button> </td>"+
                                     "</tr>";
                     });
+                    if(html == ""){
+                        html = "<tr><td colspan=\"7\">暂无数据</td></tr>";
+                    }
                     $("#tbody").html(html);
                     laypage({
                         cont: 'page', //容器。值支持id名、原生dom对象，jquery对象。【如该容器为】：<div id="page1"></div>

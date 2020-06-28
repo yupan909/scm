@@ -3,10 +3,7 @@ package com.java.scm.bean;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Date;
 
 /**
@@ -21,7 +18,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "stock_record")
-public class stockRecord {
+public class StockRecord {
 
     /**
      * 库存变更记录id
@@ -65,5 +62,8 @@ public class stockRecord {
      * 创建人
      */
     private String createUser;
+
+    @Transient
+    private String typeInfo;
 
 }
