@@ -1,12 +1,8 @@
 package com.java.scm.service.impl;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.java.scm.bean.Project;
-import com.java.scm.bean.User;
 import com.java.scm.bean.base.BaseResult;
 import com.java.scm.dao.ProjectDao;
 import com.java.scm.enums.StateEnum;
@@ -71,12 +67,10 @@ public class ProjectServiceImpl implements ProjectService {
         PageHelper.startPage(pageNum,pageSize);
         List<Project> projects = projectDao.selectByExample(example);
         PageInfo<Project> pageInfo = new PageInfo<>(projects);
-        JSONArray data = JSONArray.parseArray(JSON.toJSONString(projects));
-        for (int i = 0 ; i < data.size(); i ++){
-            JSONObject one = data.getJSONObject(i);
-            one.put("stateInfo", StateEnum.getEnumByValue(one.getByte("state")));
+        for (Project one : projects){
+            one.setStateInfo( StateEnum.getEnumByValue(one.getState()));
         }
-        return new BaseResult(data,pageInfo.getTotal());
+        return new BaseResult(projects,pageInfo.getTotal());
     }
 
     @Override
@@ -90,6 +84,7 @@ public class ProjectServiceImpl implements ProjectService {
             project.setState(STOP_USING);
             msg = "工程已停用";
         }
+        project.setUpdateTime(new Date());
         projectDao.updateByPrimaryKey(project);
         return new BaseResult(true,msg);
     }

@@ -104,7 +104,7 @@ public class UserServiceImpl implements UserService {
         if(mobileCount >0){
             throw new BusinessException("电话号码："+user.getMobile()+"已存在，无法使用该电话号码");
         }
-
+        user.setUpdateTime(new Date());
         userDao.updateByPrimaryKeySelective(user);
         return new BaseResult(true,"修改成功");
     }
@@ -135,6 +135,7 @@ public class UserServiceImpl implements UserService {
         User query = new User();
         query.setId(id);
         query.setPassword(password);
+        query.setUpdateTime(new Date());
         userDao.updateByPrimaryKeySelective(query);
         return new BaseResult(true,"账号密码已被重置");
     }
