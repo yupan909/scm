@@ -1,0 +1,132 @@
+/*body{*/
+/*    margin:0px 0px;*/
+/*    padding: 0px 0px;*/
+/*}*/
+.bg-top{
+    width:100%;
+    margin-top:1px;
+    background-color: #10498c;
+    display: none;
+}
+.bg-main{
+    margin:0px 0px;
+    padding: 0px 0px;
+    width:1260px;
+    height:736px;
+    float:left;
+    background:url("../image/gkrl_bj.jpg") no-repeat top center;
+}
+.bg-add{
+    height:736px;
+    float:left;
+    background: url("../image/gkrl_bj_01.jpg");
+    display: none;
+}
+.frm{
+    width:400px;
+    margin: 0 auto;
+    margin-top: 320px;
+}
+.left{
+    float: left;
+}
+.right{
+    float: left;
+    margin-left: 2px;
+}
+.login-input_user {
+    background: url("../image/gkrl_input_user.png") no-repeat;
+    width: 282px;
+    height: 49px;
+    line-height: 49px;
+}
+.login-input_pw {
+    background: url("../image/gkrl_input_pw.png") no-repeat;
+    width: 282px;
+    height: 49px;
+    line-height: 49px;
+}
+.tr{
+    outline:none;
+    border: 0px;
+    height: 40px;
+    line-height: 49px;
+    width: 234px;
+    margin-left: 47px;
+    background: none;
+    font-family: "微软雅黑", Helvetica, sans-serif;
+    font-size: 18px;
+    color: #FFF;
+}
+.register{
+    text-align:center;
+    margin: 0 auto;
+}
+.register a{
+    color:black;
+    cursor: pointer;
+}
+.bq{
+    text-align:center;
+    margin: 0 auto;
+    margin-top: 200px;
+    color:#FFF;
+}
+.bg-notice{
+    height:50px;
+    width:100%;
+    font-size:30px;
+    padding-top: 15px;
+    font-weight: bold;
+}
+.bg-notice > a{
+    cursor:pointer;
+    color: #FFF;
+}
+
+
+body {
+    padding-top: 10%;
+    padding-bottom: 40px;
+    background-color: #364150;
+}
+
+.form-signin {
+    max-width: 330px;
+    padding: 15px;
+    margin: 0 auto;
+}
+.form-signin .form-signin-heading {
+    text-align: center;
+    margin-bottom: 40px;
+    color: #FFF;
+    font-size: 30px;
+}
+.form-signin .checkbox {
+    margin-bottom: 10px;
+}
+.form-signin .checkbox {
+    font-weight: normal;
+}
+.form-signin .form-control {
+    position: relative;
+    height: auto;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    padding: 10px;
+    font-size: 16px;
+}
+.form-signin .form-control:focus {
+    z-index: 2;
+}
+.form-signin input[type="email"] {
+    margin-bottom: -1px;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+}
+.form-signin input[type="password"] {
+    margin-bottom: 10px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}

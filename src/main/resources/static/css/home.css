@@ -1,20 +1,19 @@
 /* home.html 专用css */
 
 body {
-  padding-top: 60px;
+  padding-top: 50px;
   font-size: 13px;
   font-family: "Open Sans", "Microsoft YaHei", "\5FAE\8F6F\96C5\9ED1", "Microsoft JhengHei", "\534E\6587\7EC6\9ED1", STHeiti, MingLiu, sans-serif;
   background:url("../image/formBackground.png") repeat scroll !important;
 }
 
 .navbar{
-	min-height: 60px;
+	min-height: 50px;
 }
 /*导航栏背景颜色*/
 .navbar-inverse{
-	background:url("../image/nav.jpg") repeat scroll !important;
-	background-color: #428bca;
-	border-color: #428bca;
+	background-color: #101010;
+	border-color: #101010;
 }
 
 .navbar-fixed-top {
@@ -23,33 +22,33 @@ body {
 
 .div-left{
 	float:left;
-	min-height: 60px;
+	min-height: 50px;
 	width: 50%;
 	text-align: left;
 	vertical-align: middle;
 	font-size: 24px;
 	padding-top: 10px;
-	color: #fff;
+	color: #9d9d9d;
 	font-weight: bold;
 }
 .div-center{
 	float:left;
-	min-height: 60px;
+	min-height: 50px;
 	width: 25%;
 	text-align: center;
-	font-size: 21px;
+	font-size: 20px;
 	padding-top: 10px;
-	color: #000;
+	color: #9d9d9d;
 }
 .div-right{
 	float:right;
-	min-height: 60px;
+	min-height: 50px;
 	width: 25%;
 	text-align: right;
 	vertical-align: middle;
-	font-size: 22px;
+	font-size: 20px;
 	padding-top: 10px;
-	color: #fff;
+	color: #9d9d9d;
 	font-weight: bold;
 }
 
@@ -58,7 +57,7 @@ body {
  */
 .sidebar {
   position: fixed;
-  top: 61px;
+  top: 51px;
   bottom: 0;
   left: 0;
   z-index: 1000;
@@ -78,11 +77,11 @@ body {
 }
 .nav-sidebar > li{
   cursor:pointer;
-  border-bottom: 1px solid #ddd;
+  /*border-bottom: 1px solid #ddd;*/
 }
 .nav-sidebar > li > a {
   padding-right: 15px;
-  padding-left: 15px;
+  padding-left: 30px;
   font-size: 15px;
 }
 .nav-sidebar > .active > a,
@@ -225,5 +224,6 @@ body {
 .modal-form{
 	padding: 5% 15%;
 }
+
 
 
