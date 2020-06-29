@@ -22,6 +22,10 @@ public class WarehouseController {
     @Resource
     private WarehouseService warehouseService;
 
+    /**
+     * 获取所有仓库
+     * @return
+     */
     @GetMapping("/list")
     public BaseResult list(){
         List<Warehouse> all = warehouseService.getAllWarehouse();

@@ -19,29 +19,55 @@ public class ProjectController {
     @Autowired
     private ProjectService projectService;
 
+    /**
+     * 查询工程详情
+     * @return
+     */
     @GetMapping("/getProject/{id}")
     public BaseResult getProject(@PathVariable("id") Long id) {
         return  projectService.getProject(id);
     }
 
+    /**
+     * 保存工程
+     * @return
+     */
     @PostMapping("/save")
     public BaseResult saveProject(@RequestBody Project project){
         return projectService.saveProject(project);
     }
 
+    /**
+     * 修改工程
+     * @return
+     */
     @PostMapping("/modify")
     public BaseResult modifyProject(@RequestBody Project project){
         return projectService.modifyProject(project);
     }
+
+    /**
+     * 删除工程
+     * @return
+     */
     @GetMapping("/delete/{id}")
     public BaseResult deleteProject(@PathVariable("id") Long id){
         return projectService.deleteProject(id);
     }
 
+    /**
+     * 查询工程列表
+     * @return
+     */
     @GetMapping("/list")
     public BaseResult listProject(String name,int pageNum,int pageSize){
         return projectService.listProject(name,pageNum,pageSize);
     }
+
+    /**
+     * 停用启用工程
+     * @return
+     */
     @GetMapping("/stopUsing/{id}")
     public BaseResult stopUsing(@PathVariable("id") Long id){
         return projectService.stopUsing(id);
