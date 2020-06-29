@@ -12,8 +12,8 @@ body {
 }
 /*导航栏背景颜色*/
 .navbar-inverse{
-	background-color: #101010;
-	border-color: #101010;
+	background-color: #2b3643;
+	border-color: #2b3643;
 }
 
 .navbar-fixed-top {
@@ -57,7 +57,7 @@ body {
  */
 .sidebar {
   position: fixed;
-  top: 51px;
+  top: 50px;
   bottom: 0;
   left: 0;
   z-index: 1000;
