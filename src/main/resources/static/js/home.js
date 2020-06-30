@@ -42,7 +42,7 @@ $(function(){
         	Public.alert(2,"服务器出现异常！");
         },
         success: function(data) {
-            if(data.flag ){
+            if(data.flag){
                 Public.setCurrentUser(data.data);
                 if(data.data.admin == "1"){
                     //$(".normal").remove();
@@ -50,6 +50,7 @@ $(function(){
                     $(".admin").remove();
                 }
                 $("#currentUserName").html(data.data.name);
+                $("#warehouseName").html(data.data.warehouseName);
                 var now = new Date();
                 var weekNum = now.getDay(); //当月第一天星期几
                 var week = new Array("星期日","星期一","星期二","星期三","星期四","星期五","星期六");

@@ -3,10 +3,7 @@ package com.java.scm.bean;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -35,6 +32,12 @@ public class User implements Serializable {
      * 仓库ID
      */
     private Integer warehouseId;
+
+    /**
+     * 仓库名称
+     */
+    @Transient
+    private String warehouseName;
 
     /**
      * 用户名

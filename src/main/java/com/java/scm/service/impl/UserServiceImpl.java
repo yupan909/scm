@@ -9,6 +9,7 @@ import com.java.scm.dao.UserDao;
 import com.java.scm.enums.AdminEnum;
 import com.java.scm.enums.StateEnum;
 import com.java.scm.service.UserService;
+import com.java.scm.service.WarehouseService;
 import com.java.scm.util.RequestUtil;
 import com.java.scm.util.StringUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
 import javax.annotation.Resource;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -33,6 +35,9 @@ public class UserServiceImpl implements UserService {
     @Resource
     private UserDao userDao;
 
+    @Resource
+    private WarehouseService warehouseService;
+
     @Override
     public BaseResult login(String mobile, String password) {
         if(StringUtil.isNotEmpty(mobile) && StringUtil.isNotEmpty(password)){
@@ -45,6 +50,8 @@ public class UserServiceImpl implements UserService {
                 if(STOP_USING.equals(user.getState())){
                     throw  new BusinessException("账号已被停用");
                 }else{
+                    Map<Integer, String> warehouseMap = warehouseService.getWarehouseMap(Arrays.asList(user.getWarehouseId()));
+                    user.setWarehouseName(StringUtil.isNotEmpty(warehouseMap.get(user.getWarehouseId())) ? warehouseMap.get(user.getWarehouseId()) : "");
                     RequestUtil.setLoginUser(user);
                     BaseResult result = new BaseResult(user);
                     result.setMessage("登录成功");

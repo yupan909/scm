@@ -20,14 +20,26 @@
 	<nav class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container-fluid">
 			<div class="div-left"><span class="glyphicon glyphicon-home"></span> 仓 库 管 理</div>
-			<div class="div-right"><span style="padding-right: 5px" id = "currentUserName"></span>欢迎您！<a href="javascript:void(0)" onclick="loginOut()" style="color: #CCC;">退出</a></div>
+			<div class="div-right">
+                <span id="warehouseName" class="warehouseSpan"></span>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span class="glyphicon glyphicon-user"></span>
+                        <span id="currentUserName"></span> <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">修改密码</a></li>
+                        <li><a href="#" onclick="loginOut()">注销</a></li>
+                    </ul>
+                </div>
+            </div>
 		</div>
 	</nav>
 
 	<div class="container-fluid">
       <div class="row">
       	<!-- 左侧列表 -->
-        <div class="col-sm-3 col-md-2 sidebar">
+        <div class="sidebar">
           <ul class="nav nav-sidebar">
             <li name="inStock" class="normal" id="inStock/inStock_list.html"><a><span class="glyphicon glyphicon-list-alt"></span> 入库管理</a></li>
             <li name="outStock" class="normal" id="outStock/outStock_list.html"><a><span class="glyphicon glyphicon-file"></span> 出库管理</a></li>
@@ -39,7 +51,7 @@
         </div>
         
         <!-- 右侧主内容 -->
-        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+        <div class="main">
         </div>
         
       </div>
