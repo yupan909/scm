@@ -39,6 +39,9 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public BaseResult saveProject(Project project) {
+        if(!projectCheck(null,project.getName())){
+            return new BaseResult(false,"工程名不可重复");
+        }
         project.setCreateTime(new Date());
         project.setUpdateTime(new Date());
         projectDao.insert(project);
@@ -47,6 +50,9 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public BaseResult modifyProject(Project project) {
+        if(!projectCheck(project.getId(),project.getName())){
+            return new BaseResult(false,"工程名不可重复");
+        }
         project.setUpdateTime(new Date());
         projectDao.updateByPrimaryKeySelective(project);
         return new BaseResult(true,"修改成功");
@@ -87,5 +93,20 @@ public class ProjectServiceImpl implements ProjectService {
         project.setUpdateTime(new Date());
         projectDao.updateByPrimaryKey(project);
         return new BaseResult(true,msg);
+    }
+
+    private boolean projectCheck(Integer id,String name){
+        Example example = new Example(Project.class);
+        Example.Criteria criteria =  example.createCriteria();
+        if(id !=null){
+            criteria.andNotEqualTo("id",id);
+        }
+        criteria.andEqualTo("name",name);
+        int count = projectDao.selectCountByExample(example);
+        if(count >0){
+            return false;
+        }else{
+            return true;
+        }
     }
 }

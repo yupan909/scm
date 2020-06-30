@@ -67,7 +67,8 @@ function load(cnt){
                                     "<td>"+item.warehouseInfo+"</td>"+
                              "<td> <button class= \"btn btn-primary btn-xs\" onclick=\"edit('"+item.id+"');\">修改</button> " +
                              "<button class= \"btn btn-primary btn-xs "+stopStyle+"\" onclick=\"stopUsing('"+item.id+"');\">"+stopName+"</button> " +
-                             "<button class= \"btn btn-primary btn-xs btn-danger\" onclick=\"deleteById('"+item.id+"');\">删除</button> </td>"+
+                             "<button class= \"btn btn-primary btn-xs btn-danger\" onclick=\"deleteById('"+item.id+"');\">删除</button> "+
+                             "<button class= \"btn btn-primary btn-xs btn-danger\" onclick=\"openChange('"+item.id+"');\">重置密码</button> </td>"+
                                     "</tr>";
                     });
                     if(html == ""){
@@ -217,6 +218,51 @@ function editSave(){
             }
         }
     });
+}
+
+function openChange(id){
+    $('#changePasswordModal').modal('show');
+    $.ajax({
+        cache: true,
+        type: "GET",
+        url:"../user/get/"+id ,
+        async: false,
+        error: function(request) {
+            Public.alert(2,"请求失败！");
+        },
+        success: function(data) {
+            if(data.flag){
+                $("#name_c").val(data.data.name);
+                $("#mobile_c").val(data.data.mobile);
+                $("#id_c").val(data.data.id);
+            }else{
+                Public.alert(2,data.message);
+            }
+        }
+    });
+}
+
+function changePassword() {
+    var id = $("#id_c").val();
+    var password = $("#password_c").val();
+    var data = '{"id":"'+id+'","password":"'+password+'"}';
+    $.ajax({
+        url: "../user/resetPassword",
+        dataType: "json",
+        type: "POST",
+        data: data,
+        success: function (data) {
+            if(data.flag){
+                $("#changePasswordModal input").val("");
+                $("#changePasswordModal select option:first").prop("selected", 'selected');
+                document.getElementById("change-close-btn").click();
+                Public.alert(1,"修改成功！");
+            }else{
+                Public.alert(2,data.message);
+            }
+        }
+    });
+
 }
 
 

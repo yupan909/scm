@@ -47,6 +47,9 @@ public class StockServiceImpl implements StockService {
     @Transactional
     @Override
     public BaseResult initStock(Stock stock) {
+        if(!stockCheck(null,stock.getWarehouseId(),stock.getProduct(),stock.getModel())){
+            return new BaseResult(false,"物资已存在，无法重复添加！");
+        }
         User user = RequestUtil.getCurrentUser();
         stock.setCreateTime(new Date());
         stock.setUpdateTime(new Date());
@@ -64,6 +67,9 @@ public class StockServiceImpl implements StockService {
 
     @Override
     public BaseResult modifyStockInfo(Stock stock) {
+        if(!stockCheck(stock.getId(),stock.getWarehouseId(),stock.getProduct(),stock.getModel())){
+            return new BaseResult(false,"无法修改成已存在的物资！");
+        }
         stock.setCount(null);
         stock.setUpdateTime(new Date());
         stockDao.updateByPrimaryKeySelective(stock);
@@ -137,5 +143,31 @@ public class StockServiceImpl implements StockService {
             }
         }
         return new BaseResult(data,pageInfo.getTotal());
+    }
+
+    /**
+     * 校验库存唯一
+     * @param id
+     * @param warehouseId
+     * @param product
+     * @param model
+     * @return
+     */
+    private boolean stockCheck(Long id,Integer warehouseId,String product ,String model){
+        Example example = new Example(Stock.class);
+        Example.Criteria criteria =  example.createCriteria();
+        if(id !=null){
+            criteria.andNotEqualTo("id",id);
+        }
+        criteria.andEqualTo("warehouseId",warehouseId);
+        criteria.andEqualTo("product",product);
+        criteria.andEqualTo("model",model);
+        int count = stockDao.selectCountByExample(example);
+        if(count >0){
+            return false;
+        }else{
+            return true;
+        }
+
     }
 }
