@@ -43,7 +43,7 @@ body {
 .div-right{
 	float:right;
 	min-height: 50px;
-	width: 25%;
+	width: 50%;
 	text-align: right;
 	vertical-align: middle;
 	font-size: 18px;
@@ -83,14 +83,12 @@ body {
   padding-right: 15px;
   padding-left: 30px;
   font-size: 15px;
-	border-radius: 10%;
 }
 .nav-sidebar > .active > a,
 .nav-sidebar > .active > a:hover,
 .nav-sidebar > .active > a:focus {
   color: #fff;
   background-color: #428bca;
-  border-radius: 10%;
 }
 
 /*
