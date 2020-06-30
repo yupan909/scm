@@ -18,6 +18,7 @@ var curr = 1;
 $(function(){
     load(curr);
     loadWarehouse();
+    validate();
 });
 
 function loadWarehouse() {
@@ -86,6 +87,10 @@ function load(cnt){
 }
 
 function save(){
+    var validate = doValidate("save-form");
+    if(!validate){
+        return;
+    }
     var product = $("#product").val();
     var model = $("#model").val();
     var unit = $("#unit").val();
@@ -140,6 +145,10 @@ function loadOne(id){
 }
 
 function editSave(){
+    var validate = doValidate("edit-form");
+    if(!validate){
+        return;
+    }
     var id = $("#id_e").val();
     var product = $("#product_e").val();
     var model = $("#model_e").val();
@@ -191,6 +200,10 @@ function loadOneForCount(id){
 }
 
 function editCountSave(){
+    var validate = doValidate("edit-form-count");
+    if(!validate){
+        return;
+    }
     var id = $("#id_count_e").val();
     var count = $("#count_e").val();
     var data = '{"count":"'+count+'","id":"'+id+'"}';
@@ -264,4 +277,111 @@ function loadDetail(cnt){
     });
 
 
+}
+function validate(){
+    $('#save-form').bootstrapValidator({
+        live : 'enabled', //enabled代表当表单控件内容发生变化时就触发验证，默认提交时验证，
+        fields: {
+            product: {
+                validators: {
+                    notEmpty: {
+                        message: '请输入物资名称'
+                    }
+                }
+            },
+            model: {
+                validators: {
+                    notEmpty: {
+                        message: '请输入物资型号'
+                    }
+                }
+            },
+            unit: {
+                validators: {
+                    notEmpty: {
+                        message: '请输入单位'
+                    }
+                }
+            },
+            warehouseId: {
+                validators: {
+                    notEmpty: {
+                        message: '请选择所属仓库'
+                    }
+                }
+            },
+            count: {
+                validators: {
+                    notEmpty: {
+                        message: '请输入库存数量'
+                    },
+                    regexp:{
+                        regexp: /^[1-9]\d*|0$/,  //正则规则用两个/包裹起来
+                        message: '请输入正确的库存数量'
+                    }
+                }
+            }
+
+        }
+    })
+
+    $('#edit-form').bootstrapValidator({
+        live : 'enabled', //enabled代表当表单控件内容发生变化时就触发验证，默认提交时验证，
+        fields: {
+            product_e: {
+                validators: {
+                    notEmpty: {
+                        message: '请输入物资名称'
+                    }
+                }
+            },
+            model_e: {
+                validators: {
+                    notEmpty: {
+                        message: '请输入物资型号'
+                    }
+                }
+            },
+            unit_e: {
+                validators: {
+                    notEmpty: {
+                        message: '请输入单位'
+                    }
+                }
+            },
+            warehouseId_e: {
+                validators: {
+                    notEmpty: {
+                        message: '请选择所属仓库'
+                    }
+                }
+            }
+        }
+    })
+
+
+    $('#edit-form-count').bootstrapValidator({
+        live : 'enabled', //enabled代表当表单控件内容发生变化时就触发验证，默认提交时验证，
+        fields: {
+            count_e: {
+                validators: {
+                    notEmpty: {
+                        message: '请输入库存数量'
+                    },
+                    regexp:{
+                        regexp: /^[1-9]\d*|0$/,  //正则规则用两个/包裹起来
+                        message: '请输入正确的库存数量'
+                    }
+                }
+            }
+        }
+    })
+
+}
+
+function doValidate(id){
+    $("#"+id).data('bootstrapValidator').resetForm();
+    $("#"+id).data('bootstrapValidator').validate();
+    var flag = $("#"+id).data("bootstrapValidator").isValid();
+    return flag;
 }

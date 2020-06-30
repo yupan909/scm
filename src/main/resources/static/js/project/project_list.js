@@ -17,9 +17,14 @@ $(function(){
         $(".admin").remove();
     }
     load(curr);
+    validate();
 });
 
 function save(){
+    var validate = doValidate("save-form");
+    if(!validate){
+        return;
+    }
     var name = $("#name").val();
     var content = $("#content").val();
     var state = $("#state").val();
@@ -157,6 +162,10 @@ function loadOneProject(id){
 }
 
 function editSave(){
+    var validate = doValidate("edit-form");
+    if(!validate){
+        return;
+    }
     var id = $("#id_e").val();
     var name = $("#name_e").val();
     var content = $("#content_e").val();
@@ -202,4 +211,68 @@ function stopUsing(id){
         }
     });
 
+}
+function validate(){
+    $('#save-form').bootstrapValidator({
+        live : 'enabled', //enabled代表当表单控件内容发生变化时就触发验证，默认提交时验证，
+        fields: {
+            name: {
+                validators: {
+                    notEmpty: {
+                        message: '请输入工程名称'
+                    }
+                }
+            },
+            content: {
+                validators: {
+                    notEmpty: {
+                        message: '请输入设计内容'
+                    }
+                }
+            },
+            state: {
+                validators: {
+                    notEmpty: {
+                        message: '请选择工程是否开启'
+                    }
+                }
+            }
+
+        }
+    })
+
+    $('#edit-form').bootstrapValidator({
+        live : 'enabled', //enabled代表当表单控件内容发生变化时就触发验证，默认提交时验证，
+        fields: {
+            name_e: {
+                validators: {
+                    notEmpty: {
+                        message: '请输入工程名称'
+                    }
+                }
+            },
+            content_e: {
+                validators: {
+                    notEmpty: {
+                        message: '请输入设计内容'
+                    }
+                }
+            },
+            state_e: {
+                validators: {
+                    notEmpty: {
+                        message: '请选择工程是否开启'
+                    }
+                }
+            }
+        }
+    })
+
+}
+
+function doValidate(id){
+    $("#"+id).data('bootstrapValidator').resetForm();
+    $("#"+id).data('bootstrapValidator').validate();
+    var flag = $("#"+id).data("bootstrapValidator").isValid();
+    return flag;
 }

@@ -17,6 +17,7 @@ var curr = 1;
 $(function(){
 	load(curr);
     loadWarehouse();
+    validate();
 });
 
 function loadWarehouse() {
@@ -93,6 +94,11 @@ function load(cnt){
 }
 
 function save(){
+
+    var validate = doValidate("save-form");
+    if(!validate){
+        return;
+    }
     var name = $("#name").val();
     var mobile = $("#mobile").val();
     var password = $("#password").val();
@@ -195,6 +201,10 @@ function loadOneUser(id){
 }
 
 function editSave(){
+    var validate = doValidate("edit-form");
+    if(!validate){
+        return;
+    }
     var id = $("#id_e").val();
     var name = $("#name_e").val();
     var mobile = $("#mobile_e").val();
@@ -243,6 +253,10 @@ function openChange(id){
 }
 
 function changePassword() {
+    var validate = doValidate("changePassword-form");
+    if(!validate){
+        return;
+    }
     var id = $("#id_c").val();
     var password = $("#password_c").val();
     var data = '{"id":"'+id+'","password":"'+password+'"}';
@@ -263,6 +277,136 @@ function changePassword() {
         }
     });
 
+}
+
+function validate(){
+
+    $('#save-form').bootstrapValidator({
+        live : 'enabled', //enabled代表当表单控件内容发生变化时就触发验证，默认提交时验证，
+        fields: {
+            name: {
+                validators: {
+                    notEmpty: {
+                        message: '请输入姓名'
+                    }
+                }
+            },
+            mobile: {
+                validators: {
+                    regexp:{
+                        regexp: /^1[3-9][\d]{9}$/,  //正则规则用两个/包裹起来
+                        message: '请输入正确的手机号'
+                    },
+                    notEmpty: {
+                        message: '请输入手机号'
+                    }
+                }
+            },
+            warehouseId: {
+                validators: {
+                    notEmpty: {
+                        message: '请选择仓库'
+                    }
+                }
+            },
+            admin: {
+                validators: {
+                    notEmpty: {
+                        message: '请选择是否为管理员'
+                    }
+                }
+            },
+            password: {
+                validators: {
+                    notEmpty: {
+                        message: '请输入密码'
+                    },
+                    identical: {
+                        field: 'password2',
+                        message: '两次输入的密码不相符'
+                    }
+                }
+            },
+            password2: {
+                validators: {
+                    notEmpty: {
+                        message: '请再次输入密码'
+                    },
+                    identical: {
+                        field: 'password',
+                        message: '两次输入的密码不相符'
+                    }
+                }
+            }
+        }
+    })
+
+    $('#edit-form').bootstrapValidator({
+        live : 'enabled', //enabled代表当表单控件内容发生变化时就触发验证，默认提交时验证，
+        fields: {
+            mobile_e: {
+                validators: {
+                    regexp:{
+                        regexp: /^1[3-9][\d]{9}$/,  //正则规则用两个/包裹起来
+                        message: '请输入正确的手机号'
+                    },
+                    notEmpty: {
+                        message: '请输入手机号'
+                    }
+                }
+            },
+            warehouseId: {
+                validators: {
+                    notEmpty: {
+                        message: '请选择仓库'
+                    }
+                }
+            },
+            admin: {
+                validators: {
+                    notEmpty: {
+                        message: '请选择是否为管理员'
+                    }
+                }
+            }
+        }
+    })
+
+
+    $('#changePassword-form').bootstrapValidator({
+        live : 'enabled', //enabled代表当表单控件内容发生变化时就触发验证，默认提交时验证，
+        fields: {
+            password_c: {
+                validators: {
+                    notEmpty: {
+                        message: '请输入密码'
+                    },
+                    identical: {
+                        field: 'password_c2',
+                        message: '两次输入的密码不相符'
+                    }
+                }
+            },
+            password_c2: {
+                validators: {
+                    notEmpty: {
+                        message: '请再次输入密码'
+                    },
+                    identical: {
+                        field: 'password_c',
+                        message: '两次输入的密码不相符'
+                    }
+                }
+            }
+        }
+    })
+}
+
+function doValidate(id){
+    $("#"+id).data('bootstrapValidator').resetForm();
+    $("#"+id).data('bootstrapValidator').validate();
+    var flag = $("#"+id).data("bootstrapValidator").isValid();
+    return flag;
 }
 
 
