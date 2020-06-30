@@ -8,7 +8,7 @@ package com.java.scm.util.excel;
  */
 public enum ExcelTypeEnum {
 
-    XLS("xls"), XLSX("xlsx");
+    XLS(".xls"), XLSX(".xlsx");
 
     private String value;
 

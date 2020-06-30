@@ -2,12 +2,14 @@ package com.java.scm.util;
 
 import com.java.scm.bean.User;
 import com.java.scm.config.exception.BusinessException;
+import com.java.scm.enums.AdminEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.Objects;
 
 /**
  * @author hujunhui
@@ -21,7 +23,6 @@ public class RequestUtil {
     public static HttpServletRequest getRequest() {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         return request;
-
     }
 
     public static HttpSession getSession() {
@@ -43,5 +44,17 @@ public class RequestUtil {
 
     public static void removeLoginUser(){
         getSession().removeAttribute(USER);
+    }
+
+    /**
+     * 获取当前登录人的仓库id（管理员仓库为空）
+     * @return
+     */
+    public static Integer getWarehouseId(){
+        User user = getCurrentUser();
+        if (Objects.equals(AdminEnum.管理员.getType(), user.getAdmin())) {
+            return null;
+        }
+        return user.getWarehouseId();
     }
 }

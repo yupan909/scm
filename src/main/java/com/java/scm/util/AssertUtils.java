@@ -118,6 +118,16 @@ public class AssertUtils {
     }
 
     /**
+     * 判断字符串不为空
+     *
+     */
+    public static void notEmpty(String str, String message){
+        if (str == null || str.trim().isEmpty()) {
+            fail(message);
+        }
+    }
+
+    /**
      * 抛出自定义异常
      *
      * @param message

@@ -36,7 +36,7 @@ public class ExcelUtils {
         try{
             response.setCharacterEncoding("UTF-8");
             response.setHeader("content-Type", "application/vnd.ms-excel");
-            response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(fileName + "." + ExcelTypeEnum.XLSX.getValue(), "UTF-8"));
+            response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(fileName  + ExcelTypeEnum.XLSX.getValue(), "UTF-8"));
             workbook.write(response.getOutputStream());
         } finally {
             if (workbook != null) {

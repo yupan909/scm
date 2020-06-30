@@ -10,8 +10,10 @@ import com.java.scm.bean.so.InoutStockSO;
 import com.java.scm.config.exception.BusinessException;
 import com.java.scm.enums.InoutStockTypeEnum;
 import com.java.scm.service.InoutStockService;
+import com.java.scm.util.AssertUtils;
 import com.java.scm.util.DateUtils;
 import com.java.scm.util.RequestUtil;
+import com.java.scm.util.excel.ExcelTypeEnum;
 import com.java.scm.util.excel.ExcelUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
@@ -45,6 +47,7 @@ public class InoutStockController {
      */
     @PostMapping("/list")
     public BaseResult listInoutStock(@RequestBody InoutStockSO inoutStockSO) {
+        inoutStockSO.setWarehouseId(RequestUtil.getWarehouseId());
         PageInfo<InoutStock> pageInfo = inoutStockService.listInoutStock(inoutStockSO);
         return new BaseResult(pageInfo.getList(), Long.valueOf(pageInfo.getTotal()).intValue());
     }
@@ -113,11 +116,25 @@ public class InoutStockController {
      */
     @PostMapping("/import/{type}")
     public BaseResult importInoutStock(@RequestParam("file")MultipartFile file, @PathVariable("type") Byte type, HttpServletRequest request) throws Exception {
-        // 获取导入的excel数据
+        if (file.getOriginalFilename().indexOf(ExcelTypeEnum.XLS.getValue()) == -1 && file.getOriginalFilename().indexOf(ExcelTypeEnum.XLSX.getValue()) == -1) {
+            throw new BusinessException("导入文件类型不正确，只能导入.xls和.xlsx后缀的文件！");
+        }
+
+        // 1、获取导入的excel数据
         List<InoutStockTemplate> importList = ExcelUtils.importExcel(file, 1,1, InoutStockTemplate.class);
         if (CollectionUtils.isEmpty(importList)) {
             throw new BusinessException("导入excel数据为空！");
         }
+
+        // 2、校验数据
+        importList.forEach(p -> {
+            AssertUtils.notEmpty(p.getProject(), "工程名称不能为空！");
+            AssertUtils.notEmpty(p.getProduct(), "物资名称不能为空！");
+            AssertUtils.notEmpty(p.getModel(), "物资型号不能为空！");
+            AssertUtils.notEmpty(p.getUnit(), "单位不能为空！");
+            AssertUtils.notEmpty(p.getCount(), "数量不能为空！");
+            // 判断库存是否存在
+        });
 
         Byte inoutStockType = InoutStockTypeEnum.入库.getType();
         if (Objects.equals(type, InoutStockTypeEnum.出库.getType())) {
