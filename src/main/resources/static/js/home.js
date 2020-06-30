@@ -87,32 +87,4 @@ $(function(){
 		
 		e.stopPropagation();
 	});
-	
-	
-	//我的消息--待读提醒
-	//getMsgCount();
-	
 });
-
-//我的消息--待读总条数
-function getMsgCount(){
-	/**
-     * 加载权限
-     */
-	$.ajax({
-        cache: true,
-        type: "POST",
-        url:"../getMsgCount.do",
-        async: false,
-        error: function(request) {
-        	Public.alert(2,"服务器出现异常！");
-        },
-        success: function(data) {
-        	if(data!=null && data.count>0){
-        		$("#msg_count").html(data.count).show();
-        	}else{
-        		$("#msg_count").hide();
-        	}
-        }
-    });
-}

@@ -2,8 +2,8 @@
 
 body {
   padding-top: 50px;
-  font-size: 13px;
-  font-family: "Open Sans", "Microsoft YaHei", "\5FAE\8F6F\96C5\9ED1", "Microsoft JhengHei", "\534E\6587\7EC6\9ED1", STHeiti, MingLiu, sans-serif;
+  font-size: 14px;
+  font-family: tahoma, arial, 'Hiragino Sans GB', '\5b8b\4f53', sans-serif;
   background:url("../image/formBackground.png") repeat scroll !important;
 }
 
@@ -26,9 +26,9 @@ body {
 	width: 50%;
 	text-align: left;
 	vertical-align: middle;
-	font-size: 24px;
+	font-size: 22px;
 	padding-top: 10px;
-	color: #9d9d9d;
+	color: #F5F5F5;
 	font-weight: bold;
 }
 .div-center{
@@ -36,9 +36,9 @@ body {
 	min-height: 50px;
 	width: 25%;
 	text-align: center;
-	font-size: 20px;
+	font-size: 18px;
 	padding-top: 10px;
-	color: #9d9d9d;
+	color: #F5F5F5;
 }
 .div-right{
 	float:right;
@@ -46,10 +46,10 @@ body {
 	width: 25%;
 	text-align: right;
 	vertical-align: middle;
-	font-size: 20px;
+	font-size: 18px;
 	padding-top: 10px;
-	color: #9d9d9d;
-	font-weight: bold;
+	color: #F5F5F5;
+	/*font-weight: bold;*/
 }
 
 /*
@@ -83,12 +83,14 @@ body {
   padding-right: 15px;
   padding-left: 30px;
   font-size: 15px;
+	border-radius: 10%;
 }
 .nav-sidebar > .active > a,
 .nav-sidebar > .active > a:hover,
 .nav-sidebar > .active > a:focus {
   color: #fff;
   background-color: #428bca;
+  border-radius: 10%;
 }
 
 /*
@@ -169,10 +171,11 @@ body {
 	vertical-align: middle;
 }
 .table thead tr th{
-	background-color: #428bca;
+	background-color: #EEEEEE;
 	text-align: center;
 	vertical-align: middle;
-	color: #FFF;
+    font-weight: bold;
+	/*color: #FFF;*/
 }
 .table tbody tr td{
 	font-size: 14px;
