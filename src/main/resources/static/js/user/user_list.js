@@ -63,9 +63,9 @@ function load(cnt){
                                     "<td>"+(i+1)+"</td>"+
                                     "<td>"+item.name+"</td>"+
                                     "<td>"+item.mobile+"</td>"+
-                                    "<td>"+item.adminInfo+"</td>"+
-                                    "<td>"+item.stateInfo+"</td>"+
+                                    // "<td>"+item.adminInfo+"</td>"+
                                     "<td>"+item.warehouseInfo+"</td>"+
+                                    "<td>"+item.stateInfo+"</td>"+
                              "<td> <button class= \"btn btn-primary btn-xs\" onclick=\"edit('"+item.id+"');\">修改</button> " +
                              "<button class= \"btn btn-primary btn-xs "+stopStyle+"\" onclick=\"stopUsing('"+item.id+"');\">"+stopName+"</button> " +
                              "<button class= \"btn btn-primary btn-xs btn-danger\" onclick=\"deleteById('"+item.id+"');\">删除</button> "+
@@ -73,7 +73,7 @@ function load(cnt){
                                     "</tr>";
                     });
                     if(html == ""){
-                        html = "<tr><td colspan=\"7\">暂无数据</td></tr>";
+                        html = "<tr><td colspan=\"6\">暂无数据</td></tr>";
                     }
                     $("#tbody").html(html);
                     laypage({
@@ -95,15 +95,15 @@ function load(cnt){
 
 function save(){
 
-    var validate = doValidate("save-form");
+    var validate = Public.doValidate("save-form");
     if(!validate){
         return;
     }
     var name = $("#name").val();
     var mobile = $("#mobile").val();
-    var admin = $("#admin").val();
+    // var admin = $("#admin").val();
     var warehouseId = $("#warehouseId").val();
-    var data = '{"name":"'+name+'","mobile":"'+mobile+'","admin":"'+admin+'","warehouseId":"'+warehouseId+'"}';
+    var data = '{"name":"'+name+'","mobile":"'+mobile+'","warehouseId":"'+warehouseId+'"}';
     $.ajax({
         url: "../user/add",
         dataType: "json",
@@ -200,16 +200,15 @@ function loadOneUser(id){
 }
 
 function editSave(){
-    var validate = doValidate("edit-form");
+    var validate = Public.doValidate("edit-form");
     if(!validate){
         return;
     }
     var id = $("#id_e").val();
     var name = $("#name_e").val();
     var mobile = $("#mobile_e").val();
-    var admin = $("#admin_e").val();
     var warehouseId = $("#warehouseId_e").val();
-    var data = '{"name":"'+name+'","mobile":"'+mobile+'","id":"'+id+'","admin":"'+admin+'","warehouseId":"'+warehouseId+'"}';
+    var data = '{"name":"'+name+'","mobile":"'+mobile+'","id":"'+id+'","warehouseId":"'+warehouseId+'"}';
     $.ajax({
         url: "../user/modify",
         dataType: "json",
@@ -229,60 +228,10 @@ function editSave(){
     });
 }
 
-function openChange(id){
-    $('#changePasswordModal').modal('show');
-    $.ajax({
-        cache: true,
-        type: "GET",
-        url:"../user/get/"+id ,
-        async: false,
-        error: function(request) {
-            Public.alert(2,"请求失败！");
-        },
-        success: function(data) {
-            if(data.flag){
-                $("#name_c").val(data.data.name);
-                $("#mobile_c").val(data.data.mobile);
-                $("#id_c").val(data.data.id);
-            }else{
-                Public.alert(2,data.message);
-            }
-        }
-    });
-}
-
-// 修改密码
-function changePassword() {
-    var validate = doValidate("changePassword-form");
-    if(!validate){
-        return;
-    }
-    var id = $("#id_c").val();
-    var password = $("#password_c").val();
-    var data = '{"id":"'+id+'","password":"'+password+'"}';
-    $.ajax({
-        url: "../user/updatePassword",
-        dataType: "json",
-        type: "POST",
-        data: data,
-        success: function (data) {
-            if(data.flag){
-                $("#changePasswordModal input").val("");
-                $("#changePasswordModal select option:first").prop("selected", 'selected');
-                document.getElementById("change-close-btn").click();
-                Public.alert(1,"修改成功！");
-            }else{
-                Public.alert(2,data.message);
-            }
-        }
-    });
-
-}
-
 // 密码重置
 function resetPassword(id) {
 
-    layer.confirm('您确定要重置密码吗?（重置后密码：123456）', {icon: 3, title:'提示'}, function(index){
+    layer.confirm('您确定要重置密码吗?<br>（重置后密码：123456）', {icon: 3, title:'提示'}, function(index){
 
         $.ajax({
             cache: true,
@@ -336,35 +285,13 @@ function validate(){
                     }
                 }
             },
-            admin: {
-                validators: {
-                    notEmpty: {
-                        message: '请选择是否为管理员'
-                    }
-                }
-            },
-            password: {
-                validators: {
-                    notEmpty: {
-                        message: '请输入密码'
-                    },
-                    identical: {
-                        field: 'password2',
-                        message: '两次输入的密码不相符'
-                    }
-                }
-            },
-            password2: {
-                validators: {
-                    notEmpty: {
-                        message: '请再次输入密码'
-                    },
-                    identical: {
-                        field: 'password',
-                        message: '两次输入的密码不相符'
-                    }
-                }
-            }
+            // admin: {
+            //     validators: {
+            //         notEmpty: {
+            //             message: '请选择是否为管理员'
+            //         }
+            //     }
+            // },
         }
     })
 
@@ -388,52 +315,15 @@ function validate(){
                         message: '请选择仓库'
                     }
                 }
-            },
-            admin: {
-                validators: {
-                    notEmpty: {
-                        message: '请选择是否为管理员'
-                    }
-                }
             }
-        }
-    })
-
-
-    $('#changePassword-form').bootstrapValidator({
-        live : 'enabled', //enabled代表当表单控件内容发生变化时就触发验证，默认提交时验证，
-        fields: {
-            password_c: {
-                validators: {
-                    notEmpty: {
-                        message: '请输入密码'
-                    },
-                    identical: {
-                        field: 'password_c2',
-                        message: '两次输入的密码不相符'
-                    }
-                }
-            },
-            password_c2: {
-                validators: {
-                    notEmpty: {
-                        message: '请再次输入密码'
-                    },
-                    identical: {
-                        field: 'password_c',
-                        message: '两次输入的密码不相符'
-                    }
-                }
-            }
+            // admin: {
+            //     validators: {
+            //         notEmpty: {
+            //             message: '请选择是否为管理员'
+            //         }
+            //     }
+            // }
         }
     })
 }
-
-function doValidate(id){
-    $("#"+id).data('bootstrapValidator').resetForm();
-    $("#"+id).data('bootstrapValidator').validate();
-    var flag = $("#"+id).data("bootstrapValidator").isValid();
-    return flag;
-}
-
 

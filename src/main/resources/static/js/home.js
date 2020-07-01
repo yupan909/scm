@@ -1,5 +1,5 @@
 $.ajaxSetup({     
-    contentType:"application/x-www-form-urlencoded;charset=utf-8",     
+    // contentType:"application/x-www-form-urlencoded;charset=utf-8",
     complete:function(XMLHttpRequest,textStatus){   
      //通过XMLHttpRequest取得响应头，sessionstatus，    
       var sessionstatus=XMLHttpRequest.getResponseHeader("sessionstatus");
@@ -88,4 +88,92 @@ $(function(){
 		
 		e.stopPropagation();
 	});
+
+    validateChangePassword();
 });
+
+// 打开修改密码页面
+function openChange(id){
+    var user = Public.getCurrentUser();
+    if (!user) {
+        Public.alert(2, "获取用户信息失败！");
+    }
+
+    $('#changePasswordModal').modal('show');
+    $.ajax({
+        cache: true,
+        type: "GET",
+        url:"../user/get/"+user.id ,
+        async: false,
+        error: function(request) {
+            Public.alert(2,"请求失败！");
+        },
+        success: function(data) {
+            if(data.flag){
+                $("#name_c").val(data.data.name);
+                $("#id_c").val(data.data.id);
+            }else{
+                Public.alert(2,data.message);
+            }
+        }
+    });
+}
+
+// 修改密码
+function changePassword() {
+    var validate = Public.doValidate("changePassword-form");
+    if(!validate){
+        return;
+    }
+    var id = $("#id_c").val();
+    var password = $("#password_c").val();
+    var data = '{"id":"'+id+'","password":"'+password+'"}';
+    $.ajax({
+        url: "../user/updatePassword",
+        dataType: "json",
+        contentType:"application/json;charset=utf-8",
+        type: "POST",
+        data: data,
+        success: function (data) {
+            if(data.flag){
+                $("#changePasswordModal input").val("");
+                $("#changePasswordModal select option:first").prop("selected", 'selected');
+                document.getElementById("change-close-btn").click();
+                Public.alert(1,"修改成功！");
+            }else{
+                Public.alert(2,data.message);
+            }
+        }
+    });
+
+}
+
+function validateChangePassword() {
+    $('#changePassword-form').bootstrapValidator({
+        live : 'enabled', //enabled代表当表单控件内容发生变化时就触发验证，默认提交时验证，
+        fields: {
+            password_c: {
+                validators: {
+                    notEmpty: {
+                        message: '请输入密码'
+                    },
+                    identical: {
+                        field: 'password_c2',
+                        message: '两次输入的密码不相符'
+                    }
+                }
+            },
+            password_c2: {
+                validators: {
+                    notEmpty: {
+                        message: '请再次输入密码'
+                    },
+                    identical: {
+                        field: 'password_c',
+                        message: '两次输入的密码不相符'
+                    }
+                }
+            }
+        }
+    })
+}

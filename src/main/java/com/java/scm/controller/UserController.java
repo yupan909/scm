@@ -98,7 +98,6 @@ public class UserController {
      * @return
      */
     @PostMapping("/updatePassword")
-    @AdminRight
     public BaseResult updatePassword(@RequestBody JSONObject params){
         Integer id = params.getInteger("id");
         String password = params.getString("password");
@@ -134,7 +133,6 @@ public class UserController {
      * @return
      */
     @GetMapping("/get/{id}")
-    @AdminRight
     public BaseResult getOne(@PathVariable("id") Long id){
         return userService.getUserById(id);
     }

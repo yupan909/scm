@@ -291,6 +291,14 @@ var Public = {
 				}
 			});
 			return warehouseMap;
+		},
+
+		// 验证表单
+		doValidate: function(id) {
+			$("#" + id).data('bootstrapValidator').resetForm();
+			$("#" + id).data('bootstrapValidator').validate();
+			var flag = $("#" + id).data("bootstrapValidator").isValid();
+			return flag;
 		}
 
 }

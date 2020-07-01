@@ -34,9 +34,9 @@
                                 <th class="col-md-1">序号</th>
                                 <th class="col-md-1">姓名</th>
                                 <th class="col-md-2">手机号</th>
-                                <th class="col-md-1">是否为管理员</th>
-                                <th class="col-md-1">是否禁用</th>
+<!--                                <th class="col-md-1">是否为管理员</th>-->
                                 <th class="col-md-2">所属仓库</th>
+                                <th class="col-md-1">状态</th>
                                 <th class="col-md-2">操作</th>
                             </tr>
                         </thead>
@@ -87,29 +87,15 @@
                             </div>
                         </div>
 
-                        <div class="form-group">
-                            <label for="admin" class="col-md-3 control-label">是否为管理员</label>
-                            <div class="col-md-9">
-                                <select id="admin" name="admin" class="form-control selectpicker" data-live-search="true">
-                                    <option value="0">否</option>
-                                    <option value="1">是</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="password" class="col-md-3 control-label">输入密码</label>
-                            <div class="col-md-9">
-                                <input type="password" class="form-control" id="password" name = "password" placeholder="请输入密码，区分大小写，请尽量设得复杂一些" autocomplete="new-password">
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="password2" class="col-md-3 control-label">确认密码</label>
-                            <div class="col-md-9">
-                                <input type="password" class="form-control" id="password2" name="password2" placeholder="请输入确认密码，两次密码必须保持一致">
-                            </div>
-                        </div>
+<!--                        <div class="form-group">-->
+<!--                            <label for="admin" class="col-md-3 control-label">是否为管理员</label>-->
+<!--                            <div class="col-md-9">-->
+<!--                                <select id="admin" name="admin" class="form-control selectpicker" data-live-search="true">-->
+<!--                                    <option value="0">否</option>-->
+<!--                                    <option value="1">是</option>-->
+<!--                                </select>-->
+<!--                            </div>-->
+<!--                        </div>-->
 
                     </form>
                 </div>
@@ -122,7 +108,7 @@
     </div>
 
 
-    <!-- 新增用户模态框 -->
+    <!-- 修改用户模态框 -->
     <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -160,72 +146,20 @@
                             </div>
                         </div>
 
-                        <div class="form-group">
-                            <label for="admin_e" class="col-md-3 control-label">是否为管理员</label>
-                            <div class="col-md-9">
-                                <select id="admin_e" name="admin_e" class="form-control selectpicker" data-live-search="true">
-                                    <option value="0">否</option>
-                                    <option value="1">是</option>
-                                </select>
-                            </div>
-                        </div>
+<!--                        <div class="form-group">-->
+<!--                            <label for="admin_e" class="col-md-3 control-label">是否为管理员</label>-->
+<!--                            <div class="col-md-9">-->
+<!--                                <select id="admin_e" name="admin_e" class="form-control selectpicker" data-live-search="true">-->
+<!--                                    <option value="0">否</option>-->
+<!--                                    <option value="1">是</option>-->
+<!--                                </select>-->
+<!--                            </div>-->
+<!--                        </div>-->
                     </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" id = "edit-close-btn" data-dismiss="modal">关闭</button>
                     <button type="button" class="btn btn-primary" onclick="editSave()">修改</button>
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal -->
-    </div>
-    <!-- 新增用户模态框 -->
-    <div class="modal fade" id="changePasswordModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-                        &times;
-                    </button>
-                    <h4 class="modal-title">
-                        重置登录密码
-                    </h4>
-                </div>
-                <div class="modal-body">
-                    <form id = "changePassword-form"  class="form-horizontal" style="margin-right: 10%;">
-                        <input type="hidden" id = "id_c">
-                        <div class="form-group">
-                            <label for="name_c" class="col-md-3 control-label">用户姓名</label>
-                            <div class="col-md-9">
-                                <input type="text" class="form-control" id="name_c" name = "name_c" placeholder="用户姓名" disabled>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="mobile_c" class="col-md-3 control-label">电话号码</label>
-                            <div class="col-md-9">
-                                <input type="tel" class="form-control" id="mobile_c" name = "mobile_c" placeholder="电话号码" disabled>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="password_c" class="col-md-3 control-label">输入密码</label>
-                            <div class="col-md-9">
-                                <input type="password" class="form-control" id="password_c" name = "password_c" placeholder="请输入密码，区分大小写，请尽量设得复杂一些" autocomplete="new-password">
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="password_c2" class="col-md-3 control-label">确认密码</label>
-                            <div class="col-md-9">
-                                <input type="password" class="form-control" id="password_c2" name="password_c2" placeholder="请输入确认密码，两次密码必须保持一致">
-                            </div>
-                        </div>
-
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" id = "change-close-btn" data-dismiss="modal">关闭</button>
-                    <button type="button" class="btn btn-primary" onclick="changePassword()">修改</button>
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal -->

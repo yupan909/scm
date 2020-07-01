@@ -97,6 +97,7 @@ public class UserServiceImpl implements UserService {
         if(nameCount > 0){
             throw new BusinessException("用户名已存在！（若用户存在重名情况，请使用姓名+编号进行区分）");
         }
+        user.setPassword(CommonConsts.RESET_PASSWORD);
         userDao.insertSelective(user);
         return new BaseResult(true,"新增成功");
     }
