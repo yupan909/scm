@@ -45,7 +45,7 @@ $(function(){
             if(data.flag){
                 Public.setCurrentUser(data.data);
                 if(data.data.admin == "1"){
-                    //$(".normal").remove();
+                    $(".normal").remove();
                 }else if(data.data.admin == "0"){
                     $(".admin").remove();
                 }

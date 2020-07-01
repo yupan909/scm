@@ -14,8 +14,12 @@ $.ajaxSetup({
     }
 });
 
+var user = Public.getCurrentUser()
 var curr = 1;
 $(function(){
+    if(user.admin == "0"){
+        $(".admin").remove();
+    }
     load(curr);
     loadWarehouse();
     validate();
@@ -51,6 +55,12 @@ function load(cnt){
             var html= "";
             if(data.flag){
                 $.each(data.data, function (i, item) {
+                    var buttonInfo = "";
+                    if(user.admin == "1"){
+                        buttonInfo = "<button class= \"btn btn-primary btn-xs\" onclick=\"edit('"+item.id+"');\">修改物资</button> " +
+                            "<button class= \"btn btn-primary btn-xs\" onclick=\"editCount('"+item.id+"');\">修改库存</button> "
+                    }
+
                     html +="<tr>"+
                         "<td>"+(i+1)+"</td>"+
                         "<td>"+item.product+"</td>"+
@@ -59,9 +69,7 @@ function load(cnt){
                         "<td>"+item.count+"</td>"+
                         "<td>"+item.warehouseName+"</td>"+
                         "<td>"+item.createTime+"</td>"+
-                        "<td> <button class= \"btn btn-primary btn-xs\" onclick=\"edit('"+item.id+"');\">修改物资</button> " +
-                             "<button class= \"btn btn-primary btn-xs\" onclick=\"editCount('"+item.id+"');\">修改库存</button> " +
-                             "<button class= \"btn btn-primary btn-xs\" onclick=\"detail('"+item.id+"');\">明细</button>" +
+                        "<td> " + buttonInfo + "<button class= \"btn btn-primary btn-xs\" onclick=\"detail('"+item.id+"');\">明细</button>" +
                         " </td>"+
                         "</tr>";
                 });
