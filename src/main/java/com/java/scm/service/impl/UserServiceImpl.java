@@ -7,9 +7,11 @@ import com.java.scm.bean.base.BaseResult;
 import com.java.scm.config.exception.BusinessException;
 import com.java.scm.dao.UserDao;
 import com.java.scm.enums.AdminEnum;
+import com.java.scm.enums.CommonConsts;
 import com.java.scm.enums.StateEnum;
 import com.java.scm.service.UserService;
 import com.java.scm.service.WarehouseService;
+import com.java.scm.util.AssertUtils;
 import com.java.scm.util.RequestUtil;
 import com.java.scm.util.StringUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -18,11 +20,12 @@ import tk.mybatis.mapper.entity.Example;
 
 import javax.annotation.Resource;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
+ * 用户相关服务
  * @author hujunhui
  * @date 2020/6/24
  */
@@ -30,70 +33,84 @@ import java.util.Map;
 @Service
 public class UserServiceImpl implements UserService {
 
-    private static final Byte STOP_USING = (byte) 1;
-
     @Resource
     private UserDao userDao;
 
     @Resource
     private WarehouseService warehouseService;
 
+    /**
+     * 登录
+     * @param userName
+     * @param password
+     * @return
+     */
     @Override
-    public BaseResult login(String mobile, String password) {
-        if(StringUtil.isNotEmpty(mobile) && StringUtil.isNotEmpty(password)){
-            User query = new User();
-            query.setMobile(mobile);
-            query.setPassword(password);
-            List<User> users = userDao.select(query);
-            if(users !=null && !users.isEmpty()){
-                User user = users.get(0);
-                if(STOP_USING.equals(user.getState())){
-                    throw  new BusinessException("账号已被停用");
-                }else{
-                    Map<Integer, String> warehouseMap = warehouseService.getWarehouseMap(Arrays.asList(user.getWarehouseId()));
-                    user.setWarehouseName(StringUtil.isNotEmpty(warehouseMap.get(user.getWarehouseId())) ? warehouseMap.get(user.getWarehouseId()) : "");
-                    RequestUtil.setLoginUser(user);
-                    BaseResult result = new BaseResult(user);
-                    result.setMessage("登录成功");
-                    return result;
-                }
+    public BaseResult login(String userName, String password) {
+        AssertUtils.notEmpty(userName, "用户名不能为空");
+        AssertUtils.notEmpty(password, "密码不能为空");
+        User query = new User();
+        query.setName(userName);
+        query.setPassword(password);
+        List<User> users = userDao.select(query);
+        if(users !=null && !users.isEmpty()){
+            User user = users.get(0);
+            if(Objects.equals(user.getState(), StateEnum.禁用.getType())){
+                throw new BusinessException("账号已被停用");
             }else{
-                throw  new BusinessException("账号或密码错误");
+                Map<Integer, String> warehouseMap = warehouseService.getWarehouseMap(Arrays.asList(user.getWarehouseId()));
+                user.setWarehouseName(StringUtil.isNotEmpty(warehouseMap.get(user.getWarehouseId())) ? warehouseMap.get(user.getWarehouseId()) : "");
+                RequestUtil.setLoginUser(user);
+                BaseResult result = new BaseResult(user);
+                result.setMessage("登录成功");
+                return result;
             }
         }else{
-            throw  new BusinessException("请输入登录账号和密码");
+            throw new BusinessException("账号或密码错误");
         }
+
     }
 
+    /**
+     * 注销
+     * @return
+     */
     @Override
     public BaseResult logout() {
         RequestUtil.removeLoginUser();
         return new BaseResult(true,"退出登录");
     }
 
+    /**
+     * 新增用户
+     * @param user
+     * @return
+     */
     @Override
     public BaseResult addUser(User user) {
-        User queryMobile = new User();
-        queryMobile.setMobile(user.getMobile());
-        int mobileCount = userDao.selectCount(queryMobile);
-        if(mobileCount > 0){
-            throw new BusinessException("电话号码已存在，电话号码作为用户登陆账号，不可重复");
-        }
+        AssertUtils.notNull(user, "用户信息不能为空");
+        AssertUtils.notEmpty(user.getName(), "用户名不能为空");
+
         User queryName = new User();
         queryName.setName(user.getName());
         int nameCount = userDao.selectCount(queryName);
-        if(nameCount >0){
-            throw new BusinessException("用户姓名已存在，若用户存在重名情况，请使用姓名+编号进行区分");
+        if(nameCount > 0){
+            throw new BusinessException("用户名已存在！（若用户存在重名情况，请使用姓名+编号进行区分）");
         }
-        user.setCreateTime(new Date());
-        user.setUpdateTime(new Date());
-        user.setState((byte)0);
-        userDao.insert(user);
+        userDao.insertSelective(user);
         return new BaseResult(true,"新增成功");
     }
 
+    /**
+     * 修改用户
+     * @param user
+     * @return
+     */
     @Override
     public BaseResult modifyUser(User user) {
+        AssertUtils.notNull(user, "用户信息不能为空");
+        AssertUtils.notNull(user.getId(), "用户ID不能为空");
+
         Example example = new Example(User.class);
         Example.Criteria criteria =  example.createCriteria();
         criteria.andNotEqualTo("id",user.getId());
@@ -111,42 +128,68 @@ public class UserServiceImpl implements UserService {
         if(mobileCount >0){
             throw new BusinessException("电话号码："+user.getMobile()+"已存在，无法使用该电话号码");
         }
-        user.setUpdateTime(new Date());
         userDao.updateByPrimaryKeySelective(user);
         return new BaseResult(true,"修改成功");
     }
 
+    /**
+     * 用户状态启用/停用
+     * @param id
+     * @return
+     */
     @Override
     public BaseResult stopUsing(Integer id) {
+        AssertUtils.notNull(id, "用户ID不能为空");
         User user = userDao.selectByPrimaryKey(id);
-        String msg ;
-        if(STOP_USING.equals(user.getState())){
-            user.setState((byte)0);
+        if (user == null) {
+            throw new BusinessException("用户信息不存在");
+        }
+        String msg;
+        if(Objects.equals(user.getState(), StateEnum.禁用.getType())){
+            user.setState(StateEnum.启用.getType());
             msg = "账号已启用";
         }else{
-            user.setState(STOP_USING);
+            user.setState(StateEnum.禁用.getType());
             msg = "账号已停用";
         }
         userDao.updateByPrimaryKey(user);
         return new BaseResult(true,msg);
     }
 
+    /**
+     * 删除用户
+     * @param id
+     * @return
+     */
     @Override
     public BaseResult deleteUser(Integer id) {
+        AssertUtils.notNull(id, "用户ID不能为空");
         userDao.deleteByPrimaryKey(id);
         return new BaseResult(true,"账号已删除");
     }
 
+    /**
+     * 修改密码
+     * @return
+     */
     @Override
-    public BaseResult resetPassword(Integer id, String password) {
+    public BaseResult updatePassword(Integer id, String password) {
+        AssertUtils.notNull(id, "用户ID不能为空");
+        AssertUtils.notEmpty(password, "密码不能为空");
         User query = new User();
         query.setId(id);
         query.setPassword(password);
-        query.setUpdateTime(new Date());
         userDao.updateByPrimaryKeySelective(query);
-        return new BaseResult(true,"账号密码已被重置");
+        return BaseResult.successResult();
     }
 
+    /**
+     * 用户列表
+     * @param key
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
     @Override
     public BaseResult list(String key, int pageNum, int pageSize) {
         PageHelper.startPage(pageNum,pageSize);
@@ -159,8 +202,14 @@ public class UserServiceImpl implements UserService {
         return new BaseResult(users,pageInfo.getTotal());
     }
 
+    /**
+     * 获取用户详情
+     * @param id
+     * @return
+     */
     @Override
     public BaseResult getUserById(Long id) {
+        AssertUtils.notNull(id, "用户ID不能为空");
         User user = userDao.selectByPrimaryKey(id);
         return  new BaseResult(user);
     }

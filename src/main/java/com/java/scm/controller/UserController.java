@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java.scm.aop.anno.AdminRight;
 import com.java.scm.bean.User;
 import com.java.scm.bean.base.BaseResult;
+import com.java.scm.enums.CommonConsts;
 import com.java.scm.service.UserService;
 import com.java.scm.util.RequestUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -32,9 +33,9 @@ public class UserController {
     @PostMapping("/login")
     public BaseResult login(){
         HttpServletRequest request = RequestUtil.getRequest();
-        String mobile = request.getParameter("mobile");
+        String userName = request.getParameter("userName");
         String password = request.getParameter("password");
-        return userService.login(mobile,password);
+        return userService.login(userName,password);
     }
 
     /**
@@ -90,17 +91,28 @@ public class UserController {
         return userService.deleteUser(id);
     }
 
+
     /**
-     * 密码重置
+     * 修改密码
      * @param params
      * @return
      */
-    @PostMapping("/resetPassword")
+    @PostMapping("/updatePassword")
     @AdminRight
-    public BaseResult resetPassword(@RequestBody JSONObject params){
+    public BaseResult updatePassword(@RequestBody JSONObject params){
         Integer id = params.getInteger("id");
         String password = params.getString("password");
-        return userService.resetPassword(id,password);
+        return userService.updatePassword(id,password);
+    }
+
+    /**
+     * 密码重置
+     * @return
+     */
+    @GetMapping("/resetPassword/{id}")
+    @AdminRight
+    public BaseResult resetPassword(@PathVariable("id") Integer id){
+        return userService.updatePassword(id, CommonConsts.RESET_PASSWORD);
     }
 
     /**
@@ -127,6 +139,9 @@ public class UserController {
         return userService.getUserById(id);
     }
 
+    /**
+     * 获取当前登录用户
+     */
     @GetMapping("/authority")
     public BaseResult authority(){
         User user = RequestUtil.getCurrentUser();

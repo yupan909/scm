@@ -16,7 +16,7 @@ var Public = {
 			
 			layer.open({
 				type:0,
-				content:'<div style="font-size:20px;">'+msg+'</div>',
+				content:'<div style="font-size:15px;">'+msg+'</div>',
 				icon: icon,
 				btn: ['确定'],
 			  	yes: fn,

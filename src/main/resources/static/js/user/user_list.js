@@ -69,7 +69,7 @@ function load(cnt){
                              "<td> <button class= \"btn btn-primary btn-xs\" onclick=\"edit('"+item.id+"');\">修改</button> " +
                              "<button class= \"btn btn-primary btn-xs "+stopStyle+"\" onclick=\"stopUsing('"+item.id+"');\">"+stopName+"</button> " +
                              "<button class= \"btn btn-primary btn-xs btn-danger\" onclick=\"deleteById('"+item.id+"');\">删除</button> "+
-                             "<button class= \"btn btn-primary btn-xs btn-danger\" onclick=\"openChange('"+item.id+"');\">重置密码</button> </td>"+
+                             "<button class= \"btn btn-primary btn-xs btn-danger\" onclick=\"resetPassword('"+item.id+"');\">重置密码</button> </td>"+
                                     "</tr>";
                     });
                     if(html == ""){
@@ -101,10 +101,9 @@ function save(){
     }
     var name = $("#name").val();
     var mobile = $("#mobile").val();
-    var password = $("#password").val();
     var admin = $("#admin").val();
     var warehouseId = $("#warehouseId").val();
-    var data = '{"name":"'+name+'","mobile":"'+mobile+'","password":"'+password+'","admin":"'+admin+'","warehouseId":"'+warehouseId+'"}';
+    var data = '{"name":"'+name+'","mobile":"'+mobile+'","admin":"'+admin+'","warehouseId":"'+warehouseId+'"}';
     $.ajax({
         url: "../user/add",
         dataType: "json",
@@ -252,6 +251,7 @@ function openChange(id){
     });
 }
 
+// 修改密码
 function changePassword() {
     var validate = doValidate("changePassword-form");
     if(!validate){
@@ -261,7 +261,7 @@ function changePassword() {
     var password = $("#password_c").val();
     var data = '{"id":"'+id+'","password":"'+password+'"}';
     $.ajax({
-        url: "../user/resetPassword",
+        url: "../user/updatePassword",
         dataType: "json",
         type: "POST",
         data: data,
@@ -277,6 +277,33 @@ function changePassword() {
         }
     });
 
+}
+
+// 密码重置
+function resetPassword(id) {
+
+    layer.confirm('您确定要重置密码吗?（重置后密码：123456）', {icon: 3, title:'提示'}, function(index){
+
+        $.ajax({
+            cache: true,
+            type: "GET",
+            url:"../user/resetPassword/"+id ,
+            async: false,
+            error: function(request) {
+                Public.alert(2,"请求失败！");
+            },
+            success: function(data) {
+                if(data.flag){
+                    Public.alert(1,"重置成功！");
+                    load(curr);
+                }else{
+                    Public.alert(2,"重置失败！");
+                }
+            }
+        });
+
+        layer.close(index);
+    });
 }
 
 function validate(){

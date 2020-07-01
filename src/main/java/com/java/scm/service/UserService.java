@@ -12,11 +12,11 @@ public interface UserService {
 
     /**
      * 登录
-     * @param mobile
+     * @param userName
      * @param password
      * @return
      */
-    BaseResult login(String mobile,String password);
+    BaseResult login(String userName,String password);
 
     /**
      * 登出
@@ -55,10 +55,9 @@ public interface UserService {
     /**
      * 密码重置
      * @param id
-     * @param password
      * @return
      */
-    BaseResult resetPassword(Integer id,String password);
+    BaseResult updatePassword(Integer id, String password);
 
     /**
      * 用户列表展示
