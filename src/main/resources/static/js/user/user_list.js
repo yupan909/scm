@@ -14,85 +14,71 @@ $.ajaxSetup({
        }
 });
 var curr = 1;
+var pageSize = 20;
 $(function(){
 	load(curr);
-    loadWarehouse();
+    Public.initWarehouse("warehouseId", "warehouseId_e");
     validate();
 });
 
-function loadWarehouse() {
-    $.ajax({
-        url: "../warehouse/list",
-        dataType: "json",
-        type: "GET",
-        success: function (data) {
-            var html= "";
-            if(data.flag){
-                $.each(data.data, function (i, item) {
-                    html += "<option value=\""+item.id+"\">"+item.name+"</option>";
-                });
-                $("#warehouseId").html(html);
-                $("#warehouseId_e").html(html);
-            }
-        }
-    });
-
-}
-
-function load(cnt){
+function load(pageNum){
 	var key = $("#key").val();
 	$.ajax({
-        url: "../user/list?key="+key+"&pageNum="+cnt+"&pageSize=10",
+        url: "../user/list?key="+key+"&pageNum="+pageNum+"&pageSize="+pageSize,
         dataType: "json",
         type: "GET",
         //data: {"name":name,"mobile":mobile,"pageNum":cnt,"pageSize":10},
         success: function (data) {
-                var html= "";
-                if(data.flag){
-                	 $.each(data.data, function (i, item) {
-                	     var stopStyle
-                         var stopName ;
-                	     if(item.state == "0"){
-                             stopStyle = " btn-warning";
-                             stopName = "停用"
-                         }else{
-                             stopStyle = "btn-success";
-                             stopName = "启用"
-                         }
-                         html +="<tr>"+
-                                    "<td>"+(i+1)+"</td>"+
-                                    "<td>"+item.name+"</td>"+
-                                    "<td>"+item.mobile+"</td>"+
-                                    // "<td>"+item.adminInfo+"</td>"+
-                                    "<td>"+item.warehouseInfo+"</td>"+
-                                    "<td>"+item.stateInfo+"</td>"+
-                             "<td> <button class= \"btn btn-primary btn-xs\" onclick=\"edit('"+item.id+"');\">修改</button> " +
-                             "<button class= \"btn btn-primary btn-xs "+stopStyle+"\" onclick=\"stopUsing('"+item.id+"');\">"+stopName+"</button> " +
-                             "<button class= \"btn btn-primary btn-xs btn-danger\" onclick=\"deleteById('"+item.id+"');\">删除</button> "+
-                             "<button class= \"btn btn-primary btn-xs btn-danger\" onclick=\"resetPassword('"+item.id+"');\">重置密码</button> </td>"+
-                                    "</tr>";
-                    });
-                    if(html == ""){
-                        html = "<tr><td colspan=\"6\">暂无数据</td></tr>";
-                    }
-                    $("#tbody").html(html);
-                    laypage({
-                        cont: 'page', //容器。值支持id名、原生dom对象，jquery对象。【如该容器为】：<div id="page1"></div>
-                        pages: Math.ceil(data.totalCount / 10), //通过后台拿到的总页数
-                        skin: "#49afcd",
-                        curr: curr || 1, //当前页
-                        jump: function (obj, first) { //触发分页后的回调
-                            if (!first) { //点击跳页触发函数自身，并传递当前页：obj.curr
-                                curr = obj.curr;
-                                load(curr);
-                            }
-                        }
-                    });
+            var html= "";
+            if(data.flag){
+                 $.each(data.data, function (i, item) {
+                     var stopStyle
+                     var stopName ;
+                     if(item.state == "0"){
+                         stopStyle = " btn-warning";
+                         stopName = "停用"
+                     }else{
+                         stopStyle = "btn-success";
+                         stopName = "启用"
+                     }
+                     html +="<tr>"+
+                                "<td>"+(i+1)+"</td>"+
+                                "<td>"+item.name+"</td>"+
+                                "<td>"+item.mobile+"</td>"+
+                                // "<td>"+item.adminInfo+"</td>"+
+                                "<td>"+item.warehouseInfo+"</td>"+
+                                "<td>"+item.stateInfo+"</td>"+
+                         "<td> <button class= \"btn btn-primary btn-xs\" onclick=\"edit('"+item.id+"');\">修改</button> " +
+                         "<button class= \"btn btn-primary btn-xs "+stopStyle+"\" onclick=\"stopUsing('"+item.id+"');\">"+stopName+"</button> " +
+                         "<button class= \"btn btn-primary btn-xs btn-danger\" onclick=\"deleteById('"+item.id+"');\">删除</button> "+
+                         "<button class= \"btn btn-primary btn-xs btn-danger\" onclick=\"resetPassword('"+item.id+"');\">重置密码</button> </td>"+
+                                "</tr>";
+                });
+                if(html == ""){
+                    html = "<tr><td colspan=\"6\">暂无数据</td></tr>";
                 }
+                $("#tbody").html(html);
+                // 分页
+                layui.laypage.render({
+                    elem: 'page', // 指向存放分页的容器，值可以是容器ID、DOM对象。如：1. elem: 'id' 注意：这里不能加 # 号 2. elem: document.getElementById('id')
+                    theme: '#009688', // 自定义主题
+                    count: data.totalCount,   // 数据总数
+                    limit: pageSize,           // 每页显示的条数
+                    curr: pageNum || 1,           // 当前页
+                    layout: ['count', 'prev', 'page', 'next', 'skip'], //自定义排版。可选值有：count（总条目输区域）、prev（上一页区域）、page（分页区域）、next（下一页区域）、limit（条目选项区域）、refresh（页面刷新区域。注意：layui 2.3.0 新增） 、skip（快捷跳页区域）
+                    jump: function (obj, first) { //触发分页后的回调
+                        if (!first) { //点击跳页触发函数自身，并传递当前页：obj.curr
+                            curr = obj.curr;
+                            load(curr);
+                        }
+                    }
+                });
+            }
         }
     });
 }
 
+// 新增用户
 function save(){
 
     var validate = Public.doValidate("save-form");
@@ -124,8 +110,9 @@ function save(){
 
 }
 
+// 删除用户
 function deleteById(id){
-    layer.confirm('您确定要删除吗?', {icon: 3, title:'提示', skin: 'layui-layer-molv'}, function(index){
+    layui.layer.confirm('您确定要删除吗?', {icon: 3, title:'提示', skin: 'layui-layer-molv'}, function(index){
 
         $.ajax({
             cache: true,
@@ -145,11 +132,12 @@ function deleteById(id){
             }
         });
 
-        layer.close(index);
+        layui.layer.close(index);
     });
 
 }
 
+// 启用/停用
 function stopUsing(id){
     $.ajax({
         cache: true,
@@ -170,6 +158,7 @@ function stopUsing(id){
     });
 }
 
+// 修改用户页面
 function edit(id){
     $('#editModal').modal('show');
     loadOneUser(id);
@@ -199,6 +188,7 @@ function loadOneUser(id){
 
 }
 
+// 修改用户提交
 function editSave(){
     var validate = Public.doValidate("edit-form");
     if(!validate){
@@ -231,7 +221,7 @@ function editSave(){
 // 密码重置
 function resetPassword(id) {
 
-    layer.confirm('您确定要重置密码吗?<br>（重置后密码：123456）', {icon: 3, title:'提示', skin: 'layui-layer-molv'}, function(index){
+    layui.layer.confirm('您确定要重置密码吗?<br>（重置后密码：123456）', {icon: 3, title:'提示', skin: 'layui-layer-molv'}, function(index){
 
         $.ajax({
             cache: true,
@@ -251,20 +241,25 @@ function resetPassword(id) {
             }
         });
 
-        layer.close(index);
+        layui.layer.close(index);
     });
 }
 
 function validate(){
 
     $('#save-form').bootstrapValidator({
+        message: '不能为空', //为每个字段指定通用错误提示语
+        feedbackIcons: {   //输入框不同状态，显示图片的样式
+            valid: 'glyphicon glyphicon-ok',
+            invalid: 'glyphicon glyphicon-remove',
+            validating: 'glyphicon glyphicon-refresh'
+        },
         live : 'enabled', //enabled代表当表单控件内容发生变化时就触发验证，默认提交时验证，
         fields: {
             name: {
                 validators: {
-                    notEmpty: {
-                        message: '请输入姓名'
-                    }
+                    notEmpty: {message: '请输入姓名'},
+                    stringLength: { max: 50, message: '不能超过50个字符'}
                 }
             },
             mobile: {
@@ -296,6 +291,12 @@ function validate(){
     })
 
     $('#edit-form').bootstrapValidator({
+        message: '不能为空', //为每个字段指定通用错误提示语
+        feedbackIcons: {   //输入框不同状态，显示图片的样式
+            valid: 'glyphicon glyphicon-ok',
+            invalid: 'glyphicon glyphicon-remove',
+            validating: 'glyphicon glyphicon-refresh'
+        },
         live : 'enabled', //enabled代表当表单控件内容发生变化时就触发验证，默认提交时验证，
         fields: {
             mobile_e: {

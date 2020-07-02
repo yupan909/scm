@@ -19,10 +19,7 @@ import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
 import javax.annotation.Resource;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * 用户相关服务
@@ -153,7 +150,8 @@ public class UserServiceImpl implements UserService {
             user.setState(StateEnum.禁用.getType());
             msg = "账号已停用";
         }
-        userDao.updateByPrimaryKey(user);
+        user.setUpdateTime(new Date());
+        userDao.updateByPrimaryKeySelective(user);
         return new BaseResult(true,msg);
     }
 

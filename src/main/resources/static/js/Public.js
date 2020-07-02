@@ -13,8 +13,8 @@ var Public = {
 			}else if(3==type){ //警告
 				icon = 7;
 			}
-			
-			layer.open({
+
+            layui.layer.open({
                 skin: 'layui-layer-molv',
 				type:0,
 				content:msg,
@@ -272,7 +272,7 @@ var Public = {
         },
 
 		// 加载仓库下拉列表
-		initWarehouse:function(val){
+		initWarehouse:function(val, val2){
 			var warehouseMap = {};
 			// 仓库下拉回显
 			$.ajax({
@@ -287,7 +287,12 @@ var Public = {
 							html += '<option value="' + item.id + '">' + item.name + '</option>';
 							warehouseMap[item.id] = item.name;
 						});
-						$("#" + val).html(html);
+						if (val) {
+							$("#" + val).html(html);
+						}
+						if (val2) {
+							$("#" + val2).html(html);
+						}
 					}
 				}
 			});

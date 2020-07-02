@@ -22,7 +22,7 @@ CREATE TABLE `scm`.`user`(
 
 -- 工程表
 CREATE TABLE `scm`.`project`(
-  `id` int(11) PRIMARY KEY AUTO_INCREMENT COMMENT '工程id',
+  `id` bigint(20) PRIMARY KEY AUTO_INCREMENT COMMENT '工程id',
   `name` varchar(50) DEFAULT NULL COMMENT '工程名称',
   `content` varchar(500) DEFAULT NULL COMMENT '设计内容',
   `state` tinyint(1) DEFAULT 0 COMMENT '状态 0：启用 1：禁用',

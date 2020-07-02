@@ -20,7 +20,7 @@ $(function(){
 });
 
 
-function load(cnt){
+function load(pageNum){
 	var project = $("#project").val();
 	var product = $("#product").val();
 	var startDate = $("#startDate").val();
@@ -30,7 +30,7 @@ function load(cnt){
         type: "POST",
 		contentType:"application/json;charset=utf-8",
         dataType: "json",
-        data: JSON.stringify({ "pageNum":cnt,
+        data: JSON.stringify({ "pageNum":pageNum,
         		"pageSize":pageSize,
         		"type":stockType,
         		"project":project,
@@ -61,11 +61,14 @@ function load(cnt){
                     html = "<tr><td colspan=\"11\">暂无数据</td></tr>";
                 }
                 $("#tbody").html(html);
-                laypage({
-                    cont: 'page', //容器。值支持id名、原生dom对象，jquery对象。【如该容器为】：<div id="page1"></div>
-                    pages: Math.ceil(data.totalCount / pageSize), //通过后台拿到的总页数
-                    skin: "#49afcd",
-                    curr: curr || 1, //当前页
+                // 分页
+                layui.laypage.render({
+                    elem: 'page', // 指向存放分页的容器，值可以是容器ID、DOM对象。如：1. elem: 'id' 注意：这里不能加 # 号 2. elem: document.getElementById('id')
+                    theme: '#009688', // 自定义主题
+                    count: data.totalCount,   // 数据总数
+                    limit: pageSize,           // 每页显示的条数
+                    curr: pageNum || 1,           // 当前页
+                    layout: ['count', 'prev', 'page', 'next', 'skip'], //自定义排版。可选值有：count（总条目输区域）、prev（上一页区域）、page（分页区域）、next（下一页区域）、limit（条目选项区域）、refresh（页面刷新区域。注意：layui 2.3.0 新增） 、skip（快捷跳页区域）
                     jump: function (obj, first) { //触发分页后的回调
                         if (!first) { //点击跳页触发函数自身，并传递当前页：obj.curr
                             curr = obj.curr;
@@ -73,6 +76,7 @@ function load(cnt){
                         }
                     }
                 });
+
             }else{
                 Public.alert(2, data.message);
             }

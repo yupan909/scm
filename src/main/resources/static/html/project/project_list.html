@@ -34,7 +34,7 @@
                         <th class="col-md-1">序号</th>
                         <th class="col-md-2">工程名称</th>
                         <th class="col-md-2">设计内容</th>
-                        <th class="col-md-1">是否启用</th>
+                        <th class="col-md-1">状态</th>
                         <th class="col-md-1 admin">操作</th>
                     </tr>
                     </thead>
@@ -75,16 +75,6 @@
                             <textarea class="form-control" id="content" name = "content" placeholder="设计内容"></textarea>
                         </div>
                     </div>
-
-                    <div class="form-group">
-                        <label for="state" class="col-md-3 control-label">是否禁用</label>
-                        <div class="col-md-9">
-                            <select id="state" name="state" class="form-control selectpicker" data-live-search="true">
-                                <option value="0">开启</option>
-                                <option value="1">禁用</option>
-                            </select>
-                        </div>
-                    </div>
                 </form>
             </div>
             <div class="modal-footer">
@@ -96,7 +86,7 @@
 </div>
 
 
-<!-- 新增用户模态框 -->
+<!-- 编辑工程模态框 -->
 <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -123,16 +113,6 @@
                         <label for="content_e" class="col-md-3 control-label">设计内容</label>
                         <div class="col-md-9">
                             <textarea class="form-control" id="content_e" name = "content_e" placeholder="设计内容"></textarea>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="state_e" class="col-md-3 control-label">是否禁用</label>
-                        <div class="col-md-9">
-                            <select id="state_e" name="state_e" class="form-control selectpicker" data-live-search="true">
-                                <option value="0">开启</option>
-                                <option value="1">禁用</option>
-                            </select>
                         </div>
                     </div>
                 </form>

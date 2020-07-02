@@ -215,11 +215,14 @@
 
                 <div class="row ">
                     <div class="col-md-12 queryDIV form-inline">
+                        <form>
                             <input type="hidden" id = "detail_id">
                             <label>变更时间</label>
                             <input type="text" class="form-control date-Input" id="startDate" name="createtime" placeholder="开始时间" readonly="readonly" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:'#F{$dp.$D(\'endDate\')}'})">
                             至 <input type="text" class="form-control date-Input" id="endDate" name="createtime" placeholder="结束时间" readonly="readonly" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'startDate\')}'})">
                             <button type="button" class="btn btn-primary" onclick="loadDetail('1')"><span class="glyphicon glyphicon-search"></span>查询</button>
+                            <button type="reset" class="btn btn-default"><span class="glyphicon glyphicon-trash"></span> 清空</button>
+                        </form>
                     </div>
                 </div>
                 <div class="row">
@@ -229,9 +232,9 @@
                             <tr>
                                 <th class="col-md-1">序号</th>
                                 <th class="col-md-2">变更类型</th>
-                                <th class="col-md-1">变更用户</th>
                                 <th class="col-md-1">变更数量</th>
                                 <th class="col-md-2">关联工程</th>
+                                <th class="col-md-1">变更用户</th>
                                 <th class="col-md-2">变更时间</th>
                             </tr>
                             </thead>

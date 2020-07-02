@@ -132,7 +132,9 @@ function changePassword() {
                 $("#changePasswordModal input").val("");
                 $("#changePasswordModal select option:first").prop("selected", 'selected');
                 document.getElementById("change-close-btn").click();
-                Public.alert(1,"修改成功！");
+                Public.alert(1,"修改成功，请重新登录！", function(){
+                    window.location.href="../login.html";
+                });
             }else{
                 Public.alert(2,data.message);
             }
@@ -150,7 +152,7 @@ function validateChangePassword() {
             invalid: 'glyphicon glyphicon-remove',
             validating: 'glyphicon glyphicon-refresh'
         },
-        // live : 'enabled', //enabled代表当表单控件内容发生变化时就触发验证，默认提交时验证，
+        live : 'enabled', //enabled代表当表单控件内容发生变化时就触发验证，默认提交时验证，
         fields: {
             password_c: {
                 validators: {
