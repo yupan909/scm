@@ -1,5 +1,5 @@
 $.ajaxSetup({     
-    // contentType:"application/x-www-form-urlencoded;charset=utf-8",
+    contentType:"application/x-www-form-urlencoded;charset=utf-8",
     complete:function(XMLHttpRequest,textStatus){   
      //通过XMLHttpRequest取得响应头，sessionstatus，    
       var sessionstatus=XMLHttpRequest.getResponseHeader("sessionstatus");
@@ -11,25 +11,7 @@ $.ajaxSetup({
        }     
 });
 
-//退出
-function loginOut(){
-	$.ajax({
-        cache: true,
-        type: "GET",
-        url:"../user/logout",
-        async: false,
-        error: function(request) {
-        	Public.alert(2,"服务器出现异常！");
-        },
-        success: function(data) {
-        	window.location.href="../login.html";   
-        }
-    });
-	
-}
-
 $(function(){
-	
     /**
      * 加载权限
      */
@@ -51,11 +33,6 @@ $(function(){
                 }
                 $("#currentUserName").html(data.data.name);
                 $("#warehouseName").html(data.data.warehouseName);
-                var now = new Date();
-                var weekNum = now.getDay(); //当月第一天星期几
-                var week = new Array("星期日","星期一","星期二","星期三","星期四","星期五","星期六");
-                var dateHtml = now.getFullYear()+"年"+(now.getMonth()+1)+"月"+now.getDate()+"日   "+week[weekNum];
-                $("#currentTimeInfo").html(dateHtml);
             }
         }
     });
@@ -89,8 +66,25 @@ $(function(){
 		e.stopPropagation();
 	});
 
+	// 修改密码校验
     validateChangePassword();
 });
+
+//退出
+function loginOut(){
+    $.ajax({
+        cache: true,
+        type: "GET",
+        url:"../user/logout",
+        async: false,
+        error: function(request) {
+            Public.alert(2,"服务器出现异常！");
+        },
+        success: function(data) {
+            window.location.href="../login.html";
+        }
+    });
+}
 
 // 打开修改密码页面
 function openChange(id){
@@ -119,7 +113,7 @@ function openChange(id){
     });
 }
 
-// 修改密码
+// 提交修改密码
 function changePassword() {
     var validate = Public.doValidate("changePassword-form");
     if(!validate){
@@ -148,14 +142,24 @@ function changePassword() {
 
 }
 
+// 校验修改密码页面
 function validateChangePassword() {
     $('#changePassword-form').bootstrapValidator({
-        live : 'enabled', //enabled代表当表单控件内容发生变化时就触发验证，默认提交时验证，
+        message: '不能为空', //为每个字段指定通用错误提示语
+        feedbackIcons: {   //输入框不同状态，显示图片的样式
+            valid: 'glyphicon glyphicon-ok',
+            invalid: 'glyphicon glyphicon-remove',
+            validating: 'glyphicon glyphicon-refresh'
+        },
+        // live : 'enabled', //enabled代表当表单控件内容发生变化时就触发验证，默认提交时验证，
         fields: {
             password_c: {
                 validators: {
-                    notEmpty: {
-                        message: '请输入密码'
+                    notEmpty: {message: '请输入密码'}, //非空提示
+                    stringLength: { min: 6, max: 20, message: '密码长度必须在6到20之间'}, ///长度提示
+                    regexp: {
+                        regexp: /^[a-zA-Z0-9_\.]+$/,
+                        message: '密码只能包含字母、数字、下划线和小数点'
                     },
                     identical: {
                         field: 'password_c2',
@@ -165,8 +169,11 @@ function validateChangePassword() {
             },
             password_c2: {
                 validators: {
-                    notEmpty: {
-                        message: '请再次输入密码'
+                    notEmpty: {message: '请再次输入密码'}, //非空提示
+                    stringLength: { min: 6, max: 20, message: '密码长度必须在6到20之间'}, ///长度提示
+                    regexp: {
+                        regexp: /^[a-zA-Z0-9_\.]+$/,
+                        message: '密码只能包含字母、数字、下划线和小数点'
                     },
                     identical: {
                         field: 'password_c',
