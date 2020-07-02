@@ -15,15 +15,16 @@ var Public = {
 			}
 			
 			layer.open({
+                skin: 'layui-layer-molv',
 				type:0,
-				content:'<div style="font-size:15px;">'+msg+'</div>',
+				content:msg,
 				icon: icon,
 				btn: ['确定'],
 			  	yes: fn,
 			  	cancel: fn
 			}); 
 		},
-		
+
 		/**
 		 * 获取url地址栏指定的参数
 		 * @param name

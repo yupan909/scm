@@ -125,7 +125,7 @@ function save(){
 }
 
 function deleteById(id){
-    layer.confirm('您确定要删除吗?', {icon: 3, title:'提示'}, function(index){
+    layer.confirm('您确定要删除吗?', {icon: 3, title:'提示', skin: 'layui-layer-molv'}, function(index){
 
         $.ajax({
             cache: true,
@@ -231,7 +231,7 @@ function editSave(){
 // 密码重置
 function resetPassword(id) {
 
-    layer.confirm('您确定要重置密码吗?<br>（重置后密码：123456）', {icon: 3, title:'提示'}, function(index){
+    layer.confirm('您确定要重置密码吗?<br>（重置后密码：123456）', {icon: 3, title:'提示', skin: 'layui-layer-molv'}, function(index){
 
         $.ajax({
             cache: true,
