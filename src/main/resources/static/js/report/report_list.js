@@ -29,6 +29,15 @@ $(function(){
     warehouseMap = Public.initWarehouse("warehouseId");
 
 	load(curr);
+
+    //开始时间
+    layui.laydate.render({
+        elem: '#startDate'
+    });
+    //结束时间
+    layui.laydate.render({
+        elem: '#endDate'
+    });
 });
 
 
@@ -60,18 +69,18 @@ function load(pageNum){
                  $.each(data.data, function (i, item) {
                  html +="<tr>"+
                             "<td>"+(i+1)+"</td>"+
-                            "<td>"+item.typeText+"</td>"+
-                            "<td>"+item.warehouseName+"</td>"+
-                            "<td>"+item.project+"</td>"+
-                            "<td>"+item.product+"</td>"+
-                            "<td>"+item.model+"</td>"+
-                            "<td>"+item.unit+"</td>"+
-                            "<td>"+item.count+"</td>"+
-                            "<td>"+item.price+"</td>"+
-                            "<td>"+item.source+"</td>"+
-                            "<td>"+item.handle+"</td>"+
-                            "<td>"+item.remark+"</td>"+
-                            "<td>"+item.createTime+"</td>"+
+                            "<td>"+Public.ifNull(item.typeText)+"</td>"+
+                            "<td>"+Public.ifNull(item.warehouseName)+"</td>"+
+                            "<td>"+Public.ifNull(item.project)+"</td>"+
+                            "<td>"+Public.ifNull(item.product)+"</td>"+
+                            "<td>"+Public.ifNull(item.model)+"</td>"+
+                            "<td>"+Public.ifNull(item.unit)+"</td>"+
+                            "<td>"+Public.ifNull(item.count)+"</td>"+
+                            "<td>"+Public.ifNull(item.price)+"</td>"+
+                            "<td>"+Public.ifNull(item.source)+"</td>"+
+                            "<td>"+Public.ifNull(item.handle)+"</td>"+
+                            "<td>"+Public.ifNull(item.remark)+"</td>"+
+                            "<td>"+Public.ifNull(item.createTime)+"</td>"+
                             "</tr>";
                 });
                 if(html == ""){

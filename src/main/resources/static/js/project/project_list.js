@@ -52,9 +52,9 @@ function load(pageNum){
                     }
                     html +="<tr>"+
                         "<td>"+(i+1)+"</td>"+
-                        "<td>"+item.name+"</td>"+
-                        "<td>"+item.content+"</td>"+
-                        "<td>"+item.stateInfo+"</td>"+
+                        "<td>"+Public.ifNull(item.name)+"</td>"+
+                        "<td>"+Public.ifNull(item.content)+"</td>"+
+                        "<td>"+Public.ifNull(item.stateInfo)+"</td>"+
                         handel+
                         "</tr>";
                 });

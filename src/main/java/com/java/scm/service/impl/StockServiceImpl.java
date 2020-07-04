@@ -161,6 +161,7 @@ public class StockServiceImpl implements StockService {
     public BaseResult getChangeDetail(Long id, String startDate, String endDate, int pageNum, int pageSize) {
         AssertUtils.notNull(id, "库存id不能为空");
         Example example = new Example(StockRecord.class);
+        example.setOrderByClause(" create_time DESC ");
         Example.Criteria criteria =  example.createCriteria();
         criteria.andEqualTo("stockId",id);
         if(StringUtil.isEmpty(startDate)){
@@ -174,10 +175,7 @@ public class StockServiceImpl implements StockService {
         List<StockRecord> data = stockRecordDao.selectByExample(example);
         PageInfo<StockRecord> pageInfo = new PageInfo<>(data);
         for (StockRecord one : data){
-            if(one.getProject() == null){
-                one.setProject("");
-                one.setTypeInfo(StockRecordTypeEnum.getEnumByValue(one.getType()));
-            }
+            one.setTypeInfo(StockRecordTypeEnum.getEnumByValue(one.getType()));
         }
         return new BaseResult(data,pageInfo.getTotal());
     }
@@ -193,7 +191,7 @@ public class StockServiceImpl implements StockService {
         inoutStockList.forEach(inoutStock -> {
             Stock oldStock = getStockBySelective(inoutStock.getWarehouseId(), inoutStock.getProduct(), inoutStock.getModel());
             if (oldStock == null) {
-                throw new BusinessException(String.format("%s（%s）在仓库没有库存，请检查后再重新导入！", inoutStock.getProduct(), inoutStock.getModel()));
+                throw new BusinessException(String.format("%s（%s）没有库存，请检查后再重新导入！", inoutStock.getProduct(), inoutStock.getModel()));
             }
             // 新库存数量
             Stock newStock = new Stock();

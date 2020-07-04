@@ -24,6 +24,15 @@ $(function(){
     load(curr);
     Public.initWarehouse("warehouseId", "warehouseId_e");
     validate();
+
+    //开始时间
+    layui.laydate.render({
+        elem: '#startDate'
+    });
+    //结束时间
+    layui.laydate.render({
+        elem: '#endDate'
+    });
 });
 
 // 列表
@@ -40,18 +49,18 @@ function load(pageNum){
                     var buttonInfo = "";
                     if(user.admin == "1"){
                         buttonInfo = "<button class= \"btn btn-primary btn-xs\" onclick=\"edit('"+item.id+"');\">修改物资</button> " +
-                            "<button class= \"btn btn-primary btn-xs\" onclick=\"editCount('"+item.id+"');\">修改库存</button> "
+                            "<button class= \"btn btn-info btn-xs\" onclick=\"editCount('"+item.id+"');\">修改库存</button> "
                     }
 
                     html +="<tr>"+
                         "<td>"+(i+1)+"</td>"+
-                        "<td>"+item.product+"</td>"+
-                        "<td>"+item.model+"</td>"+
-                        "<td>"+item.unit+"</td>"+
-                        "<td>"+item.count+"</td>"+
-                        "<td>"+item.warehouseName+"</td>"+
-                        "<td>"+item.createTime+"</td>"+
-                        "<td> " + buttonInfo + "<button class= \"btn btn-primary btn-xs\" onclick=\"detail('"+item.id+"');\">明细</button>" +
+                        "<td>"+Public.ifNull(item.product)+"</td>"+
+                        "<td>"+Public.ifNull(item.model)+"</td>"+
+                        "<td>"+Public.ifNull(item.unit)+"</td>"+
+                        "<td>"+Public.ifNull(item.count)+"</td>"+
+                        "<td>"+Public.ifNull(item.warehouseName)+"</td>"+
+                        "<td>"+Public.ifNull(item.createTime)+"</td>"+
+                        "<td> " + buttonInfo + "<button class= \"btn btn-success btn-xs\" onclick=\"detail('"+item.id+"');\">明细</button>" +
                         " </td>"+
                         "</tr>";
                 });
@@ -227,6 +236,7 @@ function editCountSave(){
 
 // 库存明细
 var detailCnt = 1;
+var detailPageSize = 10;
 function detail(id){
     $("#detail_id").val(id);
     $('#detail').modal('show');
@@ -239,7 +249,7 @@ function loadDetail(pageNum){
     var endDate = $("#endDate").val();
     var detailId = $("#detail_id").val();
     $.ajax({
-        url: "../stock/detail?id="+detailId+"&pageNum="+pageNum+"&pageSize="+pageSize+"&startDate="+startDate+"&endDate="+endDate,
+        url: "../stock/detail?id="+detailId+"&pageNum="+pageNum+"&pageSize="+detailPageSize+"&startDate="+startDate+"&endDate="+endDate,
         dataType: "json",
         type: "GET",
         success: function (data) {
@@ -248,11 +258,11 @@ function loadDetail(pageNum){
                 $.each(data.data, function (i, item) {
                     html +="<tr>"+
                         "<td>"+(i+1)+"</td>"+
-                        "<td>"+item.typeInfo+"</td>"+
-                        "<td>"+item.count+"</td>"+
-                        "<td>"+item.project+"</td>"+
-                        "<td>"+item.createUser+"</td>"+
-                        "<td>"+item.createTime+"</td>"+
+                        "<td>"+Public.ifNull(item.typeInfo)+"</td>"+
+                        "<td>"+Public.ifNull(item.count)+"</td>"+
+                        "<td>"+Public.ifNull(item.project)+"</td>"+
+                        "<td>"+Public.ifNull(item.createUser)+"</td>"+
+                        "<td>"+Public.ifNull(item.createTime)+"</td>"+
                         "</tr>";
                 });
                 if(html == ""){
@@ -264,7 +274,7 @@ function loadDetail(pageNum){
                     elem: 'detailpage', // 指向存放分页的容器，值可以是容器ID、DOM对象。如：1. elem: 'id' 注意：这里不能加 # 号 2. elem: document.getElementById('id')
                     theme: '#009688', // 自定义主题
                     count: data.totalCount,   // 数据总数
-                    limit: pageSize,           // 每页显示的条数
+                    limit: detailPageSize,           // 每页显示的条数
                     curr: pageNum || 1,           // 当前页
                     layout: ['count', 'prev', 'page', 'next', 'skip'], //自定义排版。可选值有：count（总条目输区域）、prev（上一页区域）、page（分页区域）、next（下一页区域）、limit（条目选项区域）、refresh（页面刷新区域。注意：layui 2.3.0 新增） 、skip（快捷跳页区域）
                     jump: function (obj, first) { //触发分页后的回调

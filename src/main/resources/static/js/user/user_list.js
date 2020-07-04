@@ -43,11 +43,11 @@ function load(pageNum){
                      }
                      html +="<tr>"+
                                 "<td>"+(i+1)+"</td>"+
-                                "<td>"+item.name+"</td>"+
-                                "<td>"+item.mobile+"</td>"+
+                                "<td>"+Public.ifNull(item.name)+"</td>"+
+                                "<td>"+Public.ifNull(item.mobile)+"</td>"+
                                 // "<td>"+item.adminInfo+"</td>"+
-                                "<td>"+item.warehouseInfo+"</td>"+
-                                "<td>"+item.stateInfo+"</td>"+
+                                "<td>"+Public.ifNull(item.warehouseInfo)+"</td>"+
+                                "<td>"+Public.ifNull(item.stateInfo)+"</td>"+
                          "<td> <button class= \"btn btn-primary btn-xs\" onclick=\"edit('"+item.id+"');\">修改</button> " +
                          "<button class= \"btn btn-primary btn-xs "+stopStyle+"\" onclick=\"stopUsing('"+item.id+"');\">"+stopName+"</button> " +
                          "<button class= \"btn btn-primary btn-xs btn-danger\" onclick=\"deleteById('"+item.id+"');\">删除</button> "+

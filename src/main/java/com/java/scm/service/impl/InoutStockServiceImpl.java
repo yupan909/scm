@@ -25,10 +25,7 @@ import org.springframework.util.CollectionUtils;
 import tk.mybatis.mapper.entity.Example;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -134,7 +131,7 @@ public class InoutStockServiceImpl implements InoutStockService {
         List<String> existProjectNameList = projectService.getProjectByName(projectNameList);
         List<String> notExistProjectNameList = projectNameList.stream().filter(p -> !existProjectNameList.contains(p)).collect(Collectors.toList());
         if (!CollectionUtils.isEmpty(notExistProjectNameList)) {
-            throw new BusinessException("导入失败，以下工程不存在" + Arrays.toString(notExistProjectNameList.toArray()));
+            throw new BusinessException("导入失败，以下工程不存在：" + Arrays.toString(notExistProjectNameList.toArray()));
         }
 
         // 2、保存出入表
@@ -154,6 +151,11 @@ public class InoutStockServiceImpl implements InoutStockService {
             inoutStock.setRemark(StringUtil.trim(template.getRemark()));
             inoutStock.setCreateUser(user.getName());
             inoutStockDao.insertSelective(inoutStock);
+
+            // 出库数量为负
+            if (Objects.equals(inoutStockType, InoutStockTypeEnum.出库.getType())) {
+                inoutStock.setCount(-1 * inoutStock.getCount());
+            }
             inoutStockList.add(inoutStock);
         }
 

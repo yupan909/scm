@@ -218,8 +218,8 @@
                         <form>
                             <input type="hidden" id = "detail_id">
                             <label>变更时间</label>
-                            <input type="text" class="form-control date-Input" id="startDate" name="createtime" placeholder="开始时间" readonly="readonly" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:'#F{$dp.$D(\'endDate\')}'})">
-                            至 <input type="text" class="form-control date-Input" id="endDate" name="createtime" placeholder="结束时间" readonly="readonly" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'startDate\')}'})">
+                            <input type="text" class="form-control" id="startDate" name="startDate" placeholder="开始时间" readonly="readonly">
+                            至 <input type="text" class="form-control" id="endDate" name="endDate" placeholder="结束时间" readonly="readonly">
                             <button type="button" class="btn btn-primary" onclick="loadDetail('1')"><span class="glyphicon glyphicon-search"></span>查询</button>
                             <button type="reset" class="btn btn-default"><span class="glyphicon glyphicon-trash"></span> 清空</button>
                         </form>

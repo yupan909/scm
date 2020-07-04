@@ -44,23 +44,4 @@ public class InoutStockServiceTest {
         System.out.println(JSON.toJSONString(pageInfo));
     }
 
-    /**
-     * 新增出入库
-     */
-    @Test
-    public void insertInoutStock(){
-        InoutStock inoutStock = new InoutStock();
-        inoutStock.setWarehouseId(2);
-        inoutStock.setProject("工程C");
-        inoutStock.setProduct("产品7");
-        inoutStock.setModel("15瓶/箱");
-        inoutStock.setUnit("瓶");
-        inoutStock.setCount(15);
-        inoutStock.setHandle("余xx");
-        inoutStock.setType(InoutStockTypeEnum.出库.getType());
-        inoutStock.setCreateUser("张三");
-        Long id = inoutStockService.insertInoutStock(inoutStock);
-        System.out.println("出入库id:" + id);
-    }
-
 }

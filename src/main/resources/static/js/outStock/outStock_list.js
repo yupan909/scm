@@ -17,6 +17,15 @@ var pageSize = 20;
 var stockType = 1;
 $(function(){
 	load(curr);
+
+    //开始时间
+    layui.laydate.render({
+        elem: '#startDate'
+    });
+    //结束时间
+    layui.laydate.render({
+        elem: '#endDate'
+    });
 });
 
 function load(pageNum){
@@ -44,16 +53,16 @@ function load(pageNum){
                  $.each(data.data, function (i, item) {
                  html +="<tr>"+
                             "<td>"+(i+1)+"</td>"+
-                            "<td>"+item.project+"</td>"+
-                            "<td>"+item.product+"</td>"+
-                            "<td>"+item.model+"</td>"+
-                            "<td>"+item.unit+"</td>"+
-                            "<td>"+item.count+"</td>"+
-                            "<td>"+item.price+"</td>"+
-                            "<td>"+item.source+"</td>"+
-                            "<td>"+item.handle+"</td>"+
-                            "<td>"+item.remark+"</td>"+
-                            "<td>"+item.createTime+"</td>"+
+                            "<td>"+Public.ifNull(item.project)+"</td>"+
+                            "<td>"+Public.ifNull(item.product)+"</td>"+
+                            "<td>"+Public.ifNull(item.model)+"</td>"+
+                            "<td>"+Public.ifNull(item.unit)+"</td>"+
+                            "<td>"+Public.ifNull(item.count)+"</td>"+
+                            "<td>"+Public.ifNull(item.price)+"</td>"+
+                            "<td>"+Public.ifNull(item.source)+"</td>"+
+                            "<td>"+Public.ifNull(item.handle)+"</td>"+
+                            "<td>"+Public.ifNull(item.remark)+"</td>"+
+                            "<td>"+Public.ifNull(item.createTime)+"</td>"+
                             "</tr>";
                 });
                 if(html == ""){
@@ -93,6 +102,12 @@ function exportTemplate(){
  * 导入
  */
 function importFile() {
+    var file = $("#file").val();
+    if (!file) {
+        Public.alert(2,"请选择导入文件！");
+        return;
+    }
+
     var formData = new FormData($('#uploadForm')[0]);
     $.ajax({
         type: "POST",
@@ -106,7 +121,10 @@ function importFile() {
         },
         success: function(data) {
             if(data.flag == true){
-                $('#importModal').modal('hide');
+                $("#importModal input").val("");
+                $("#importModal select option:first").prop("selected", 'selected');
+                document.getElementById("import-close-btn").click();
+
                 Public.alert(1,"导入成功！");
                 load(1);
             }else{

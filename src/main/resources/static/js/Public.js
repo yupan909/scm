@@ -305,6 +305,14 @@ var Public = {
 			$("#" + id).data('bootstrapValidator').validate();
 			var flag = $("#" + id).data("bootstrapValidator").isValid();
 			return flag;
+		},
+
+		// null转化为""
+		ifNull: function(value) {
+			if (value == null) {
+				return "";
+			}
+			return value;
 		}
 
 }
