@@ -2,6 +2,7 @@ package com.java.scm.util;
 
 import com.java.scm.config.exception.BusinessException;
 
+import java.math.BigDecimal;
 import java.util.Collection;
 
 /**
@@ -124,6 +125,44 @@ public class AssertUtils {
     public static void notEmpty(String str, String message){
         if (str == null || str.trim().isEmpty()) {
             fail(message);
+        }
+    }
+
+    /**
+     * 判断字符串长度
+     *
+     */
+    public static void maxlength(String str, int length, String message){
+        if (str != null) {
+            if (str.length() > length) {
+                fail(message);
+            }
+        }
+    }
+
+    /**
+     * 判断是否是数字
+     */
+    public static void isInteger(String str, String message){
+        if (str != null) {
+            try{
+                Integer.valueOf(str);
+            }catch(Exception e){
+                fail(message);
+            }
+        }
+    }
+
+    /**
+     * 判断是否是大数指类型
+     */
+    public static void isBigDecimal(String str, String message){
+        if (str != null) {
+            try{
+                new BigDecimal(str);
+            }catch(Exception e){
+                fail(message);
+            }
         }
     }
 

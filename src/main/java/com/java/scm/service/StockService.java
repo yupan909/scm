@@ -1,7 +1,10 @@
 package com.java.scm.service;
 
+import com.java.scm.bean.InoutStock;
 import com.java.scm.bean.Stock;
 import com.java.scm.bean.base.BaseResult;
+
+import java.util.List;
 
 /**
  * 库存信息服务
@@ -66,6 +69,11 @@ public interface StockService {
      * @return
      */
     BaseResult getChangeDetail(Long id,String startDate,String endDate,int pageNum,int pageSize);
+
+    /**
+     * 批量变更库存
+     */
+    void insertStock(List<InoutStock> inoutStockList);
 
 
 }

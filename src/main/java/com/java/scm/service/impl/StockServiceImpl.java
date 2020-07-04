@@ -1,30 +1,32 @@
 package com.java.scm.service.impl;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.java.scm.bean.InoutStock;
 import com.java.scm.bean.Stock;
 import com.java.scm.bean.StockRecord;
 import com.java.scm.bean.User;
 import com.java.scm.bean.base.BaseResult;
+import com.java.scm.config.exception.BusinessException;
 import com.java.scm.dao.StockDao;
 import com.java.scm.dao.StockRecordDao;
-import com.java.scm.enums.StateEnum;
+import com.java.scm.enums.AdminEnum;
 import com.java.scm.enums.StockRecordTypeEnum;
 import com.java.scm.service.StockService;
+import com.java.scm.util.AssertUtils;
 import com.java.scm.util.RequestUtil;
 import com.java.scm.util.StringUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 import tk.mybatis.mapper.entity.Example;
 
 import javax.annotation.Resource;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * @author hujunhui
@@ -34,52 +36,77 @@ import java.util.Map;
 @Service
 public class StockServiceImpl implements StockService {
 
-    private static Byte TYPE = (byte) 2;
-
-    private static Byte ADMIN = (byte) 1 ;
-
     @Resource
     private StockDao stockDao;
 
     @Resource
     private StockRecordDao stockRecordDao;
 
+    /**
+     * 初始化库存
+     * @param stock
+     * @return
+     */
     @Transactional
     @Override
     public BaseResult initStock(Stock stock) {
+        AssertUtils.notNull(stock, "初始化库存不能为空");
+        AssertUtils.notNull(stock.getWarehouseId(), "仓库id不能为空");
+        AssertUtils.notNull(stock.getProduct(), "物资名称不能为空");
+        AssertUtils.notNull(stock.getModel(), "物资型号不能为空");
+        AssertUtils.notNull(stock.getCount(), "数量不能为空");
+
         if(!stockCheck(null,stock.getWarehouseId(),stock.getProduct(),stock.getModel())){
             return new BaseResult(false,"物资已存在，无法重复添加！");
         }
+        stockDao.insertSelective(stock);
+
         User user = RequestUtil.getCurrentUser();
-        stock.setCreateTime(new Date());
-        stock.setUpdateTime(new Date());
-        stockDao.insert(stock);
         Long stockId = stock.getId();
         StockRecord stockRecord = new StockRecord();
         stockRecord.setCreateUser(user.getName());
         stockRecord.setStockId(stockId);
         stockRecord.setCount(stock.getCount());
-        stockRecord.setType(TYPE);
-        stockRecord.setCreateTime(new Date());
-        stockRecordDao.insert(stockRecord);
+        stockRecord.setType(StockRecordTypeEnum.手动修改.getType());
+        stockRecordDao.insertSelective(stockRecord);
         return new BaseResult(true,"库存初始化成功！");
     }
 
+    /**
+     * 修改库存物资
+     * @param stock
+     * @return
+     */
     @Override
     public BaseResult modifyStockInfo(Stock stock) {
+        AssertUtils.notNull(stock, "修改库存物资不能为空");
+        AssertUtils.notNull(stock.getId(), "库存id不能为空");
+        AssertUtils.notNull(stock.getWarehouseId(), "仓库id不能为空");
+        AssertUtils.notNull(stock.getProduct(), "物资名称不能为空");
+        AssertUtils.notNull(stock.getModel(), "物资型号不能为空");
+
         if(!stockCheck(stock.getId(),stock.getWarehouseId(),stock.getProduct(),stock.getModel())){
             return new BaseResult(false,"无法修改成已存在的物资！");
         }
-        stock.setCount(null);
-        stock.setUpdateTime(new Date());
         stockDao.updateByPrimaryKeySelective(stock);
         return new BaseResult(true,"物资信息就该成功！");
     }
 
+    /**
+     * 修改库存数量
+     * @param stock
+     * @return
+     */
     @Transactional
     @Override
     public BaseResult modifyStockCount(Stock stock) {
+        AssertUtils.notNull(stock, "修改库存参数不能为空");
+        AssertUtils.notNull(stock.getId(), "库存id不能为空");
+        AssertUtils.notNull(stock.getCount(), "库存数量不能为空");
+
         User user = RequestUtil.getCurrentUser();
+        stockDao.updateByPrimaryKeySelective(stock);
+
         Long id  = stock.getId();
         Stock oldStock = stockDao.selectByPrimaryKey(id);
         Integer oldStockCount = oldStock.getCount();
@@ -89,19 +116,24 @@ public class StockServiceImpl implements StockService {
         stockRecord.setCreateUser(user.getName());
         stockRecord.setStockId(id);
         stockRecord.setCount(diff);
-        stockRecord.setType(TYPE);
-        stockRecord.setCreateTime(new Date());
-        stockDao.updateByPrimaryKeySelective(stock);
-        stockRecordDao.insert(stockRecord);
+        stockRecord.setType(StockRecordTypeEnum.手动修改.getType());
+        stockRecordDao.insertSelective(stockRecord);
         return new BaseResult(true,"库存数量更新成功！");
     }
 
+    /**
+     * 库存列表
+     * @param key
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
     @Override
     public BaseResult listStock(String key, int pageNum, int pageSize) {
         User user = RequestUtil.getCurrentUser();
         List<Map> data ;
         PageHelper.startPage(pageNum,pageSize);
-        if(ADMIN.equals(user.getAdmin())){
+        if(Objects.equals(user.getAdmin(), AdminEnum.管理员.getType())){
             data = stockDao.getStockInfosForAdmin(key);
         }else{
             data = stockDao.getStockInfos(user.getWarehouseId(),key);
@@ -121,8 +153,13 @@ public class StockServiceImpl implements StockService {
         return new BaseResult(stock);
     }
 
+    /**
+     * 获取库存变更明细
+     * @return
+     */
     @Override
     public BaseResult getChangeDetail(Long id, String startDate, String endDate, int pageNum, int pageSize) {
+        AssertUtils.notNull(id, "库存id不能为空");
         Example example = new Example(StockRecord.class);
         Example.Criteria criteria =  example.createCriteria();
         criteria.andEqualTo("stockId",id);
@@ -143,6 +180,50 @@ public class StockServiceImpl implements StockService {
             }
         }
         return new BaseResult(data,pageInfo.getTotal());
+    }
+
+    /**
+     * 批量变更库存
+     */
+    @Override
+    public void insertStock(List<InoutStock> inoutStockList) {
+        if (CollectionUtils.isEmpty(inoutStockList)) {
+            throw new BusinessException("变更库存参数不能为空");
+        }
+        inoutStockList.forEach(inoutStock -> {
+            Stock oldStock = getStockBySelective(inoutStock.getWarehouseId(), inoutStock.getProduct(), inoutStock.getModel());
+            if (oldStock == null) {
+                throw new BusinessException(String.format("%s（%s）在仓库没有库存，请检查后再重新导入！", inoutStock.getProduct(), inoutStock.getModel()));
+            }
+            // 新库存数量
+            Stock newStock = new Stock();
+            newStock.setId(oldStock.getId());
+            newStock.setCount(oldStock.getCount() + inoutStock.getCount());
+            stockDao.updateByPrimaryKeySelective(newStock);
+
+            // 库存记录
+            StockRecord stockRecord = new StockRecord();
+            stockRecord.setStockId(oldStock.getId());
+            stockRecord.setProject(inoutStock.getProject());
+            stockRecord.setCount(inoutStock.getCount());
+            stockRecord.setType(inoutStock.getType());
+            stockRecord.setInoutStockId(inoutStock.getId());
+            stockRecord.setCreateUser(inoutStock.getCreateUser());
+            stockRecordDao.insertSelective(stockRecord);
+        });
+    }
+
+    private Stock getStockBySelective(Integer warehouseId,String product ,String model) {
+        Example example = new Example(Stock.class);
+        Example.Criteria criteria =  example.createCriteria();
+        criteria.andEqualTo("warehouseId",warehouseId);
+        criteria.andEqualTo("product",product);
+        criteria.andEqualTo("model",model);
+        List<Stock> stockList = stockDao.selectByExample(example);
+        if (CollectionUtils.isEmpty(stockList)) {
+            return null;
+        }
+        return stockList.get(0);
     }
 
     /**

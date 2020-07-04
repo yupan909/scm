@@ -3,6 +3,8 @@ package com.java.scm.service;
 import com.java.scm.bean.Project;
 import com.java.scm.bean.base.BaseResult;
 
+import java.util.List;
+
 /**
  * 工程
  *
@@ -54,5 +56,11 @@ public interface ProjectService {
      * @return
      */
     BaseResult stopUsing( Long id);
+
+    /**
+     * 根据工程名称查询存在的工程名称
+     * @return
+     */
+    List<String> getProjectByName(List<String> nameList);
 
 }
