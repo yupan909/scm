@@ -35,14 +35,13 @@ public class ProjectServiceImpl implements ProjectService {
     @Autowired
     private ProjectDao projectDao;
 
-
     /**
      * 获取工程
      * @param id
      * @return
      */
     @Override
-    public BaseResult getProject(Long id) {
+    public BaseResult getProject(String id) {
         AssertUtils.notNull(id, "工程id不能为空");
         Project project = projectDao.selectByPrimaryKey(id);
         return new BaseResult(project);
@@ -86,7 +85,7 @@ public class ProjectServiceImpl implements ProjectService {
      * @return
      */
     @Override
-    public BaseResult deleteProject(Long id) {
+    public BaseResult deleteProject(String id) {
         AssertUtils.notNull(id, "工程id不能为空");
         projectDao.deleteByPrimaryKey(id);
         return new BaseResult(true,"删除成功");
@@ -117,7 +116,7 @@ public class ProjectServiceImpl implements ProjectService {
      * @return
      */
     @Override
-    public BaseResult stopUsing(Long id) {
+    public BaseResult stopUsing(String id) {
         AssertUtils.notNull(id, "工程id不能为空");
         Project project = projectDao.selectByPrimaryKey(id);
         if (project == null) {
@@ -161,7 +160,7 @@ public class ProjectServiceImpl implements ProjectService {
      * @param name
      * @return
      */
-    private boolean projectCheck(Long id,String name){
+    private boolean projectCheck(String id,String name){
         Example example = new Example(Project.class);
         Example.Criteria criteria =  example.createCriteria();
         if(id !=null){

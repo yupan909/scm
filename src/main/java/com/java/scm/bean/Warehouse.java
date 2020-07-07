@@ -1,6 +1,8 @@
 package com.java.scm.bean;
 
 import lombok.*;
+import tk.mybatis.mapper.annotation.KeySql;
+import tk.mybatis.mapper.code.ORDER;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -25,8 +27,8 @@ public class Warehouse {
      * 仓库id
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    @KeySql(order = ORDER.BEFORE, sql = "select uuid_short()")
+    private String id;
 
     /**
      * 仓库名称

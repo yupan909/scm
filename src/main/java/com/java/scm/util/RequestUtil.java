@@ -50,7 +50,7 @@ public class RequestUtil {
      * 获取当前登录人的仓库id（管理员仓库为空）
      * @return
      */
-    public static Integer getWarehouseId(){
+    public static String getWarehouseId(){
         User user = getCurrentUser();
         if (Objects.equals(AdminEnum.管理员.getType(), user.getAdmin())) {
             return null;

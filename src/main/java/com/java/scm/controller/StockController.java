@@ -67,7 +67,7 @@ public class StockController {
      * @return
      */
     @GetMapping("/delete")
-    public BaseResult deleteStock(Long id){
+    public BaseResult deleteStock(String id){
         return stockService.deleteStock(id);
     }
 
@@ -77,7 +77,7 @@ public class StockController {
      * @return
      */
     @GetMapping("/get/{id}")
-    public BaseResult getStockById(@PathVariable("id") Long id){
+    public BaseResult getStockById(@PathVariable("id") String id){
         return stockService.getStockById(id);
     }
 
@@ -91,7 +91,7 @@ public class StockController {
      * @return
      */
     @GetMapping("detail")
-    public BaseResult getChangeDetail(Long id, String startDate, String endDate, int pageNum, int pageSize){
+    public BaseResult getChangeDetail(String id, String startDate, String endDate, int pageNum, int pageSize){
         return stockService.getChangeDetail(id,startDate,endDate,pageNum,pageSize);
     }
 }

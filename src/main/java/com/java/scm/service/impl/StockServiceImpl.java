@@ -56,16 +56,15 @@ public class StockServiceImpl implements StockService {
         AssertUtils.notNull(stock.getModel(), "物资型号不能为空");
         AssertUtils.notNull(stock.getCount(), "数量不能为空");
 
-        if(!stockCheck(null,stock.getWarehouseId(),stock.getProduct(),stock.getModel())){
+        if(!stockCheck(null, stock.getWarehouseId(), stock.getProduct(), stock.getModel())){
             return new BaseResult(false,"物资已存在，无法重复添加！");
         }
         stockDao.insertSelective(stock);
 
         User user = RequestUtil.getCurrentUser();
-        Long stockId = stock.getId();
         StockRecord stockRecord = new StockRecord();
         stockRecord.setCreateUser(user.getName());
-        stockRecord.setStockId(stockId);
+        stockRecord.setStockId(stock.getId());
         stockRecord.setCount(stock.getCount());
         stockRecord.setType(StockRecordTypeEnum.手动修改.getType());
         stockRecordDao.insertSelective(stockRecord);
@@ -104,17 +103,18 @@ public class StockServiceImpl implements StockService {
         AssertUtils.notNull(stock.getId(), "库存id不能为空");
         AssertUtils.notNull(stock.getCount(), "库存数量不能为空");
 
+        String id  = stock.getId();
+        Stock oldStock = stockDao.selectByPrimaryKey(id);
+
         User user = RequestUtil.getCurrentUser();
         stockDao.updateByPrimaryKeySelective(stock);
 
-        Long id  = stock.getId();
-        Stock oldStock = stockDao.selectByPrimaryKey(id);
         Integer oldStockCount = oldStock.getCount();
         Integer newCount = stock.getCount();
         Integer diff = newCount - oldStockCount;
         StockRecord stockRecord = new StockRecord();
         stockRecord.setCreateUser(user.getName());
-        stockRecord.setStockId(id);
+        stockRecord.setStockId(stock.getId());
         stockRecord.setCount(diff);
         stockRecord.setType(StockRecordTypeEnum.手动修改.getType());
         stockRecordDao.insertSelective(stockRecord);
@@ -143,12 +143,12 @@ public class StockServiceImpl implements StockService {
     }
 
     @Override
-    public BaseResult deleteStock(Long id) {
+    public BaseResult deleteStock(String id) {
         return new BaseResult(true,"暂不支持删除库存");
     }
 
     @Override
-    public BaseResult getStockById(Long id) {
+    public BaseResult getStockById(String id) {
         Stock stock =  stockDao.selectByPrimaryKey(id);
         return new BaseResult(stock);
     }
@@ -158,7 +158,7 @@ public class StockServiceImpl implements StockService {
      * @return
      */
     @Override
-    public BaseResult getChangeDetail(Long id, String startDate, String endDate, int pageNum, int pageSize) {
+    public BaseResult getChangeDetail(String id, String startDate, String endDate, int pageNum, int pageSize) {
         AssertUtils.notNull(id, "库存id不能为空");
         Example example = new Example(StockRecord.class);
         example.setOrderByClause(" create_time DESC ");
@@ -211,12 +211,17 @@ public class StockServiceImpl implements StockService {
         });
     }
 
-    private Stock getStockBySelective(Integer warehouseId,String product ,String model) {
+    /**
+     * 按条件查询库存
+     *
+     * @return
+     */
+    private Stock getStockBySelective(String warehouseId, String product, String model) {
         Example example = new Example(Stock.class);
-        Example.Criteria criteria =  example.createCriteria();
-        criteria.andEqualTo("warehouseId",warehouseId);
-        criteria.andEqualTo("product",product);
-        criteria.andEqualTo("model",model);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("warehouseId", warehouseId);
+        criteria.andEqualTo("product", product);
+        criteria.andEqualTo("model", model);
         List<Stock> stockList = stockDao.selectByExample(example);
         if (CollectionUtils.isEmpty(stockList)) {
             return null;
@@ -232,7 +237,7 @@ public class StockServiceImpl implements StockService {
      * @param model
      * @return
      */
-    private boolean stockCheck(Long id,Integer warehouseId,String product ,String model){
+    private boolean stockCheck(String id, String warehouseId, String product, String model){
         Example example = new Example(Stock.class);
         Example.Criteria criteria =  example.createCriteria();
         if(id !=null){

@@ -20,7 +20,7 @@ public class InoutStockSO extends PageCondition {
     /**
      * 仓库id
      */
-    private Integer warehouseId;
+    private String warehouseId;
 
     /**
      * 工程名称

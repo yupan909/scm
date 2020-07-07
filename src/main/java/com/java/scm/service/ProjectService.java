@@ -18,7 +18,7 @@ public interface ProjectService {
      * @param id
      * @return
      */
-    BaseResult getProject(Long id);
+    BaseResult getProject(String id);
 
     /**
      * 保存工程
@@ -39,7 +39,7 @@ public interface ProjectService {
      * @param id
      * @return
      */
-    BaseResult deleteProject( Long id);
+    BaseResult deleteProject(String id);
 
     /**
      * 展示工程列表
@@ -55,7 +55,7 @@ public interface ProjectService {
      * @param id
      * @return
      */
-    BaseResult stopUsing( Long id);
+    BaseResult stopUsing(String id);
 
     /**
      * 根据工程名称查询存在的工程名称

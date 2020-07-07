@@ -43,21 +43,21 @@ public interface UserService {
      * @param id
      * @return
      */
-    BaseResult stopUsing(Integer id);
+    BaseResult stopUsing(String id);
 
     /**
      * 删除账户
      * @param id
      * @return
      */
-    BaseResult deleteUser(Integer id);
+    BaseResult deleteUser(String id);
 
     /**
      * 密码重置
      * @param id
      * @return
      */
-    BaseResult updatePassword(Integer id, String password);
+    BaseResult updatePassword(String id, String password);
 
     /**
      * 用户列表展示
@@ -73,5 +73,5 @@ public interface UserService {
      * @param id
      * @return
      */
-    BaseResult getUserById(Long id);
+    BaseResult getUserById(String id);
 }

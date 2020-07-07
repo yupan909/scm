@@ -24,7 +24,7 @@ public class ProjectController {
      * @return
      */
     @GetMapping("/getProject/{id}")
-    public BaseResult getProject(@PathVariable("id") Long id) {
+    public BaseResult getProject(@PathVariable("id") String id) {
         return  projectService.getProject(id);
     }
 
@@ -51,7 +51,7 @@ public class ProjectController {
      * @return
      */
     @GetMapping("/delete/{id}")
-    public BaseResult deleteProject(@PathVariable("id") Long id){
+    public BaseResult deleteProject(@PathVariable("id") String id){
         return projectService.deleteProject(id);
     }
 
@@ -69,7 +69,7 @@ public class ProjectController {
      * @return
      */
     @GetMapping("/stopUsing/{id}")
-    public BaseResult stopUsing(@PathVariable("id") Long id){
+    public BaseResult stopUsing(@PathVariable("id") String id){
         return projectService.stopUsing(id);
     }
 }

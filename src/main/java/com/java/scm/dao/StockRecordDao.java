@@ -10,6 +10,5 @@ import org.springframework.stereotype.Component;
  * @date 2020/6/28
  */
 @Mapper
-@Component
 public interface StockRecordDao  extends TkMapper<StockRecord> {
 }

@@ -2,6 +2,8 @@ package com.java.scm.bean;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
+import tk.mybatis.mapper.annotation.KeySql;
+import tk.mybatis.mapper.code.ORDER;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -24,8 +26,8 @@ public class Project {
      * 工程ID
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @KeySql(order = ORDER.BEFORE, sql = "select uuid_short()")
+    private String id;
 
     /**
      * 工程名称

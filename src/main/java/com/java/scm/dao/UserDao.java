@@ -13,7 +13,6 @@ import java.util.Map;
  * @date 2020/6/24
  */
 @Mapper
-@Component
 public interface UserDao extends TkMapper<User> {
 
     /**

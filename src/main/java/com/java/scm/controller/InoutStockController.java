@@ -54,7 +54,7 @@ public class InoutStockController {
      */
     @GetMapping("/exportInoutStock")
     public void exportInoutStock(@RequestParam("type") Byte type,
-                                 @RequestParam("warehouseId") Integer warehouseId,
+                                 @RequestParam("warehouseId") String warehouseId,
                                  @RequestParam("project") String project,
                                  @RequestParam("product") String product,
                                  @RequestParam("startTime") String startTime,

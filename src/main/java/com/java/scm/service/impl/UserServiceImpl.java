@@ -55,7 +55,7 @@ public class UserServiceImpl implements UserService {
             if(Objects.equals(user.getState(), StateEnum.禁用.getType())){
                 throw new BusinessException("账号已被停用");
             }else{
-                Map<Integer, String> warehouseMap = warehouseService.getWarehouseMap(Arrays.asList(user.getWarehouseId()));
+                Map<String, String> warehouseMap = warehouseService.getWarehouseMap(Arrays.asList(user.getWarehouseId()));
                 user.setWarehouseName(StringUtil.isNotEmpty(warehouseMap.get(user.getWarehouseId())) ? warehouseMap.get(user.getWarehouseId()) : "");
                 RequestUtil.setLoginUser(user);
                 BaseResult result = new BaseResult(user);
@@ -136,7 +136,7 @@ public class UserServiceImpl implements UserService {
      * @return
      */
     @Override
-    public BaseResult stopUsing(Integer id) {
+    public BaseResult stopUsing(String id) {
         AssertUtils.notNull(id, "用户ID不能为空");
         User user = userDao.selectByPrimaryKey(id);
         if (user == null) {
@@ -161,7 +161,7 @@ public class UserServiceImpl implements UserService {
      * @return
      */
     @Override
-    public BaseResult deleteUser(Integer id) {
+    public BaseResult deleteUser(String id) {
         AssertUtils.notNull(id, "用户ID不能为空");
         userDao.deleteByPrimaryKey(id);
         return new BaseResult(true,"账号已删除");
@@ -172,7 +172,7 @@ public class UserServiceImpl implements UserService {
      * @return
      */
     @Override
-    public BaseResult updatePassword(Integer id, String password) {
+    public BaseResult updatePassword(String id, String password) {
         AssertUtils.notNull(id, "用户ID不能为空");
         AssertUtils.notEmpty(password, "密码不能为空");
         User query = new User();
@@ -207,7 +207,7 @@ public class UserServiceImpl implements UserService {
      * @return
      */
     @Override
-    public BaseResult getUserById(Long id) {
+    public BaseResult getUserById(String id) {
         AssertUtils.notNull(id, "用户ID不能为空");
         User user = userDao.selectByPrimaryKey(id);
         return  new BaseResult(user);

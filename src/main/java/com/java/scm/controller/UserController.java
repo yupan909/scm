@@ -76,7 +76,7 @@ public class UserController {
      */
     @GetMapping("/stopUsing/{id}")
     @AdminRight
-    public BaseResult stopUsing(@PathVariable("id") Integer id){
+    public BaseResult stopUsing(@PathVariable("id") String id){
         return userService.stopUsing(id);
     }
 
@@ -87,7 +87,7 @@ public class UserController {
      */
     @GetMapping("/delete/{id}")
     @AdminRight
-    public BaseResult deleteUser(@PathVariable("id") Integer id){
+    public BaseResult deleteUser(@PathVariable("id") String id){
         return userService.deleteUser(id);
     }
 
@@ -99,7 +99,7 @@ public class UserController {
      */
     @PostMapping("/updatePassword")
     public BaseResult updatePassword(@RequestBody JSONObject params){
-        Integer id = params.getInteger("id");
+        String id = params.getString("id");
         String password = params.getString("password");
         return userService.updatePassword(id,password);
     }
@@ -110,7 +110,7 @@ public class UserController {
      */
     @GetMapping("/resetPassword/{id}")
     @AdminRight
-    public BaseResult resetPassword(@PathVariable("id") Integer id){
+    public BaseResult resetPassword(@PathVariable("id") String id){
         return userService.updatePassword(id, CommonConsts.RESET_PASSWORD);
     }
 
@@ -133,7 +133,7 @@ public class UserController {
      * @return
      */
     @GetMapping("/get/{id}")
-    public BaseResult getOne(@PathVariable("id") Long id){
+    public BaseResult getOne(@PathVariable("id") String id){
         return userService.getUserById(id);
     }
 

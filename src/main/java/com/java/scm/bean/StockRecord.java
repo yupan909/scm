@@ -2,6 +2,8 @@ package com.java.scm.bean;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
+import tk.mybatis.mapper.annotation.KeySql;
+import tk.mybatis.mapper.code.ORDER;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -24,13 +26,13 @@ public class StockRecord {
      * 库存变更记录id
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @KeySql(order = ORDER.BEFORE, sql = "select uuid_short()")
+    private String id;
 
     /**
      * 库存id
      */
-    private Long stockId;
+    private String stockId;
 
     /**
      * 工程名称
@@ -50,7 +52,7 @@ public class StockRecord {
     /**
      * 出入库id
      */
-    private Long inoutStockId;
+    private String inoutStockId;
 
     /**
      * 创建时间

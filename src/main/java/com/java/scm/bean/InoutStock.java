@@ -2,6 +2,8 @@ package com.java.scm.bean;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
+import tk.mybatis.mapper.annotation.KeySql;
+import tk.mybatis.mapper.code.ORDER;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -25,13 +27,13 @@ public class InoutStock {
      * 出入库Id
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @KeySql(order = ORDER.BEFORE, sql = "select uuid_short()")
+    private String id;
 
     /**
      * 仓库id
      */
-    private Integer warehouseId;
+    private String warehouseId;
 
     /**
      * 仓库名称

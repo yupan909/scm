@@ -21,5 +21,5 @@ public interface WarehouseService {
      * 查询仓库id对应名称集合
      * @return
      */
-    Map<Integer, String> getWarehouseMap(List<Integer> ids);
+    Map<String, String> getWarehouseMap(List<String> ids);
 }

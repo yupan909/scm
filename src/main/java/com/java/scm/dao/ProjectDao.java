@@ -12,7 +12,6 @@ import org.springframework.stereotype.Component;
  * @date 2020-06-23 22:08
  */
 @Mapper
-@Component
 public interface ProjectDao extends TkMapper<Project> {
 
 }

@@ -44,7 +44,7 @@ public class WarehouseServiceImpl implements WarehouseService {
     }
 
     @Override
-    public Map<Integer, String> getWarehouseMap(List<Integer> ids) {
+    public Map<String, String> getWarehouseMap(List<String> ids) {
         AssertUtils.notEmpty(ids, "仓库id不能为空");
         Example example = new Example(Warehouse.class);
         Example.Criteria criteria = example.createCriteria();
@@ -53,7 +53,7 @@ public class WarehouseServiceImpl implements WarehouseService {
         if (CollectionUtils.isEmpty(warehouseList)) {
             return Collections.EMPTY_MAP;
         }
-        Map<Integer, String> warehouseMap = new HashMap<>();
+        Map<String, String> warehouseMap = new HashMap<>();
         warehouseList.forEach(warehouse -> {
             warehouseMap.put(warehouse.getId(), warehouse.getName());
         });

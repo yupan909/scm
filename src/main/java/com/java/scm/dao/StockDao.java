@@ -14,7 +14,6 @@ import java.util.Map;
  * @date 2020/6/28
  */
 @Mapper
-@Component
 public interface StockDao extends TkMapper<Stock> {
 
 
@@ -43,5 +42,5 @@ public interface StockDao extends TkMapper<Stock> {
             @Result(column="update_time", property="updateTime")
     })
     @Select("SELECT a.`id`,a.`warehouse_id`,a.`product`,a.`model`,a.`unit`,a.`count` , DATE_FORMAT(  a.`create_time`, '%Y-%m-%d %H:%m:%s' ) AS create_time , DATE_FORMAT(  a.update_time, '%Y-%m-%d %H:%m:%s' )  AS update_time ,b.name AS warehouseName FROM `stock` a LEFT JOIN warehouse b ON a.warehouse_id = b.`id` where a.product like CONCAT('%',#{product},'%') and a.warehouse_id = #{warehouseId}  order by a.create_time desc")
-    List<Map> getStockInfos(@Param("warehouseId") Integer warehouseId ,@Param("product") String product);
+    List<Map> getStockInfos(@Param("warehouseId") String warehouseId ,@Param("product") String product);
 }

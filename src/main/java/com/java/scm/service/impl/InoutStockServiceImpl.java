@@ -81,8 +81,8 @@ public class InoutStockServiceImpl implements InoutStockService {
         // 设置仓库名称和类型
         if (!CollectionUtils.isEmpty(list)) {
             // 查询仓库名称集合
-            List<Integer> warehouseIds = list.stream().map(p -> p.getWarehouseId()).distinct().collect(Collectors.toList());
-            Map<Integer, String> warehouseMap = warehouseService.getWarehouseMap(warehouseIds);
+            List<String> warehouseIds = list.stream().map(p -> p.getWarehouseId()).distinct().collect(Collectors.toList());
+            Map<String, String> warehouseMap = warehouseService.getWarehouseMap(warehouseIds);
             list.forEach(p -> {
                 p.setTypeText(InoutStockTypeEnum.getEnumByValue(p.getType()));
                 p.setWarehouseName(warehouseMap.get(p.getWarehouseId()));

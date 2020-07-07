@@ -49,14 +49,14 @@ public interface StockService {
      * @param id
      * @return
      */
-    BaseResult deleteStock(Long id);
+    BaseResult deleteStock(String id);
 
     /**
      * 根据id 获取库存信息
      * @param id
      * @return
      */
-    BaseResult getStockById(Long id);
+    BaseResult getStockById(String id);
 
 
     /**
@@ -68,7 +68,7 @@ public interface StockService {
      * @param pageSize
      * @return
      */
-    BaseResult getChangeDetail(Long id,String startDate,String endDate,int pageNum,int pageSize);
+    BaseResult getChangeDetail(String id,String startDate,String endDate,int pageNum,int pageSize);
 
     /**
      * 批量变更库存

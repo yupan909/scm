@@ -32,7 +32,7 @@ public class InoutStockServiceTest {
     @Test
     public void listInoutStock() throws Exception{
         InoutStockSO inoutStockSO = new InoutStockSO();
-        inoutStockSO.setWarehouseId(1);
+        inoutStockSO.setWarehouseId("1");
         inoutStockSO.setType(InoutStockTypeEnum.入库.getType());
         inoutStockSO.setProject("A");
         inoutStockSO.setProduct("5");
