@@ -72,6 +72,7 @@ public class ProjectServiceImpl implements ProjectService {
     public BaseResult modifyProject(Project project) {
         AssertUtils.notNull(project, "工程信息不能为空");
         AssertUtils.notNull(project.getId(), "工程id不能为空");
+        AssertUtils.notEmpty(project.getName(), "工程名称不能为空");
         if(!projectCheck(project.getId(),project.getName())){
             return new BaseResult(false,"工程名不可重复");
         }

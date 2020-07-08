@@ -88,7 +88,7 @@ public class StockServiceImpl implements StockService {
             return new BaseResult(false,"无法修改成已存在的物资！");
         }
         stockDao.updateByPrimaryKeySelective(stock);
-        return new BaseResult(true,"物资信息就该成功！");
+        return new BaseResult(true,"物资信息修改成功！");
     }
 
     /**
