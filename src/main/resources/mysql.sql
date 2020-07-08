@@ -78,5 +78,5 @@ CREATE TABLE `scm`.`stock_record`(
 ) COMMENT='库存变更记录表';
 
 -- 初始化数据
-insert into `scm`.`user`(id, name, password, admin) values (uuid_short(),'管理员', 'admin', 1);
+insert into `scm`.`user`(id, name, password, admin) values (uuid_short(),'管理员', '123456', 1);
 insert into `scm`.`warehouse`(id, name) values (uuid_short(), '武汉市东西湖区电力设备安装有限公司'), (uuid_short(), '湖北得力电气有限公司');

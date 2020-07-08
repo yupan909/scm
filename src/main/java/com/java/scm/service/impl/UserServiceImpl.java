@@ -108,6 +108,7 @@ public class UserServiceImpl implements UserService {
     public BaseResult modifyUser(User user) {
         AssertUtils.notNull(user, "用户信息不能为空");
         AssertUtils.notNull(user.getId(), "用户ID不能为空");
+        AssertUtils.notEmpty(user.getName(), "用户名不能为空");
 
         Example example = new Example(User.class);
         Example.Criteria criteria =  example.createCriteria();
@@ -116,15 +117,6 @@ public class UserServiceImpl implements UserService {
         int nameCount = userDao.selectCountByExample(example);
         if(nameCount >0){
             throw new BusinessException("用户姓名："+user.getName()+"已存在，请修改成其他姓名");
-        }
-
-        Example mobileExample = new Example(User.class);
-        Example.Criteria mobileCriteria =  mobileExample.createCriteria();
-        mobileCriteria.andNotEqualTo("id",user.getId());
-        mobileCriteria.andEqualTo("mobile",user.getMobile());
-        int mobileCount = userDao.selectCountByExample(mobileExample);
-        if(mobileCount >0){
-            throw new BusinessException("电话号码："+user.getMobile()+"已存在，无法使用该电话号码");
         }
         userDao.updateByPrimaryKeySelective(user);
         return new BaseResult(true,"修改成功");

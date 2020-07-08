@@ -280,9 +280,6 @@ function validate(){
                     regexp:{
                         regexp: /^1[3-9][\d]{9}$/,  //正则规则用两个/包裹起来
                         message: '请输入正确的手机号'
-                    },
-                    notEmpty: {
-                        message: '请输入手机号'
                     }
                 }
             },
@@ -317,9 +314,6 @@ function validate(){
                     regexp:{
                         regexp: /^1[3-9][\d]{9}$/,  //正则规则用两个/包裹起来
                         message: '请输入正确的手机号'
-                    },
-                    notEmpty: {
-                        message: '请输入手机号'
                     }
                 }
             },
