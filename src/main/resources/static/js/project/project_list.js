@@ -20,7 +20,6 @@ $(function(){
         $(".admin").remove();
     }
     load(curr);
-    validate();
 });
 
 
@@ -83,6 +82,16 @@ function load(pageNum){
 
 }
 
+// 打开新增工程页面
+function openSave(){
+    // 打开模态窗口
+    Public.openModal("saveModal");
+    // 重置校验
+    Public.resetValidate("save-form");
+    // 添加校验
+    validate();
+}
+
 // 新增工程
 function save(){
     var validate = Public.doValidate("save-form");
@@ -99,10 +108,7 @@ function save(){
         data: data,
         success: function (data) {
             if(data.flag){
-                $("#saveModal input").val("");
-                $("#saveModal textarea").val("");
-                $("#saveModal select option:first").prop("selected", 'selected');
-                document.getElementById("save-close-btn").click();
+                Public.closeModal("saveModal");
                 Public.alert(1,"新增成功");
                 load(1);
             }else{
@@ -118,7 +124,7 @@ function save(){
  * @param id
  */
 function deleteById(id){
-    layui.layer.confirm('您确定要删除吗?', {icon: 3, title:'提示'}, function(index){
+    layui.layer.confirm('您确定要删除吗?', {icon: 3, title:'提示', skin: 'layui-layer-molv'}, function(index){
 
         $.ajax({
             cache: true,
@@ -145,11 +151,16 @@ function deleteById(id){
 }
 
 /**
- * 编辑工程页面
+ * 打开编辑工程页面
  * @param id
  */
 function edit(id){
-    $('#editModal').modal('show');
+    // 打开模态窗口
+    Public.openModal("editModal");
+    // 重置校验
+    Public.resetValidate("edit-form");
+    // 添加校验
+    validate();
     loadOneProject(id);
 }
 
@@ -192,10 +203,7 @@ function editSave(){
         data: data,
         success: function (data) {
             if(data.flag){
-                $("#editModal input").val("");
-                $("#editModal textarea").val("");
-                $("#editModal select option:first").prop("selected", 'selected');
-                document.getElementById("edit-close-btn").click();
+                Public.closeModal("editModal");
                 Public.alert(1,"修改成功！");
                 load(curr);
             }else{

@@ -299,12 +299,33 @@ var Public = {
 			return warehouseMap;
 		},
 
+		// 重置验证信息
+		resetValidate: function(id) {
+			$("#" + id).data('bootstrapValidator').destroy();
+		},
+
 		// 验证表单
 		doValidate: function(id) {
-			$("#" + id).data('bootstrapValidator').resetForm();
 			$("#" + id).data('bootstrapValidator').validate();
 			var flag = $("#" + id).data("bootstrapValidator").isValid();
 			return flag;
+		},
+
+		// 打开模态窗口
+		openModal: function(modalId) {
+			var $modal = $('#' + modalId);
+			// 显示窗口
+			$modal.modal('show');
+			// 数据重置
+			$modal.find("input").val("");
+			$modal.find("textarea").val("");
+			$modal.find("select option:first").prop("selected", 'selected');
+		},
+
+		// 关闭模态窗口
+		closeModal: function(modalId) {
+			$('#' + modalId).modal('hide');
+			// document.getElementById("edit-close-btn").click();
 		},
 
 		// null转化为""

@@ -65,9 +65,6 @@ $(function(){
 		
 		e.stopPropagation();
 	});
-
-	// 修改密码校验
-    validateChangePassword();
 });
 
 //退出
@@ -92,8 +89,14 @@ function openChange(id){
     if (!user) {
         Public.alert(2, "获取用户信息失败！");
     }
+    // 打开模态窗口
+    Public.openModal("changePasswordModal");
+    // 重置校验
+    Public.resetValidate("changePassword-form");
+    // 添加校验
+    validateChangePassword();
 
-    $('#changePasswordModal').modal('show');
+    // 回显数据
     $.ajax({
         cache: true,
         type: "GET",
@@ -129,9 +132,7 @@ function changePassword() {
         data: data,
         success: function (data) {
             if(data.flag){
-                $("#changePasswordModal input").val("");
-                $("#changePasswordModal select option:first").prop("selected", 'selected');
-                document.getElementById("change-close-btn").click();
+                Public.closeModal("changePasswordModal");
                 Public.alert(1,"修改成功，请重新登录！", function(){
                     window.location.href="../login.html";
                 });
