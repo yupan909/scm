@@ -101,6 +101,14 @@ function exportTemplate(){
 }
 
 /**
+ * 打开导入页面
+  */
+function openImportFile(){
+    // 打开模态窗口
+    Public.openModal("importModal");
+}
+
+/**
  * 导入
  */
 function importFile() {
@@ -124,10 +132,7 @@ function importFile() {
         },
         success: function(data) {
             if(data.flag == true){
-                $("#importModal input").val("");
-                $("#importModal select option:first").prop("selected", 'selected');
-                document.getElementById("import-close-btn").click();
-
+                Public.closeModal("importModal");
                 Public.alert(1,"导入成功！");
                 load(1);
             }else{

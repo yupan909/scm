@@ -65,6 +65,9 @@ $(function(){
 		
 		e.stopPropagation();
 	});
+
+    // 表单校验
+    validateChangePassword();
 });
 
 //退出

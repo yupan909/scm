@@ -20,6 +20,8 @@ $(function(){
         $(".admin").remove();
     }
     load(curr);
+    // 表单校验
+    validate();
 });
 
 

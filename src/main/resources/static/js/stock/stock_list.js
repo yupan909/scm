@@ -23,6 +23,7 @@ $(function(){
     }
     load(curr);
     Public.initWarehouse("warehouseId", "warehouseId_e");
+    // 表单校验
     validate();
 
     //开始时间
@@ -88,6 +89,16 @@ function load(pageNum){
     });
 }
 
+// 打开新增库存页面
+function openSave(){
+    // 打开模态窗口
+    Public.openModal("saveModal");
+    // 重置校验
+    Public.resetValidate("save-form");
+    // 添加校验
+    validate();
+}
+
 // 新增库存
 function save(){
     var validate = Public.doValidate("save-form");
@@ -107,9 +118,7 @@ function save(){
         data: data,
         success: function (data) {
             if(data.flag){
-                $("#saveModal input").val("");
-                $("#saveModal select option:first").prop("selected", 'selected');
-                document.getElementById("save-close-btn").click();
+                Public.closeModal("saveModal");
                 Public.alert(1,"新增成功");
                 load(1);
             }else{
@@ -121,9 +130,15 @@ function save(){
 
 // 打开修改物资页面
 function edit(id){
-    $('#editModal').modal('show');
+    // 打开模态窗口
+    Public.openModal("editModal");
+    // 重置校验
+    Public.resetValidate("edit-form");
+    // 添加校验
+    validate();
     loadOne(id);
 }
+
 function loadOne(id){
     $.ajax({
         cache: true,
@@ -167,9 +182,7 @@ function editSave(){
         data: data,
         success: function (data) {
             if(data.flag){
-                $("#editModal input").val("");
-                $("#editModal select option:first").prop("selected", 'selected');
-                document.getElementById("edit-close-btn").click();
+                Public.closeModal("editModal");
                 Public.alert(1,"修改成功！");
                 load(curr);
             }else{
@@ -181,7 +194,12 @@ function editSave(){
 
 // 打开修改库存页面
 function editCount(id){
-    $('#editModal_count').modal('show');
+    // 打开模态窗口
+    Public.openModal("editModal_count");
+    // 重置校验
+    Public.resetValidate("edit-form-count");
+    // 添加校验
+    validate();
     loadOneForCount(id);
 }
 
@@ -221,9 +239,7 @@ function editCountSave(){
         data: data,
         success: function (data) {
             if(data.flag){
-                $("#editModal_count input").val("");
-                $("#editModal_count select option:first").prop("selected", 'selected');
-                document.getElementById("edit-count-close-btn").click();
+                Public.closeModal("editModal_count");
                 Public.alert(1,"修改成功！");
                 load(curr);
             }else{
@@ -237,11 +253,14 @@ function editCountSave(){
 // 库存明细
 var detailCnt = 1;
 var detailPageSize = 10;
-function detail(id){
-    $("#detail_id").val(id);
-    $('#detail').modal('show');
-    loadDetail(detailCnt);
 
+// 打开库存明细页面
+function detail(id){
+    // 打开模态窗口
+    Public.openModal("detail");
+
+    $("#detail_id").val(id);
+    loadDetail(detailCnt);
 }
 
 function loadDetail(pageNum){

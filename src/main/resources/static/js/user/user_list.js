@@ -18,6 +18,7 @@ var pageSize = 20;
 $(function(){
 	load(curr);
     Public.initWarehouse("warehouseId", "warehouseId_e");
+    // 表单校验
     validate();
 });
 
@@ -78,6 +79,16 @@ function load(pageNum){
     });
 }
 
+// 打开新增用户页面
+function openSave(){
+    // 打开模态窗口
+    Public.openModal("saveModal");
+    // 重置校验
+    Public.resetValidate("save-form");
+    // 添加校验
+    validate();
+}
+
 // 新增用户
 function save(){
 
@@ -97,9 +108,7 @@ function save(){
         data: data,
         success: function (data) {
             if(data.flag){
-                $("#saveModal input").val("");
-                $("#saveModal select option:first").prop("selected", 'selected');
-                document.getElementById("save-close-btn").click();
+                Public.closeModal("saveModal");
                 Public.alert(1,"新增成功");
                 load(1);
             }else{
@@ -158,9 +167,15 @@ function stopUsing(id){
     });
 }
 
-// 修改用户页面
+// 打开修改用户页面
 function edit(id){
-    $('#editModal').modal('show');
+    // 打开模态窗口
+    Public.openModal("editModal");
+    // 重置校验
+    Public.resetValidate("edit-form");
+    // 添加校验
+    validate();
+
     loadOneUser(id);
 }
 
@@ -206,9 +221,7 @@ function editSave(){
         data: data,
         success: function (data) {
             if(data.flag){
-                $("#editModal input").val("");
-                $("#editModal select option:first").prop("selected", 'selected');
-                document.getElementById("edit-close-btn").click();
+                Public.closeModal("editModal");
                 Public.alert(1,"修改成功！");
                 load(curr);
             }else{
