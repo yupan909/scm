@@ -37,7 +37,7 @@ public class InoutStockServiceTest {
         inoutStockSO.setProject("A");
         inoutStockSO.setProduct("5");
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        inoutStockSO.setStartTime(sdf.parse("2020-06-24"));
+        inoutStockSO.setStartTime("2020-06-24");
         inoutStockSO.setPageNum(1);
         inoutStockSO.setPageSize(2);
         PageInfo<InoutStock> pageInfo = inoutStockService.listInoutStock(inoutStockSO);

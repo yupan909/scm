@@ -73,8 +73,12 @@ public class InoutStockServiceImpl implements InoutStockService {
             criteria.andLike("product", "%" + inoutStockSO.getProduct() + "%");
         }
         // 时间范围
-        criteria.andGreaterThanOrEqualTo("createTime", inoutStockSO.getStartTime() );
-        criteria.andLessThanOrEqualTo("createTime", inoutStockSO.getEndTime());
+        if (StringUtil.isNotEmpty(inoutStockSO.getStartTime())) {
+            criteria.andGreaterThanOrEqualTo("createTime", inoutStockSO.getStartTime() );
+        }
+        if (StringUtil.isNotEmpty(inoutStockSO.getEndTime())) {
+            criteria.andLessThanOrEqualTo("createTime", inoutStockSO.getEndTime());
+        }
         // 分页
         PageUtils.addPage(inoutStockSO.getPageNum(),inoutStockSO.getPageSize());
         List<InoutStock> list = inoutStockDao.selectByExample(example);

@@ -9,7 +9,6 @@ import com.java.scm.bean.so.InoutStockSO;
 import com.java.scm.config.exception.BusinessException;
 import com.java.scm.enums.InoutStockTypeEnum;
 import com.java.scm.service.InoutStockService;
-import com.java.scm.util.DateUtils;
 import com.java.scm.util.RequestUtil;
 import com.java.scm.util.excel.ExcelTypeEnum;
 import com.java.scm.util.excel.ExcelUtils;
@@ -65,8 +64,8 @@ public class InoutStockController {
         inoutStockSO.setWarehouseId(warehouseId);
         inoutStockSO.setProject(URLDecoder.decode(project, "utf-8"));
         inoutStockSO.setProduct(URLDecoder.decode(product, "utf-8"));
-        inoutStockSO.setStartTime(DateUtils.parseDateTime(startTime));
-        inoutStockSO.setEndTime(DateUtils.parseDateTime(endTime));
+        inoutStockSO.setStartTime(startTime);
+        inoutStockSO.setEndTime(endTime);
         PageInfo<InoutStock> pageInfo = inoutStockService.listInoutStock(inoutStockSO);
         List<InoutStockReportTemplate> exportList = new ArrayList<>();
         if (!CollectionUtils.isEmpty(pageInfo.getList())) {

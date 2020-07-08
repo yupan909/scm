@@ -164,13 +164,13 @@ public class StockServiceImpl implements StockService {
         example.setOrderByClause(" create_time DESC ");
         Example.Criteria criteria =  example.createCriteria();
         criteria.andEqualTo("stockId",id);
-        if(StringUtil.isEmpty(startDate)){
-            startDate = "2000-01-01 00:00:00";
+        // 时间范围
+        if (StringUtil.isNotEmpty(startDate)) {
+            criteria.andGreaterThanOrEqualTo("createTime", startDate);
         }
-        if(StringUtil.isEmpty(endDate)){
-            endDate = "2100-01-01 00:00:00";
+        if (StringUtil.isNotEmpty(endDate)) {
+            criteria.andLessThanOrEqualTo("createTime", endDate);
         }
-        criteria.andBetween("createTime",startDate,endDate);
         PageHelper.startPage(pageNum,pageSize);
         List<StockRecord> data = stockRecordDao.selectByExample(example);
         PageInfo<StockRecord> pageInfo = new PageInfo<>(data);
