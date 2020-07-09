@@ -149,7 +149,7 @@ public class InoutStockServiceImpl implements InoutStockService {
             inoutStock.setModel(StringUtil.trim(template.getModel()));
             inoutStock.setUnit(StringUtil.trim(template.getUnit()));
             inoutStock.setCount(Integer.valueOf(StringUtil.trim(template.getCount())));
-            inoutStock.setPrice(new BigDecimal(StringUtil.trim(template.getPrice())));
+            inoutStock.setPrice(StringUtil.isNotEmpty(template.getPrice()) ? new BigDecimal(StringUtil.trim(template.getPrice())) : null);
             inoutStock.setSource(StringUtil.trim(template.getSource()));
             inoutStock.setHandle(StringUtil.trim(template.getHandle()));
             inoutStock.setRemark(StringUtil.trim(template.getRemark()));
