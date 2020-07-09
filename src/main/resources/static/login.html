@@ -14,7 +14,15 @@
     <link href="css/login.css" rel="stylesheet">
 </head>
 <body>
-	<div class="container">
+    <div class="btn-group" style="float: right ;padding-right: 10px;padding-top: 20px">
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <span>系统授权</span> <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+            <li><a onclick="openInit()">license授权</a></li>
+        </ul>
+    </div>
+	<div class="container login-dev">
 
 		<form id="frm" class="form-signin">
 			<h2 class="form-signin-heading">仓 库 管 理</h2>
@@ -25,6 +33,41 @@
 			<button class="btn btn-lg btn-primary btn-block" type="button" onclick="login();">登录</button>
 		</form>
 	</div>
+
+    <!-- 初始化license -->
+    <div class="modal fade" id="initLicenseModel" tabindex="-1" role="dialog" aria-labelledby="initLicenseModel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title">
+                        license认证
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <form id = "initLicenseModel-form"  class="form-horizontal" style="margin-right: 10%;">
+                        <div class="form-group">
+                            <label for="license" class="col-md-3 control-label">license</label>
+                            <div class="col-md-9">
+                                <textarea class="form-control" id="license" name = "license" placeholder="license"></textarea>
+                            </div>
+                        </div>
+
+                        <dev style=" padding-left: 33%;"><span id = "licenseDate"></span></dev>
+                    </form>
+                </div>
+
+
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" id = "init-close-btn" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary" onclick="initLicense()">提交</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
 </body>
 <script src="js/plugin/dist/js/jquery.min.js"></script>
 <script src="js/plugin/dist/js/bootstrap.min.js"></script>
