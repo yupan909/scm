@@ -121,8 +121,8 @@ function save(){
 
 // 删除用户
 function deleteById(id){
-    layui.layer.confirm('您确定要删除吗?', {icon: 3, title:'提示', skin: 'layui-layer-molv'}, function(index){
 
+    Public.confirm('您确定要删除吗?', function(){
         $.ajax({
             cache: true,
             type: "GET",
@@ -140,8 +140,6 @@ function deleteById(id){
                 }
             }
         });
-
-        layui.layer.close(index);
     });
 
 }
@@ -234,8 +232,7 @@ function editSave(){
 // 密码重置
 function resetPassword(id) {
 
-    layui.layer.confirm('您确定要重置密码吗?<br>（重置后密码：123456）', {icon: 3, title:'提示', skin: 'layui-layer-molv'}, function(index){
-
+    Public.confirm('您确定要重置密码吗?<br>（重置后密码：123456）', function(){
         $.ajax({
             cache: true,
             type: "GET",
@@ -253,8 +250,6 @@ function resetPassword(id) {
                 }
             }
         });
-
-        layui.layer.close(index);
     });
 }
 

@@ -126,8 +126,8 @@ function save(){
  * @param id
  */
 function deleteById(id){
-    layui.layer.confirm('您确定要删除吗?', {icon: 3, title:'提示', skin: 'layui-layer-molv'}, function(index){
 
+    Public.confirm('您确定要删除吗?', function(){
         $.ajax({
             cache: true,
             type: "GET",
@@ -145,11 +145,7 @@ function deleteById(id){
                 }
             }
         });
-
-        layui.layer.close(index);
     });
-
-
 }
 
 /**

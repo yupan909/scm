@@ -26,6 +26,18 @@ var Public = {
 		},
 
 		/**
+		 * 确认框
+		 * @param content
+		 * @param fn
+		 */
+		confirm:function(content, fn) {
+			layui.layer.confirm(content, {icon: 3, title:'提示', skin: 'layui-layer-molv'}, function(index){
+				fn();
+				layui.layer.close(index);
+			});
+		},
+
+		/**
 		 * 获取url地址栏指定的参数
 		 * @param name
 		 */
