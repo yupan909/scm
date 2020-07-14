@@ -27,7 +27,6 @@ $(function(){
 	}
 	
 	
-	
 });
 
 //验证
@@ -67,4 +66,65 @@ function login(){
         }
     });
 	
+}
+
+
+function openInit(){
+    // 打开模态窗口
+    Public.openModal("initLicenseModel");
+    $.ajax({
+        cache: true,
+        type: "GET",
+        url:"license/date",
+        async: false,
+        error: function(request) {
+            Public.alert(2,"提取license失败");
+        },
+        success: function(data) {
+            if(data.flag == true){
+                var date = data.data;
+                var html = "系统授权至："+date;
+                $("#licenseDate").html(html);
+                $("#licenseDate").css({color:"green"})
+            }else{
+                var html = data.message;
+                $("#licenseDate").html(html);
+                $("#licenseDate").css({color:"red"})
+            }
+        }
+    });
+}
+
+function initLicense(){
+    var license = $("#license").val().replace(/(^\s*)|(\s*$)/g, "");
+    if(license == ""){
+        Public.alert(2,"请输入license码");
+        return;
+    }
+    var data = '{"license":"'+license+'"}';
+    $.ajax({
+        cache: true,
+        dataType: "json",
+        type: "POST",
+        data: data,
+        url:"license/init",
+        contentType:"application/json;charset=utf-8",
+        async: false,
+        error: function(request) {
+            Public.alert(2,"license认证失败");
+        },
+        success: function(data) {
+            if(data.flag == true){
+                var date = data.data;
+                var html = "系统授权至："+date;
+                $("#licenseDate").html(html);
+                $("#licenseDate").css({color:"green"})
+                Public.alert(1,html);
+                Public.closeModal("initLicenseModel");
+            }else{
+                Public.alert(2,data.message);
+            }
+        }
+    });
+
 }

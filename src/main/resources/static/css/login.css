@@ -1,8 +1,11 @@
 body {
-    padding-top: 10%;
     padding-bottom: 40px;
     background-color: #364150;
     font-family: tahoma, arial, 'Hiragino Sans GB', '\5b8b\4f53', sans-serif;
+}
+
+.login-dev{
+    padding-top: 10%;
 }
 
 .form-signin {
