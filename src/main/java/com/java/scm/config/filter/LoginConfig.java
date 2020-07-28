@@ -1,6 +1,5 @@
-package com.java.scm.filter.config;
+package com.java.scm.config.filter;
 
-import com.java.scm.filter.LicenseInterceptor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -9,22 +8,23 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
- * license 授权
  * @author hujunhui
- * @date 2020/7/7
+ * @date 2020/6/24
  */
 @Slf4j
 @Configuration
-@Order(-1)
-public class LicenseConfig implements WebMvcConfigurer {
+@Order(0)
+public class LoginConfig implements WebMvcConfigurer {
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         //注册TestInterceptor拦截器
-        InterceptorRegistration registration = registry.addInterceptor(new LicenseInterceptor());
+        InterceptorRegistration registration = registry.addInterceptor(new LoginInterceptor());
         //所有路径都被拦截
         registration.addPathPatterns("/**");
         //添加不拦截路径
         registration.excludePathPatterns(
+                "/user/login",
                 "/license/init",
                 "/license/date",
                 "/css/**",

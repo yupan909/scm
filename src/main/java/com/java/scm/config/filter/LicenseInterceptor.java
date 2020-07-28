@@ -1,4 +1,4 @@
-package com.java.scm.filter;
+package com.java.scm.config.filter;
 
 import com.alibaba.fastjson.JSON;
 import com.java.scm.bean.base.BaseResult;
@@ -12,7 +12,6 @@ import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.sound.sampled.Line;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;

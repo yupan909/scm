@@ -1,7 +1,6 @@
-package com.java.scm.filter;
+package com.java.scm.config.filter;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.java.scm.bean.User;
 import com.java.scm.bean.base.BaseResult;
 import lombok.extern.slf4j.Slf4j;
