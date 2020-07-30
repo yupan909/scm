@@ -15,41 +15,43 @@ CREATE TABLE `scm`.`user`(
   `mobile` varchar(11) DEFAULT NULL COMMENT '手机号',
   `password` varchar(20) DEFAULT NULL COMMENT '登陆密码',
   `state` tinyint(1) DEFAULT 0 COMMENT '状态 0：启用 1：禁用',
-  `admin` tinyint(1) DEFAULT 0 COMMENT '状态 0：非管理员 1：管理员',
+  `role` tinyint(1) DEFAULT 0 COMMENT '角色 0：仓库普通人员 1：仓库管理员',
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间'
+  `create_user_id` varchar(32) DEFAULT NULL COMMENT '创建人id',
+  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  `update_user_id` varchar(32) DEFAULT NULL COMMENT '修改人id'
 ) COMMENT='用户表';
 
 -- 工程表
 CREATE TABLE `scm`.`project`(
-  `id` varchar(32) PRIMARY KEY COMMENT '工程id',
-  `name` varchar(50) DEFAULT NULL COMMENT '工程名称',
-  `content` varchar(500) DEFAULT NULL COMMENT '设计内容',
-  `state` tinyint(1) DEFAULT 0 COMMENT '状态 0：启用 1：禁用',
-  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间'
+    `id` varchar(32) PRIMARY KEY COMMENT '工程id',
+    `name` varchar(50) DEFAULT NULL COMMENT '工程名称',
+    `content` varchar(500) DEFAULT NULL COMMENT '工程内容',
+    `contract_money` decimal(10,2) DEFAULT 0 COMMENT '合同金额',
+    `final_money` decimal(10,2) DEFAULT 0 COMMENT '结算金额',
+    `state` tinyint(1) DEFAULT 0 COMMENT '状态 0：启用 1：禁用',
+    `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `create_user_id` varchar(32) DEFAULT NULL COMMENT '创建人id',
+    `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+    `update_user_id` varchar(32) DEFAULT NULL COMMENT '修改人id',
+    KEY `idx_name` (`name`)
 ) COMMENT='工程表';
 
--- 出入库表
-CREATE TABLE `scm`.`inout_stock`(
-  `id` varchar(32) PRIMARY KEY COMMENT '出入库Id',
-  `warehouse_id` varchar(32) DEFAULT NULL COMMENT '仓库id',
-  `project` varchar(50) DEFAULT NULL COMMENT '工程名称',
-  `product` varchar(50) DEFAULT NULL COMMENT '物资名称',
-  `model` varchar(50) DEFAULT NULL COMMENT '物资型号',
-  `unit` varchar(50) DEFAULT NULL COMMENT '单位',
-  `count` int(11) DEFAULT NULL COMMENT '数量',
-  `handle` varchar(50) DEFAULT NULL COMMENT '经手人',
-  `source` varchar(50) DEFAULT NULL COMMENT '物资来源',
-  `price` decimal(10,2) DEFAULT 0 COMMENT '物资单价（元）',
+-- 工程流水帐表
+CREATE TABLE `scm`.`project_record`(
+  `id` varchar(32) PRIMARY KEY COMMENT '工程流水帐id',
+  `project_id` varchar(32) DEFAULT NULL COMMENT '工程id',
+  `type` tinyint(1) DEFAULT 0 COMMENT '流水帐类型 0：收入 1：支出',
+  `record_date` varchar(50) DEFAULT NULL COMMENT '日期',
+  `digest` varchar(500) DEFAULT NULL COMMENT '摘要',
+  `money` decimal(10,2) DEFAULT 0 COMMENT '金额',
   `remark` varchar(500) DEFAULT NULL COMMENT '备注',
-  `type` tinyint(1) DEFAULT 0 COMMENT '类别 0：入库 1：出库',
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `create_user` varchar(50) DEFAULT NULL COMMENT '创建人',
-  KEY `idx_project` (`project`),
-  KEY `idx_product` (`product`),
-  KEY `idx_create_time` (`create_time`)
-) COMMENT='出入库表';
+  `create_user_id` varchar(32) DEFAULT NULL COMMENT '创建人id',
+  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  `update_user_id` varchar(32) DEFAULT NULL COMMENT '修改人id',
+  KEY `idx_project_id` (`project_id`)
+) COMMENT='工程流水帐表';
 
 -- 库存表
 CREATE TABLE `scm`.`stock`(
@@ -60,23 +62,47 @@ CREATE TABLE `scm`.`stock`(
    `unit` varchar(50) DEFAULT NULL COMMENT '单位',
    `count` int(11) DEFAULT NULL COMMENT '库存数量',
    `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+   `create_user_id` varchar(32) DEFAULT NULL COMMENT '创建人id',
    `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
-   KEY `idx_product` (`product`)
+   `update_user_id` varchar(32) DEFAULT NULL COMMENT '修改人id',
+   KEY `idx_product` (`product`),
+   KEY `idx_model` (`model`)
 ) COMMENT='库存表';
 
 -- 库存变更记录表
 CREATE TABLE `scm`.`stock_record`(
   `id` varchar(32) PRIMARY KEY COMMENT '库存变更记录id',
   `stock_id` varchar(32) DEFAULT NULL COMMENT '库存id',
-  `project` varchar(50) DEFAULT NULL COMMENT '工程名称',
+  `inout_stock_id` varchar(32) DEFAULT NULL COMMENT '出入库id',
   `count` int(11) DEFAULT NULL COMMENT '变更数量',
   `type` tinyint(1) DEFAULT 0 COMMENT '变更类型 0：入库 1：出库 2：手动修改',
-  `inout_stock_id` varchar(32) DEFAULT NULL COMMENT '出入库id',
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `create_user` varchar(50) DEFAULT NULL COMMENT '创建人',
-  KEY `idx_stock_id` (`stock_id`)
+  `create_user_id` varchar(32) DEFAULT NULL COMMENT '创建人id',
+  KEY `idx_stock_id` (`stock_id`),
+  KEY `idx_inout_stock_id` (`inout_stock_id`),
+  KEY `idx_create_time` (`create_time`)
 ) COMMENT='库存变更记录表';
 
+-- 出入库表
+CREATE TABLE `scm`.`inout_stock`(
+  `id` varchar(32) PRIMARY KEY COMMENT '出入库Id',
+  `warehouse_id` varchar(32) DEFAULT NULL COMMENT '仓库id',
+  `project_id` varchar(32) DEFAULT NULL COMMENT '工程id',
+  `stock_id` varchar(32) DEFAULT NULL COMMENT '库存id',
+  `count` int(11) DEFAULT NULL COMMENT '数量',
+  `price` decimal(10,2) DEFAULT 0 COMMENT '物资单价（元）',
+  `source` varchar(50) DEFAULT NULL COMMENT '物资来源',
+  `handle` varchar(50) DEFAULT NULL COMMENT '经手人',
+  `remark` varchar(500) DEFAULT NULL COMMENT '备注',
+  `type` tinyint(1) DEFAULT 0 COMMENT '类别 0：入库 1：出库',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `create_user_id` varchar(32) DEFAULT NULL COMMENT '创建人id',
+  KEY `idx_project_id` (`project_id`),
+  KEY `idx_stock_id` (`stock_id`),
+  KEY `idx_create_time` (`create_time`)
+) COMMENT='出入库表';
+
+
 -- 初始化数据
-insert into `scm`.`user`(id, name, password, admin) values (uuid_short(),'管理员', '123456', 1);
+insert into `scm`.`user`(id, name, password, role) values (uuid_short(),'管理员', '123456', 1);
 insert into `scm`.`warehouse`(id, name) values (uuid_short(), '武汉市东西湖区电力设备安装有限公司'), (uuid_short(), '湖北得力电气有限公司');
