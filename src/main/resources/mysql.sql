@@ -99,8 +99,19 @@ CREATE TABLE `scm`.`inout_stock`(
   `create_user_id` varchar(32) DEFAULT NULL COMMENT '创建人id',
   KEY `idx_project_id` (`project_id`),
   KEY `idx_stock_id` (`stock_id`),
+  KEY `idx_source` (`source`),
   KEY `idx_create_time` (`create_time`)
 ) COMMENT='出入库表';
+
+-- 上传文件表
+CREATE TABLE `scm`.`file`(
+    `id` varchar(32) PRIMARY KEY COMMENT '文件id',
+    `name` varchar(100) DEFAULT NULL COMMENT '文件名',
+    `business_id` varchar(32) DEFAULT NULL COMMENT '业务id，用于区分业务类别',
+    `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `create_user_id` varchar(32) DEFAULT NULL COMMENT '创建人id',
+    KEY `idx_business_id` (`business_id`)
+) COMMENT='上传文件表';
 
 
 -- 初始化数据
