@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.java.scm.dao.StockDao">
+
+  <select id="listStock" resultType="com.java.scm.bean.Stock">
+    SELECT
+    s.id,
+    s.warehouse_id as warehouseId,
+    w.name as warehouseName,
+    s.product,
+    s.model,
+    s.unit,
+    s.count,
+    s.create_time as createTime
+    FROM stock s
+    LEFT JOIN warehouse w ON s.warehouse_id = w.id
+    <where>
+      <if test="warehouseId != null">
+        AND s.warehouse_id = #{warehouseId}
+      </if>
+      <if test="product != null">
+        AND s.product LIKE CONCAT('%', #{product}, '%')
+      </if>
+      <if test="model != null">
+        AND s.model LIKE CONCAT('%', #{model}, '%')
+      </if>
+    </where>
+    order by s.create_time desc
+  </select>
+
+</mapper>

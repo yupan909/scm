@@ -7,6 +7,7 @@ import com.java.scm.bean.Stock;
 import com.java.scm.bean.StockRecord;
 import com.java.scm.bean.User;
 import com.java.scm.bean.base.BaseResult;
+import com.java.scm.bean.so.StockSO;
 import com.java.scm.config.exception.BusinessException;
 import com.java.scm.dao.StockDao;
 import com.java.scm.dao.StockRecordDao;
@@ -122,23 +123,16 @@ public class StockServiceImpl implements StockService {
 
     /**
      * 库存列表
-     * @param key
-     * @param pageNum
-     * @param pageSize
      * @return
      */
     @Override
-    public BaseResult listStock(String key, int pageNum, int pageSize) {
-        User user = RequestUtil.getCurrentUser();
-        List<Map> data ;
-        PageHelper.startPage(pageNum,pageSize);
-        if(Objects.equals(user.getRole(), RoleEnum.仓库管理员.getType())){
-            data = stockDao.getStockInfosForAdmin(key);
-        }else{
-            data = stockDao.getStockInfos(user.getWarehouseId(),key);
-        }
-        PageInfo page = new PageInfo<>(data);
-        return new BaseResult(data,page.getTotal());
+    public BaseResult listStock(StockSO stockSO) {
+        // 获取当前登录人仓库
+        stockSO.setWarehouseId(RequestUtil.getWarehouseId());
+        PageHelper.startPage(stockSO.getPageNum(),stockSO.getPageSize());
+        List<Stock> stockList = stockDao.listStock(stockSO);
+        PageInfo page = new PageInfo<>(stockList);
+        return new BaseResult(stockList, page.getTotal());
     }
 
     @Override

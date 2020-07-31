@@ -2,6 +2,7 @@ package com.java.scm.controller;
 
 import com.java.scm.bean.Stock;
 import com.java.scm.bean.base.BaseResult;
+import com.java.scm.bean.so.StockSO;
 import com.java.scm.service.StockService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -51,14 +52,11 @@ public class StockController {
 
     /**
      * 列表展示
-     * @param key
-     * @param pageNum
-     * @param pageSize
      * @return
      */
-    @GetMapping("/list")
-    public BaseResult listStock(String key, int pageNum, int pageSize){
-        return stockService.listStock(key,pageNum,pageSize);
+    @PostMapping("/list")
+    public BaseResult listStock(@RequestBody StockSO stockSO){
+        return stockService.listStock(stockSO);
     }
 
     /**

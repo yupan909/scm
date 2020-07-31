@@ -5,10 +5,9 @@ import lombok.*;
 import tk.mybatis.mapper.annotation.KeySql;
 import tk.mybatis.mapper.code.ORDER;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import java.util.Date;
 
 /**
@@ -36,6 +35,12 @@ public class Stock {
      * 仓库id
      */
     private String warehouseId;
+
+    /**
+     * 仓库名称
+     */
+    @Transient
+    private String warehouseName;
 
     /**
      * 物资名称
@@ -68,5 +73,15 @@ public class Stock {
      */
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date updateTime;
+
+    /**
+     * 创建人id
+     */
+    private String createUserId;
+
+    /**
+     * 修改人id
+     */
+    private String updateUserId;
 
 }

@@ -3,6 +3,7 @@ package com.java.scm.service;
 import com.java.scm.bean.InoutStock;
 import com.java.scm.bean.Stock;
 import com.java.scm.bean.base.BaseResult;
+import com.java.scm.bean.so.StockSO;
 
 import java.util.List;
 
@@ -36,12 +37,9 @@ public interface StockService {
 
     /**
      * 列表展示
-     * @param key
-     * @param pageNum
-     * @param pageSize
      * @return
      */
-    BaseResult listStock(String key,int pageNum,int pageSize);
+    BaseResult listStock(StockSO stockSO);
 
 
     /**
