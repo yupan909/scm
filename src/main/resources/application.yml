@@ -34,6 +34,10 @@ spring:
     # 通过connectProperties属性来打开mergeSql功能；慢SQL记录
     connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
 
+# ========= MyBatis配置
+mybatis:
+  mapper-locations: com/java/scm/dao/*.xml
+
 # ========= Pagehelper插件配置
 pagehelper:
   helper-dialect: mysql             # 数据库方言

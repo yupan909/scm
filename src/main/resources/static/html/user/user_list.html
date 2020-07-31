@@ -34,7 +34,7 @@
                                 <th class="col-md-1">序号</th>
                                 <th class="col-md-1">姓名</th>
                                 <th class="col-md-2">手机号</th>
-<!--                                <th class="col-md-1">是否为管理员</th>-->
+                                <th class="col-md-1">角色</th>
                                 <th class="col-md-2">所属仓库</th>
                                 <th class="col-md-1">状态</th>
                                 <th class="col-md-2">操作</th>
@@ -87,15 +87,16 @@
                             </div>
                         </div>
 
-<!--                        <div class="form-group">-->
-<!--                            <label for="admin" class="col-md-3 control-label">是否为管理员</label>-->
-<!--                            <div class="col-md-9">-->
-<!--                                <select id="admin" name="admin" class="form-control selectpicker" data-live-search="true">-->
-<!--                                    <option value="0">否</option>-->
-<!--                                    <option value="1">是</option>-->
-<!--                                </select>-->
-<!--                            </div>-->
-<!--                        </div>-->
+                        <div class="form-group">
+                            <label for="role" class="col-md-3 control-label">角色</label>
+                            <div class="col-md-9">
+                                <select id="role" name="role" class="form-control selectpicker" data-live-search="true">
+                                    <option value="">--请选择--</option>
+                                    <option value="0">仓库普通人员</option>
+                                    <option value="1">仓库管理员</option>
+                                </select>
+                            </div>
+                        </div>
 
                     </form>
                 </div>
@@ -146,15 +147,16 @@
                             </div>
                         </div>
 
-<!--                        <div class="form-group">-->
-<!--                            <label for="admin_e" class="col-md-3 control-label">是否为管理员</label>-->
-<!--                            <div class="col-md-9">-->
-<!--                                <select id="admin_e" name="admin_e" class="form-control selectpicker" data-live-search="true">-->
-<!--                                    <option value="0">否</option>-->
-<!--                                    <option value="1">是</option>-->
-<!--                                </select>-->
-<!--                            </div>-->
-<!--                        </div>-->
+                        <div class="form-group">
+                            <label for="role_e" class="col-md-3 control-label">角色</label>
+                            <div class="col-md-9">
+                                <select id="role_e" name="role_e" class="form-control selectpicker" data-live-search="true">
+                                    <option value="">--请选择--</option>
+                                    <option value="0">仓库普通人员</option>
+                                    <option value="1">仓库管理员</option>
+                                </select>
+                            </div>
+                        </div>
                     </form>
                 </div>
                 <div class="modal-footer">

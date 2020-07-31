@@ -3,19 +3,17 @@ package com.java.scm.service.impl;
 import com.java.scm.bean.User;
 import com.java.scm.bean.Warehouse;
 import com.java.scm.dao.WarehouseDao;
+import com.java.scm.enums.RoleEnum;
 import com.java.scm.service.WarehouseService;
-import com.java.scm.util.RequestUtil;
 import com.java.scm.util.AssertUtils;
+import com.java.scm.util.RequestUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import tk.mybatis.mapper.entity.Example;
 
 import javax.annotation.Resource;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author hujunhui
@@ -25,15 +23,13 @@ import java.util.Map;
 @Service
 public class WarehouseServiceImpl implements WarehouseService {
 
-    private static Byte ADMIN = (byte) 1 ;
-
     @Resource
     private WarehouseDao warehouseDao;
 
     @Override
     public List<Warehouse> getAllWarehouse() {
         User user = RequestUtil.getCurrentUser();
-        if(ADMIN.equals(user.getAdmin())){
+        if(Objects.equals(RoleEnum.仓库管理员.getType(), user.getRole())){
             return warehouseDao.selectAll();
         }else{
             Warehouse query = new Warehouse();

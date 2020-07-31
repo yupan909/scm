@@ -6,8 +6,8 @@ import com.java.scm.bean.User;
 import com.java.scm.bean.base.BaseResult;
 import com.java.scm.config.exception.BusinessException;
 import com.java.scm.dao.UserDao;
-import com.java.scm.enums.AdminEnum;
 import com.java.scm.enums.CommonConsts;
+import com.java.scm.enums.RoleEnum;
 import com.java.scm.enums.StateEnum;
 import com.java.scm.service.UserService;
 import com.java.scm.service.WarehouseService;
@@ -19,7 +19,10 @@ import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
 import javax.annotation.Resource;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * 用户相关服务
@@ -95,6 +98,7 @@ public class UserServiceImpl implements UserService {
             throw new BusinessException("用户名已存在！（若用户存在重名情况，请使用姓名+编号进行区分）");
         }
         user.setPassword(CommonConsts.RESET_PASSWORD);
+        user.setCreateUserId(RequestUtil.getCurrentUser().getId());
         userDao.insertSelective(user);
         return new BaseResult(true,"新增成功");
     }
@@ -118,6 +122,7 @@ public class UserServiceImpl implements UserService {
         if(nameCount >0){
             throw new BusinessException("用户姓名："+user.getName()+"已存在，请修改成其他姓名");
         }
+        user.setUpdateUserId(RequestUtil.getCurrentUser().getId());
         userDao.updateByPrimaryKeySelective(user);
         return new BaseResult(true,"修改成功");
     }
@@ -142,7 +147,7 @@ public class UserServiceImpl implements UserService {
             user.setState(StateEnum.禁用.getType());
             msg = "账号已停用";
         }
-        user.setUpdateTime(new Date());
+        user.setUpdateUserId(RequestUtil.getCurrentUser().getId());
         userDao.updateByPrimaryKeySelective(user);
         return new BaseResult(true,msg);
     }
@@ -167,10 +172,11 @@ public class UserServiceImpl implements UserService {
     public BaseResult updatePassword(String id, String password) {
         AssertUtils.notNull(id, "用户ID不能为空");
         AssertUtils.notEmpty(password, "密码不能为空");
-        User query = new User();
-        query.setId(id);
-        query.setPassword(password);
-        userDao.updateByPrimaryKeySelective(query);
+        User user = new User();
+        user.setId(id);
+        user.setPassword(password);
+        user.setUpdateUserId(RequestUtil.getCurrentUser().getId());
+        userDao.updateByPrimaryKeySelective(user);
         return BaseResult.successResult();
     }
 
@@ -184,10 +190,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public BaseResult list(String key, int pageNum, int pageSize) {
         PageHelper.startPage(pageNum,pageSize);
-        List<Map> users  = userDao.getUserInfos(key);
-        for (Map one : users){
-            one.put("adminInfo", AdminEnum.getEnumByValue( Byte.valueOf(one.get("admin").toString())));
-            one.put("stateInfo", StateEnum.getEnumByValue( Byte.valueOf(one.get("state").toString())));
+        List<User> users  = userDao.listUser(key);
+        for (User user : users){
+            user.setStateInfo(StateEnum.getEnumByValue(user.getState()));
+            user.setRoleInfo(RoleEnum.getEnumByValue(user.getRole()));
         }
         PageInfo<Map> pageInfo = new PageInfo(users);
         return new BaseResult(users,pageInfo.getTotal());

@@ -62,9 +62,21 @@ public class User implements Serializable {
     private Byte state;
 
     /**
-     * 状态 0：非管理员 1：管理员
+     * 状态文本
      */
-    private Byte admin;
+    @Transient
+    private String stateInfo;
+
+    /**
+     * 角色 0：仓库普通人员 1：仓库管理员
+     */
+    private Byte role;
+
+    /**
+     * 角色文本
+     */
+    @Transient
+    private String roleInfo;
 
     /**
      * 创建时间
@@ -77,4 +89,14 @@ public class User implements Serializable {
      */
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date updateTime;
+
+    /**
+     * 创建人id
+     */
+    private String createUserId;
+
+    /**
+     * 修改人id
+     */
+    private String updateUserId;
 }

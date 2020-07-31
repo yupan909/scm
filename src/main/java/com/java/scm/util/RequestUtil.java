@@ -2,7 +2,7 @@ package com.java.scm.util;
 
 import com.java.scm.bean.User;
 import com.java.scm.config.exception.BusinessException;
-import com.java.scm.enums.AdminEnum;
+import com.java.scm.enums.RoleEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -52,7 +52,7 @@ public class RequestUtil {
      */
     public static String getWarehouseId(){
         User user = getCurrentUser();
-        if (Objects.equals(AdminEnum.管理员.getType(), user.getAdmin())) {
+        if (Objects.equals(user.getRole(), RoleEnum.仓库管理员.getType())) {
             return null;
         }
         return user.getWarehouseId();

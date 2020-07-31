@@ -10,14 +10,14 @@ import java.util.stream.Collectors;
  * @author yupan
  * @date 2020-06-24 11:53
  */
-public enum AdminEnum {
+public enum RoleEnum {
 
-    非管理员((byte) 0),
-    管理员((byte) 1);
+    仓库普通人员((byte) 0),
+    仓库管理员((byte) 1);
 
     private byte type;
 
-    AdminEnum(byte type) {
+    RoleEnum(byte type) {
         this.type = type;
     }
 
@@ -31,13 +31,13 @@ public enum AdminEnum {
      * @return
      */
     public static String getEnumByValue(Byte value) {
-        AdminEnum enums = null;
+        RoleEnum enums = null;
         if (value != null) {
             enums = cache.get(value);
         }
         return enums == null ? null : enums.name();
     }
 
-    private static Map<Byte, AdminEnum> cache = EnumSet.allOf(AdminEnum.class).stream()
+    private static Map<Byte, RoleEnum> cache = EnumSet.allOf(RoleEnum.class).stream()
             .collect(Collectors.toMap(p -> p.type, p -> p));
 }

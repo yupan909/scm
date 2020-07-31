@@ -46,8 +46,8 @@ function load(pageNum){
                                 "<td>"+(i+1)+"</td>"+
                                 "<td>"+Public.ifNull(item.name)+"</td>"+
                                 "<td>"+Public.ifNull(item.mobile)+"</td>"+
-                                // "<td>"+item.adminInfo+"</td>"+
-                                "<td>"+Public.ifNull(item.warehouseInfo)+"</td>"+
+                                "<td>"+Public.ifNull(item.roleInfo)+"</td>"+
+                                "<td>"+Public.ifNull(item.warehouseName)+"</td>"+
                                 "<td>"+Public.ifNull(item.stateInfo)+"</td>"+
                          "<td> <button class= \"btn btn-primary btn-xs\" onclick=\"edit('"+item.id+"');\">修改</button> " +
                          "<button class= \"btn btn-primary btn-xs "+stopStyle+"\" onclick=\"stopUsing('"+item.id+"');\">"+stopName+"</button> " +
@@ -56,7 +56,7 @@ function load(pageNum){
                                 "</tr>";
                 });
                 if(html == ""){
-                    html = "<tr><td colspan=\"6\">暂无数据</td></tr>";
+                    html = "<tr><td colspan=\"7\">暂无数据</td></tr>";
                 }
                 $("#tbody").html(html);
                 // 分页
@@ -98,9 +98,9 @@ function save(){
     }
     var name = $("#name").val();
     var mobile = $("#mobile").val();
-    // var admin = $("#admin").val();
+    var role = $("#role").val();
     var warehouseId = $("#warehouseId").val();
-    var data = '{"name":"'+name+'","mobile":"'+mobile+'","warehouseId":"'+warehouseId+'"}';
+    var data = '{"name":"'+name+'","mobile":"'+mobile+'","warehouseId":"'+warehouseId+'","role":"'+role+'"}';
     $.ajax({
         url: "../user/add",
         dataType: "json",
@@ -191,7 +191,7 @@ function loadOneUser(id){
                 $("#name_e").val(data.data.name);
                 $("#mobile_e").val(data.data.mobile);
                 $("#warehouseId_e").val(data.data.warehouseId);
-                $("#admin_e").val(data.data.admin);
+                $("#role_e").val(data.data.role);
                 $("#id_e").val(data.data.id);
             }else{
                 Public.alert(2,data.message);
@@ -210,8 +210,9 @@ function editSave(){
     var id = $("#id_e").val();
     var name = $("#name_e").val();
     var mobile = $("#mobile_e").val();
+    var role = $("#role_e").val();
     var warehouseId = $("#warehouseId_e").val();
-    var data = '{"name":"'+name+'","mobile":"'+mobile+'","id":"'+id+'","warehouseId":"'+warehouseId+'"}';
+    var data = '{"name":"'+name+'","mobile":"'+mobile+'","id":"'+id+'","warehouseId":"'+warehouseId+'","role":"'+role+'"}';
     $.ajax({
         url: "../user/modify",
         dataType: "json",
@@ -285,13 +286,13 @@ function validate(){
                     }
                 }
             },
-            // admin: {
-            //     validators: {
-            //         notEmpty: {
-            //             message: '请选择是否为管理员'
-            //         }
-            //     }
-            // },
+            admin: {
+                validators: {
+                    notEmpty: {
+                        message: '请选择角色'
+                    }
+                }
+            }
         }
     })
 
@@ -318,14 +319,14 @@ function validate(){
                         message: '请选择仓库'
                     }
                 }
+            },
+            admin: {
+                validators: {
+                    notEmpty: {
+                        message: '请选择角色'
+                    }
+                }
             }
-            // admin: {
-            //     validators: {
-            //         notEmpty: {
-            //             message: '请选择是否为管理员'
-            //         }
-            //     }
-            // }
         }
     })
 }

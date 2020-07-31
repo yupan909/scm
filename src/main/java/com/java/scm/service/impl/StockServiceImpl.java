@@ -10,7 +10,7 @@ import com.java.scm.bean.base.BaseResult;
 import com.java.scm.config.exception.BusinessException;
 import com.java.scm.dao.StockDao;
 import com.java.scm.dao.StockRecordDao;
-import com.java.scm.enums.AdminEnum;
+import com.java.scm.enums.RoleEnum;
 import com.java.scm.enums.StockRecordTypeEnum;
 import com.java.scm.service.StockService;
 import com.java.scm.util.AssertUtils;
@@ -23,7 +23,6 @@ import org.springframework.util.CollectionUtils;
 import tk.mybatis.mapper.entity.Example;
 
 import javax.annotation.Resource;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -133,7 +132,7 @@ public class StockServiceImpl implements StockService {
         User user = RequestUtil.getCurrentUser();
         List<Map> data ;
         PageHelper.startPage(pageNum,pageSize);
-        if(Objects.equals(user.getAdmin(), AdminEnum.管理员.getType())){
+        if(Objects.equals(user.getRole(), RoleEnum.仓库管理员.getType())){
             data = stockDao.getStockInfosForAdmin(key);
         }else{
             data = stockDao.getStockInfos(user.getWarehouseId(),key);

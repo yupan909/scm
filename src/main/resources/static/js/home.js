@@ -26,9 +26,9 @@ $(function(){
         success: function(data) {
             if(data.flag){
                 Public.setCurrentUser(data.data);
-                if(data.data.admin == "1"){
+                if(data.data.role == "1"){
                     $(".normal").remove();
-                }else if(data.data.admin == "0"){
+                }else if(data.data.role == "0"){
                     $(".admin").remove();
                 }
                 $("#currentUserName").html(data.data.name);

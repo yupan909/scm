@@ -1,8 +1,8 @@
 package com.java.scm.aop;
 
 import com.java.scm.bean.User;
-import com.java.scm.bean.base.BaseResult;
 import com.java.scm.config.exception.BusinessException;
+import com.java.scm.enums.RoleEnum;
 import com.java.scm.util.RequestUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
@@ -12,6 +12,7 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Objects;
 
 /**
  * @author hujunhui
@@ -21,8 +22,6 @@ import javax.servlet.http.HttpServletRequest;
 @Component
 @Slf4j
 public class AdminHandleAspect {
-
-    private static final Byte IS_ADMIN = (byte)1;
 
     @Pointcut("@annotation(com.java.scm.aop.anno.AdminRight)")
     public void serviceAspect() {
@@ -36,7 +35,7 @@ public class AdminHandleAspect {
         User user= RequestUtil.getCurrentUser();
         if(user == null ){
             throw new BusinessException("用户未登录");
-        }else if(!IS_ADMIN.equals(user.getAdmin())){
+        }else if(!Objects.equals(user.getRole(), RoleEnum.仓库管理员.getType())){
             throw new BusinessException("您无此功能权限");
         }
     }

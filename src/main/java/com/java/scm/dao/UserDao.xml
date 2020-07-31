@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.java.scm.dao.UserDao">
+
+  <select id="listUser" resultType="com.java.scm.bean.User">
+    SELECT
+    u.id,
+    u.warehouse_id as warehouseId,
+    w.name as warehouseName,
+    u.name,
+    u.mobile,
+    u.password,
+    u.state,
+    u.role,
+    u.create_time as createTime,
+    u.create_user_id as createUserId
+    FROM user u
+    LEFT JOIN warehouse w ON u.warehouse_id = w.id
+    <where>
+      <if test="key != null and key != ''">
+        AND (u.name LIKE CONCAT('%', #{key}, '%') OR u.mobile LIKE CONCAT('%', #{key} ,'%'))
+      </if>
+    </where>
+    order by u.create_time desc
+  </select>
+
+</mapper>
