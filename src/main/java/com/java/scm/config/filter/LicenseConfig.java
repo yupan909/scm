@@ -13,8 +13,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  * @date 2020/7/7
  */
 @Slf4j
-@Configuration
-@Order(-1)
+//@Configuration
+//@Order(-1)
 public class LicenseConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
