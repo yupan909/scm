@@ -18,7 +18,7 @@ var curr = 1;
 var pageSize = 20;
 var user = Public.getCurrentUser();
 $(function(){
-    if(user.admin == "0"){
+    if(user.role == "0"){
         $(".admin").remove();
     }
     load(curr);
@@ -38,17 +38,24 @@ $(function(){
 
 // 列表
 function load(pageNum){
-    var key = $("#key").val();
+    var product = $("#productQuery").val();
+    var model = $("#modelQuery").val();
     $.ajax({
-        url: "../stock/list?key="+key+"&pageNum="+pageNum+"&pageSize="+pageSize,
+        url: "../stock/list",
+        type: "POST",
+        contentType:"application/json;charset=utf-8",
         dataType: "json",
-        type: "GET",
+        data: JSON.stringify({ "pageNum":pageNum,
+            "pageSize":pageSize,
+            "product":product,
+            "model":model
+        }),
         success: function (data) {
             var html= "";
             if(data.flag){
                 $.each(data.data, function (i, item) {
                     var buttonInfo = "";
-                    if(user.admin == "1"){
+                    if(user.role == "1"){
                         buttonInfo = "<button class= \"btn btn-primary btn-xs\" onclick=\"edit('"+item.id+"');\">修改物资</button> " +
                             "<button class= \"btn btn-info btn-xs\" onclick=\"editCount('"+item.id+"');\">修改库存</button> "
                     }
@@ -268,9 +275,15 @@ function loadDetail(pageNum){
     var endDate = $("#endDate").val();
     var detailId = $("#detail_id").val();
     $.ajax({
-        url: "../stock/detail?id="+detailId+"&pageNum="+pageNum+"&pageSize="+detailPageSize+"&startDate="+startDate+"&endDate="+endDate,
+        url: "../stock/detail",
         dataType: "json",
-        type: "GET",
+        type: "POST",
+        data: JSON.stringify({ "pageNum":pageNum,
+            "pageSize":detailPageSize,
+            "stockId":detailId,
+            "startTime":startDate,
+            "endTime":endDate
+        }),
         success: function (data) {
             var html= "";
             if(data.flag){
@@ -299,7 +312,7 @@ function loadDetail(pageNum){
                     jump: function (obj, first) { //触发分页后的回调
                         if (!first) { //点击跳页触发函数自身，并传递当前页：obj.curr
                             detailCnt = obj.curr;
-                            load(detailCnt);
+                            loadDetail(detailCnt);
                         }
                     }
                 });

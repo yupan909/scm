@@ -14,16 +14,24 @@
 
     <div class="mainDIV">
         <div class="row ">
-            <div class="col-md-12 queryDIV form-inline">
-                <div class="admin" style=" float: left;">
-                    <button class="btn btn-success" onclick="openSave()">
-                        <span class="glyphicon glyphicon-plus"></span> 新增物资
-                    </button>
-                </div>
-                <div  style=" float: right;">
-                    <input type="text" class="form-control" id="key" placeholder="按物资名称搜索">
-                    <button type="button" class="btn btn-primary" onclick="load('1')"><span class="glyphicon glyphicon-search"></span> 查询</button>
-                </div>
+            <div class="col-md-12 queryDIV">
+                <form class="form-inline">
+                    <div class="form-group col-md-6">
+                        <label for="productQuery" class="t1">物资名称</label>
+                        <input type="text" class="form-control t2" id="productQuery" placeholder="输入要查询的物资名称">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="modelQuery" class="t1">物资型号</label>
+                        <input type="text" class="form-control t2" id="modelQuery" placeholder="输入要查询的物资型号">
+                    </div>
+                    <div class="clearfix"></div>
+
+                    <div class="buttonDIV">
+                        <button type="button" class="btn btn-primary" onclick="load('1')"><span class="glyphicon glyphicon-search"></span> 查询</button>
+                        <button type="reset" class="btn btn-default"><span class="glyphicon glyphicon-trash"></span> 清空</button>
+                        <button type="button" class="admin btn btn-success" onclick="openSave();"><span class="glyphicon glyphicon-plus"></span> 新增物资</button>
+                    </div>
+                </form>
             </div>
         </div>
         <div class="row">

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.java.scm.dao.StockRecordDao">
+
+  <select id="listStockRecord" resultType="com.java.scm.bean.StockRecord">
+    SELECT
+    sr.id,
+    sr.stock_id as stockId,
+    sr.inout_stock_id as inoutStockId,
+    sr.count,
+    sr.type,
+    sr.create_time as createTime,
+    sr.create_user_id as createUserId,
+    u.name as createUser,
+    p.name as project
+    FROM stock_record sr
+    INNER JOIN stock s on sr.stock_id = s.id
+    LEFT JOIN inout_stock ios on sr.inout_stock_id = ios.id
+    LEFT JOIN project p on ios.project_id = p.id
+    LEFT JOIN user u ON sr.create_user_id = u.id
+    <where>
+      <if test="stockId != null">
+        AND sr.stock_id = #{stockId}
+      </if>
+      <if test="startTime != null and startTime != ''">
+        AND sr.create_time >= #{startTime}
+      </if>
+      <if test="endTime != null and endTime != ''">
+        AND sr.create_time <![CDATA[ <= ]]> #{endTime}
+      </if>
+    </where>
+    order by sr.create_time desc
+  </select>
+
+</mapper>

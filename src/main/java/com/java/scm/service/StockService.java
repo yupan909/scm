@@ -3,6 +3,7 @@ package com.java.scm.service;
 import com.java.scm.bean.InoutStock;
 import com.java.scm.bean.Stock;
 import com.java.scm.bean.base.BaseResult;
+import com.java.scm.bean.so.StockRecordSO;
 import com.java.scm.bean.so.StockSO;
 
 import java.util.List;
@@ -41,7 +42,6 @@ public interface StockService {
      */
     BaseResult listStock(StockSO stockSO);
 
-
     /**
      * 根据id 删除库存信息
      * @param id
@@ -56,17 +56,11 @@ public interface StockService {
      */
     BaseResult getStockById(String id);
 
-
     /**
      * 获取变更记录
-     * @param id
-     * @param startDate
-     * @param endDate
-     * @param pageNum
-     * @param pageSize
      * @return
      */
-    BaseResult getChangeDetail(String id,String startDate,String endDate,int pageNum,int pageSize);
+    BaseResult getChangeDetail(StockRecordSO stockRecordSO);
 
     /**
      * 批量变更库存

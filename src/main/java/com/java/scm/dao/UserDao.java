@@ -2,11 +2,10 @@ package com.java.scm.dao;
 
 import com.java.scm.bean.User;
 import com.java.scm.tk.TkMapper;
-import org.apache.ibatis.annotations.*;
-import org.springframework.stereotype.Component;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author hujunhui

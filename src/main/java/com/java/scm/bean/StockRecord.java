@@ -5,7 +5,9 @@ import lombok.*;
 import tk.mybatis.mapper.annotation.KeySql;
 import tk.mybatis.mapper.code.ORDER;
 
-import javax.persistence.*;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Transient;
 import java.util.Date;
 
 /**
@@ -35,8 +37,14 @@ public class StockRecord {
     private String stockId;
 
     /**
+     * 出入库id
+     */
+    private String inoutStockId;
+
+    /**
      * 工程名称
      */
+    @Transient
     private String project;
 
     /**
@@ -49,10 +57,8 @@ public class StockRecord {
      */
     private Byte type;
 
-    /**
-     * 出入库id
-     */
-    private String inoutStockId;
+    @Transient
+    private String typeInfo;
 
     /**
      * 创建时间
@@ -61,11 +67,14 @@ public class StockRecord {
     private Date createTime;
 
     /**
+     * 创建人id
+     */
+    private String createUserId;
+
+    /**
      * 创建人
      */
-    private String createUser;
-
     @Transient
-    private String typeInfo;
+    private String createUser;
 
 }

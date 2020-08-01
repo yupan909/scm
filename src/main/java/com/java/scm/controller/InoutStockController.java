@@ -44,7 +44,7 @@ public class InoutStockController {
     public BaseResult listInoutStock(@RequestBody InoutStockSO inoutStockSO) {
         inoutStockSO.setWarehouseId(RequestUtil.getWarehouseId());
         PageInfo<InoutStock> pageInfo = inoutStockService.listInoutStock(inoutStockSO);
-        return new BaseResult(pageInfo.getList(), Long.valueOf(pageInfo.getTotal()).intValue());
+        return new BaseResult(pageInfo.getList(), pageInfo.getTotal());
     }
 
     /**

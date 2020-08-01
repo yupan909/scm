@@ -2,6 +2,7 @@ package com.java.scm.controller;
 
 import com.java.scm.bean.Stock;
 import com.java.scm.bean.base.BaseResult;
+import com.java.scm.bean.so.StockRecordSO;
 import com.java.scm.bean.so.StockSO;
 import com.java.scm.service.StockService;
 import lombok.extern.slf4j.Slf4j;
@@ -80,16 +81,11 @@ public class StockController {
     }
 
     /**
-     * 获取变更记录
-     * @param id
-     * @param startDate
-     * @param endDate
-     * @param pageNum
-     * @param pageSize
+     * 获取库存变更记录
      * @return
      */
-    @GetMapping("detail")
-    public BaseResult getChangeDetail(String id, String startDate, String endDate, int pageNum, int pageSize){
-        return stockService.getChangeDetail(id,startDate,endDate,pageNum,pageSize);
+    @PostMapping("detail")
+    public BaseResult getChangeDetail(@RequestBody StockRecordSO stockRecordSO){
+        return stockService.getChangeDetail(stockRecordSO);
     }
 }
