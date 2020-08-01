@@ -3,12 +3,14 @@ package com.java.scm.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.java.scm.bean.Project;
+import com.java.scm.bean.User;
 import com.java.scm.bean.base.BaseResult;
 import com.java.scm.config.exception.BusinessException;
 import com.java.scm.dao.ProjectDao;
 import com.java.scm.enums.StateEnum;
 import com.java.scm.service.ProjectService;
 import com.java.scm.util.AssertUtils;
+import com.java.scm.util.RequestUtil;
 import com.java.scm.util.StringUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +19,6 @@ import org.springframework.util.CollectionUtils;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -56,9 +57,11 @@ public class ProjectServiceImpl implements ProjectService {
     public BaseResult saveProject(Project project) {
         AssertUtils.notNull(project, "工程信息不能为空");
         AssertUtils.notEmpty(project.getName(), "工程名称不能为空");
-        if(!projectCheck(null,project.getName())){
+        if(!projectCheck(null, project.getName())){
             return new BaseResult(false,"工程名不可重复");
         }
+        User user = RequestUtil.getCurrentUser();
+        project.setCreateUserId(user.getId());
         projectDao.insertSelective(project);
         return new BaseResult(true,"新增成功");
     }
@@ -73,9 +76,11 @@ public class ProjectServiceImpl implements ProjectService {
         AssertUtils.notNull(project, "工程信息不能为空");
         AssertUtils.notNull(project.getId(), "工程id不能为空");
         AssertUtils.notEmpty(project.getName(), "工程名称不能为空");
-        if(!projectCheck(project.getId(),project.getName())){
+        if(!projectCheck(project.getId(), project.getName())){
             return new BaseResult(false,"工程名不可重复");
         }
+        User user = RequestUtil.getCurrentUser();
+        project.setUpdateUserId(user.getId());
         projectDao.updateByPrimaryKeySelective(project);
         return new BaseResult(true,"修改成功");
     }
@@ -101,14 +106,17 @@ public class ProjectServiceImpl implements ProjectService {
         Example example = new Example(Project.class);
         example.setOrderByClause(" create_time DESC ");
         Example.Criteria criteria =  example.createCriteria();
-        criteria.andLike("name","%"+name+"%");
+        // 物资名称
+        if (StringUtil.isNotEmpty(name)) {
+            criteria.andLike("name","%" + name + "%");
+        }
         PageHelper.startPage(pageNum,pageSize);
         List<Project> projects = projectDao.selectByExample(example);
-        PageInfo<Project> pageInfo = new PageInfo<>(projects);
         for (Project one : projects){
-            one.setStateInfo( StateEnum.getEnumByValue(one.getState()));
+            one.setStateInfo(StateEnum.getEnumByValue(one.getState()));
         }
-        return new BaseResult(projects,pageInfo.getTotal());
+        PageInfo<Project> pageInfo = new PageInfo<>(projects);
+        return new BaseResult(projects, pageInfo.getTotal());
     }
 
     /**
@@ -131,9 +139,10 @@ public class ProjectServiceImpl implements ProjectService {
             project.setState(StateEnum.禁用.getType());
             msg = "工程已停用";
         }
-        project.setUpdateTime(new Date());
+        User user = RequestUtil.getCurrentUser();
+        project.setUpdateUserId(user.getId());
         projectDao.updateByPrimaryKeySelective(project);
-        return new BaseResult(true,msg);
+        return new BaseResult(true, msg);
     }
 
     /**

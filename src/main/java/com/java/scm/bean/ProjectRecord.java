@@ -12,7 +12,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 /**
- * 工程表
+ * 工程流水账表
  *
  * @author yupan
  * @date 2020-06-23 22:08
@@ -22,43 +22,45 @@ import java.util.Date;
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "project")
-public class Project {
+@Table(name = "project_record")
+public class ProjectRecord {
 
     /**
-     * 工程ID
+     * 工程流水帐id
      */
     @Id
     @KeySql(order = ORDER.BEFORE, sql = "select uuid_short()")
     private String id;
 
     /**
-     * 工程名称
+     * 工程id
      */
-    private String name;
+    private String projectId;
 
     /**
-     * 工程内容
+     * 流水帐类型 0：收入 1：支出
      */
-    private String content;
+    private Byte type;
 
     /**
-     * 合同金额
+     * 日期
      */
-    private BigDecimal contractMoney;
+    private String recordDate;
 
     /**
-     * 结算金额
+     * 摘要
      */
-    private BigDecimal finalMoney;
+    private String digest;
 
     /**
-     * 状态 0：启用 1：禁用
+     * 金额
      */
-    private Byte state;
+    private BigDecimal money;
 
-    @Transient
-    private String stateInfo;
+    /**
+     * 备注
+     */
+    private String remark;
 
     /**
      * 创建时间
@@ -81,23 +83,5 @@ public class Project {
      * 修改人id
      */
     private String updateUserId;
-
-    /**
-     * 收入金额
-     */
-    @Transient
-    private BigDecimal inMoney;
-
-    /**
-     * 支出金额
-     */
-    @Transient
-    private BigDecimal outMoney;
-
-    /**
-     * 合计金额
-     */
-    @Transient
-    private BigDecimal sumMoney;
 
 }

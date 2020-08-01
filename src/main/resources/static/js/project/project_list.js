@@ -16,7 +16,7 @@ var pageSize = 20;
 var user = Public.getCurrentUser();
 $(function(){
     // 页面权限
-    if(user.admin == "0"){
+    if(user.role == "0"){
         $(".admin").remove();
     }
     load(curr);
@@ -37,7 +37,8 @@ function load(pageNum){
             if(data.flag){
                 $.each(data.data, function (i, item) {
                     var handel = "";
-                    if(user.admin == "1"){
+                    var money = "";
+                    if(user.role == "1"){
                         var stopStyle
                         var stopName ;
                         if(item.state == "0"){
@@ -48,19 +49,31 @@ function load(pageNum){
                             stopName = "启用"
                         }
                         handel = "<td> <button class= \"btn btn-primary btn-xs\" onclick=\"edit('"+item.id+"');\">修改</button> " +
-                            "<button class= \"btn btn-primary btn-xs "+stopStyle+"\" onclick=\"stopUsing('"+item.id+"');\">"+stopName+"</button> " +
-                            "<button class= \"btn btn-primary btn-xs btn-danger\" onclick=\"deleteById('"+item.id+"');\">删除</button> </td>";
+                            "<button class= \"btn btn-primary btn-xs "+stopStyle+"\" onclick=\"stopUsing('"+item.id+"');\">"+stopName+"</button> ";
+                            // "<button class= \"btn btn-primary btn-xs btn-danger\" onclick=\"deleteById('"+item.id+"');\">删除</button> </td>";
+
+                        // 金额
+                        money = "<td>"+Public.ifNull(item.contractMoney)+"</td>"+
+                            "<td>"+Public.ifNull(item.finalMoney)+"</td>"+
+                            "<td>"+Public.ifNull(item.inMoney)+"</td>"+
+                            "<td>"+Public.ifNull(item.outMoney)+"</td>"+
+                            "<td>"+Public.ifNull(item.sumMoney)+"</td>";
                     }
                     html +="<tr>"+
                         "<td>"+(i+1)+"</td>"+
                         "<td>"+Public.ifNull(item.name)+"</td>"+
                         "<td>"+Public.ifNull(item.content)+"</td>"+
+                        money+
                         "<td>"+Public.ifNull(item.stateInfo)+"</td>"+
                         handel+
                         "</tr>";
                 });
                 if(html == ""){
-                    html = "<tr><td colspan=\"5\">暂无数据</td></tr>";
+                    if(user.role == "1"){
+                        html = "<tr><td colspan=\"12\">暂无数据</td></tr>";
+                    } else {
+                        html = "<tr><td colspan=\"7\">暂无数据</td></tr>";
+                    }
                 }
                 $("#tbody").html(html);
                 // 分页
@@ -102,7 +115,9 @@ function save(){
     }
     var name = $("#name").val();
     var content = $("#content").val();
-    var data = '{"name":"'+name+'","content":"'+content+'"}';
+    var contractMoney = $("#contractMoney").val();
+    var finalMoney = $("#finalMoney").val();
+    var data = '{"name":"'+name+'","content":"'+content+'","contractMoney":"'+contractMoney+'","finalMoney":"'+finalMoney+'"}';
     $.ajax({
         url: "../project/save",
         dataType: "json",
@@ -173,9 +188,11 @@ function loadOneProject(id){
         },
         success: function(data) {
             if(data.flag){
+                $("#id_e").val(data.data.id);
                 $("#name_e").val(data.data.name);
                 $("#content_e").val(data.data.content);
-                $("#id_e").val(data.data.id);
+                $("#contractMoney_e").val(data.data.contractMoney);
+                $("#finalMoney_e").val(data.data.finalMoney);
             }else{
                 Public.alert(2,data.message);
             }
@@ -193,7 +210,9 @@ function editSave(){
     var id = $("#id_e").val();
     var name = $("#name_e").val();
     var content = $("#content_e").val();
-    var data = '{"name":"'+name+'","content":"'+content+'","id":"'+id+'"}';
+    var contractMoney = $("#contractMoney_e").val();
+    var finalMoney = $("#finalMoney_e").val();
+    var data = '{"name":"'+name+'","content":"'+content+'","id":"'+id+'","contractMoney":"'+contractMoney+'","finalMoney":"'+finalMoney+'"}';
     $.ajax({
         url: "../project/modify",
         dataType: "json",
@@ -256,6 +275,24 @@ function validate(){
                     notEmpty: {message: '请输入设计内容'},
                     stringLength: { max: 500, message: '不能超过500个字符'}
                 }
+            },
+            contractMoney: {
+                validators: {
+                    stringLength: { max: 13, message: '不能超过13个字符'},
+                    regexp:{
+                        regexp: /^([1-9]\d*)|0|([0]\.\d{1,2})|([1-9]\d*\.\d{1,2})$/,  //正则规则用两个/包裹起来
+                        message: '请输入正确的合同金额'
+                    }
+                }
+            },
+            finalMoney: {
+                validators: {
+                    stringLength: { max: 13, message: '不能超过13个字符'},
+                    regexp:{
+                        regexp: /^([1-9]\d*)|0|([0]\.\d{1,2})|([1-9]\d*\.\d{1,2})$/,  //正则规则用两个/包裹起来
+                        message: '请输入正确的结算金额'
+                    }
+                }
             }
         }
     })
@@ -279,6 +316,24 @@ function validate(){
                 validators: {
                     notEmpty: {message: '请输入设计内容'},
                     stringLength: { max: 500, message: '不能超过500个字符'}
+                }
+            },
+            contractMoney_e: {
+                validators: {
+                    stringLength: { max: 13, message: '不能超过13个字符'},
+                    regexp:{
+                        regexp: /^([1-9]\d*)|0|([0]\.\d{1,2})|([1-9]\d*\.\d{1,2})$/,  //正则规则用两个/包裹起来
+                        message: '请输入正确的合同金额'
+                    }
+                }
+            },
+            finalMoney_e: {
+                validators: {
+                    stringLength: { max: 13, message: '不能超过13个字符'},
+                    regexp:{
+                        regexp: /^([1-9]\d*)|0|([0]\.\d{1,2})|([1-9]\d*\.\d{1,2})$/,  //正则规则用两个/包裹起来
+                        message: '请输入正确的结算金额'
+                    }
                 }
             }
         }
