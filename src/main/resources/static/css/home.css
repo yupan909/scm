@@ -183,10 +183,14 @@ body {
 .t1 {
     width: 25%;
     text-align: right;
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
 
 .t2 {
     width: 70% !important;
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
 
 .date-Input {
