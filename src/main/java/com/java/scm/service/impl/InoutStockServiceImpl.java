@@ -1,8 +1,10 @@
 package com.java.scm.service.impl;
 
-import com.alibaba.fastjson.JSON;
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageInfo;
 import com.java.scm.bean.InoutStock;
+import com.java.scm.bean.Project;
+import com.java.scm.bean.Stock;
 import com.java.scm.bean.User;
 import com.java.scm.bean.excel.InoutStockTemplate;
 import com.java.scm.bean.so.InoutStockSO;
@@ -14,7 +16,6 @@ import com.java.scm.service.ProjectService;
 import com.java.scm.service.StockService;
 import com.java.scm.service.WarehouseService;
 import com.java.scm.util.AssertUtils;
-import com.java.scm.util.PageUtils;
 import com.java.scm.util.RequestUtil;
 import com.java.scm.util.StringUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +23,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
-import tk.mybatis.mapper.entity.Example;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -51,54 +51,26 @@ public class InoutStockServiceImpl implements InoutStockService {
     private ProjectService projectService;
 
     /**
-     * 新增出入库
+     * 出入库列表
      * @return
      */
     @Override
     public PageInfo<InoutStock> listInoutStock(InoutStockSO inoutStockSO) {
-        log.info("查询出入库列表参数：{}", JSON.toJSONString(inoutStockSO));
-        Example example = new Example(InoutStock.class);
-        example.setOrderByClause("create_time desc, id");
-        Example.Criteria criteria = example.createCriteria();
-        // 仓库id
-        criteria.andEqualTo("warehouseId", inoutStockSO.getWarehouseId());
-        // 类别 0：入库 1：出库
-        criteria.andEqualTo("type", inoutStockSO.getType());
-        // 工程名称
-        if (StringUtil.isNotEmpty(inoutStockSO.getProject())) {
-            criteria.andLike("project", "%" + inoutStockSO.getProject() + "%");
-        }
-        // 物资名称
-        if (StringUtil.isNotEmpty(inoutStockSO.getProduct())) {
-            criteria.andLike("product", "%" + inoutStockSO.getProduct() + "%");
-        }
-        // 时间范围
-        if (StringUtil.isNotEmpty(inoutStockSO.getStartTime())) {
-            criteria.andGreaterThanOrEqualTo("createTime", inoutStockSO.getStartTime() );
-        }
-        if (StringUtil.isNotEmpty(inoutStockSO.getEndTime())) {
-            criteria.andLessThanOrEqualTo("createTime", inoutStockSO.getEndTime());
-        }
-        // 分页
-        PageUtils.addPage(inoutStockSO.getPageNum(),inoutStockSO.getPageSize());
-        List<InoutStock> list = inoutStockDao.selectByExample(example);
-        // 设置仓库名称和类型
-        if (!CollectionUtils.isEmpty(list)) {
-            // 查询仓库名称集合
-            List<String> warehouseIds = list.stream().map(p -> p.getWarehouseId()).distinct().collect(Collectors.toList());
-            Map<String, String> warehouseMap = warehouseService.getWarehouseMap(warehouseIds);
-            list.forEach(p -> {
+        Page<InoutStock> inoutStockPage =  inoutStockDao.listInoutStock(inoutStockSO);
+        PageInfo<InoutStock> pageInfo = inoutStockPage.toPageInfo();
+        // 出入库类型
+        if (!CollectionUtils.isEmpty(pageInfo.getList())) {
+            pageInfo.getList().forEach(p -> {
                 p.setTypeText(InoutStockTypeEnum.getEnumByValue(p.getType()));
-                p.setWarehouseName(warehouseMap.get(p.getWarehouseId()));
             });
         }
-        return new PageInfo<>(list);
+        return pageInfo;
     }
 
     /**
      * 导入出入库
      */
-    @Transactional(rollbackFor = RuntimeException.class)
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public void importInoutStock(List<InoutStockTemplate> importList, Byte inoutStockType) {
         if (CollectionUtils.isEmpty(importList)) {
@@ -113,50 +85,74 @@ public class InoutStockServiceImpl implements InoutStockService {
 
         // 1、校验数据
         importList.forEach(p -> {
+            // 去空格
+            p.setProject(StringUtil.trim(p.getProject()));
+            p.setProduct(StringUtil.trim(p.getProduct()));
+            p.setModel(StringUtil.trim(p.getModel()));
+            p.setUnit(StringUtil.trim(p.getUnit()));
+            p.setCount(StringUtil.trim(p.getCount()));
+            p.setPrice(StringUtil.trim(p.getPrice()));
+            p.setSource(StringUtil.trim(p.getSource()));
+            p.setHandle(StringUtil.trim(p.getHandle()));
+            p.setRemark(StringUtil.trim(p.getRemark()));
+
+            // 校验
             AssertUtils.notEmpty(p.getProject(), "工程名称不能为空！");
-            AssertUtils.maxlength(StringUtil.trim(p.getProject()), 50, "工程名称长度不能超过50！");
             AssertUtils.notEmpty(p.getProduct(), "物资名称不能为空！");
-            AssertUtils.maxlength(StringUtil.trim(p.getProduct()), 50, "物资名称长度不能超过50！");
             AssertUtils.notEmpty(p.getModel(), "物资型号不能为空！");
-            AssertUtils.maxlength(StringUtil.trim(p.getModel()), 50, "物资型号长度不能超过50！");
             AssertUtils.notEmpty(p.getUnit(), "单位不能为空！");
-            AssertUtils.maxlength(StringUtil.trim(p.getUnit()), 50, "单位长度不能超过50！");
             AssertUtils.notEmpty(p.getCount(), "数量不能为空！");
-            AssertUtils.isInteger(StringUtil.trim(p.getCount()), "数量格式有问题，必须是数字！");
-            AssertUtils.isBigDecimal(StringUtil.trim(p.getPrice()), "物资单价格式有问题，必须是数字！");
-            AssertUtils.maxlength(StringUtil.trim(p.getSource()), 50, "物资来源长度不能超过50！");
-            AssertUtils.maxlength(StringUtil.trim(p.getHandle()), 50, "经手人长度不能超过50！");
-            AssertUtils.maxlength(StringUtil.trim(p.getRemark()), 500, "备注长度不能超过50！");
-            // 判断库存是否存在
+            AssertUtils.isInteger(p.getCount(), "数量格式有问题，必须是数字！");
+            AssertUtils.notEmpty(p.getPrice(), "物资单价不能为空！");
+            AssertUtils.isBigDecimal(p.getPrice(), "物资单价格式有问题，必须是数字！");
+            AssertUtils.notEmpty(p.getSource(), "物资来源不能为空！");
+            AssertUtils.maxlength(p.getSource(), 50, "物资来源长度不能超过50！");
+            AssertUtils.notEmpty(p.getHandle(), "经手人不能为空！");
+            AssertUtils.maxlength(p.getHandle(), 50, "经手人长度不能超过50！");
+            AssertUtils.maxlength(p.getRemark(), 500, "备注长度不能超过50！");
         });
 
-        // 判断工程名称是否存在
+        // 根据工程名称查询工程
         List<String> projectNameList = importList.stream().map(p -> StringUtil.trim(p.getProject())).distinct().collect(Collectors.toList());
-        List<String> existProjectNameList = projectService.getProjectByName(projectNameList);
-        List<String> notExistProjectNameList = projectNameList.stream().filter(p -> !existProjectNameList.contains(p)).collect(Collectors.toList());
-        if (!CollectionUtils.isEmpty(notExistProjectNameList)) {
-            throw new BusinessException("导入失败，以下工程不存在：" + Arrays.toString(notExistProjectNameList.toArray()));
+        List<Project> projectList = projectService.getProjectByName(projectNameList);
+        if (CollectionUtils.isEmpty(projectList)) {
+            throw new BusinessException("导入失败，以下工程不存在：" + Arrays.toString(projectNameList.toArray()));
         }
 
         // 2、保存出入表
         List<InoutStock> inoutStockList = new ArrayList<>();
         for (InoutStockTemplate template : importList) {
+            // 判断工程是否存在
+            Optional<Project> projectOptional = projectList.stream().filter(p -> Objects.equals(p.getName(), template.getProject())).findFirst();
+            if (!projectOptional.isPresent()) {
+                throw new BusinessException(String.format("导入失败，当前工程不存在：[%s]", template.getProject()));
+            }
+
+            // 判断库存是否存在
+            Stock stock = new Stock();
+            stock.setWarehouseId(user.getWarehouseId());
+            stock.setProduct(template.getProduct());
+            stock.setModel(template.getModel());
+            stock.setUnit(template.getUnit());
+            String stockId = stockService.getStockBySelective(stock);
+            if (stockId == null) {
+                throw new BusinessException(String.format("导入失败，当前库存不存在：[物资名称：%s，物资型号：%s，单位：%s]", template.getProduct(), template.getModel(), template.getUnit()));
+            }
+
             InoutStock inoutStock = new InoutStock();
             inoutStock.setType(inoutStockType);
             inoutStock.setWarehouseId(user.getWarehouseId());
-            inoutStock.setProject(StringUtil.trim(template.getProject()));
-            inoutStock.setProduct(StringUtil.trim(template.getProduct()));
-            inoutStock.setModel(StringUtil.trim(template.getModel()));
-            inoutStock.setUnit(StringUtil.trim(template.getUnit()));
-            inoutStock.setCount(Integer.valueOf(StringUtil.trim(template.getCount())));
-            inoutStock.setPrice(StringUtil.isNotEmpty(template.getPrice()) ? new BigDecimal(StringUtil.trim(template.getPrice())) : null);
-            inoutStock.setSource(StringUtil.trim(template.getSource()));
-            inoutStock.setHandle(StringUtil.trim(template.getHandle()));
-            inoutStock.setRemark(StringUtil.trim(template.getRemark()));
-            inoutStock.setCreateUser(user.getName());
+            inoutStock.setProjectId(projectOptional.get().getId());
+            inoutStock.setStockId(stockId);
+            inoutStock.setCount(Integer.valueOf(template.getCount()));
+            inoutStock.setPrice(new BigDecimal(template.getPrice()));
+            inoutStock.setSource(template.getSource());
+            inoutStock.setHandle(template.getHandle());
+            inoutStock.setRemark(template.getRemark());
+            inoutStock.setCreateUserId(user.getId());
             inoutStockDao.insertSelective(inoutStock);
 
-            // 出库数量为负
+            // 出库数量为负(计算库存)
             if (Objects.equals(inoutStockType, InoutStockTypeEnum.出库.getType())) {
                 inoutStock.setCount(-1 * inoutStock.getCount());
             }
@@ -164,6 +160,6 @@ public class InoutStockServiceImpl implements InoutStockService {
         }
 
         // 3、变更库存
-        stockService.insertStock(inoutStockList);
+        stockService.changeStock(inoutStockList);
     }
 }

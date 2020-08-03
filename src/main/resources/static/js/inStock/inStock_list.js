@@ -32,6 +32,8 @@ $(function(){
 function load(pageNum){
 	var project = $("#project").val();
 	var product = $("#product").val();
+	var model = $("#model").val();
+	var source = $("#source").val();
 	var startDate = $("#startDate").val();
 	var endDate = $("#endDate").val();
 	$.ajax({
@@ -44,6 +46,8 @@ function load(pageNum){
         		"type":stockType,
         		"project":project,
         		"product":product,
+        		"model":model,
+        		"source":source,
         		"startTime":startDate,
         		"endTime":endDate
         		}),

@@ -63,9 +63,14 @@ public interface StockService {
     BaseResult getChangeDetail(StockRecordSO stockRecordSO);
 
     /**
-     * 批量变更库存
+     * 出入库变更库存
      */
-    void insertStock(List<InoutStock> inoutStockList);
+    void changeStock(List<InoutStock> inoutStockList);
 
+    /**
+     * 按条件查询库存Id
+     * @return
+     */
+    String getStockBySelective(Stock stock);
 
 }

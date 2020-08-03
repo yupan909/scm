@@ -28,25 +28,34 @@
                             <input type="text" class="form-control t2" id="product" placeholder="输入要查询的物资名称">
                         </div>
                         <div class="form-group col-md-4">
-                            <label class="t1">出/入库时间</label>
-                            <input type="text" class="form-control date-Input" id="startDate" name="startDate" placeholder="开始时间" readonly="readonly">
-                            至 <input type="text" class="form-control date-Input" id="endDate" name="endDate" placeholder="结束时间" readonly="readonly">
+                            <label for="model" class="t1">物资型号</label>
+                            <input type="text" class="form-control t2" id="model" placeholder="输入要查询的物资型号">
                         </div>
 
                         <div class="clearfix"></div>
 
-                        <div class="form-group col-md-4 td">
+                        <div class="form-group col-md-4">
+                            <label for="source" class="t1">物资来源</label>
+                            <input type="text" class="form-control t2" id="source" placeholder="输入要查询的物资来源">
+                        </div>
+                        <div class="form-group col-md-4">
                             <label for="type" class="t1">类型</label>
                             <select class="form-control t2" id="type" name="type">
                                 <option value="">--请选择--</option>
                             </select>
                         </div>
-
-                        <div class="form-group col-md-4 td">
+                        <div class="form-group col-md-4">
                             <label for="warehouseId" class="t1">仓库</label>
                             <select class="form-control t2" id="warehouseId" name="warehouseId">
                                 <option value="">--请选择--</option>
                             </select>
+                        </div>
+                        <div class="clearfix"></div>
+
+                        <div class="form-group col-md-4">
+                            <label class="t1">出/入库时间</label>
+                            <input type="text" class="form-control date-Input" id="startDate" name="startDate" placeholder="开始时间" readonly="readonly">
+                            至 <input type="text" class="form-control date-Input" id="endDate" name="endDate" placeholder="结束时间" readonly="readonly">
                         </div>
 
                         <div class="clearfix"></div>

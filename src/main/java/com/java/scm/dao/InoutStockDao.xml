@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.java.scm.dao.InoutStockDao">
+
+  <select id="listInoutStock" resultType="com.java.scm.bean.InoutStock">
+    SELECT
+    ios.id,
+    ios.warehouse_id as warehouseId,
+    w.name as warehouseName,
+    ios.project_id as projectId,
+    p.name as project,
+    ios.stock_id as stockId,
+    s.product,
+    s.model,
+    s.unit,
+    ios.count,
+    ios.price,
+    ios.source,
+    ios.handle,
+    ios.remark,
+    ios.type,
+    ios.create_time as createTime
+    FROM inout_stock ios
+    INNER JOIN stock s on ios.stock_id = s.id and ios.warehouse_id = s.warehouse_id
+    LEFT JOIN project p on ios.project_id = p.id
+    LEFT JOIN warehouse w ON ios.warehouse_id = w.id
+    <where>
+      <if test="warehouseId != null and warehouseId != ''">
+        AND ios.warehouse_id = #{warehouseId}
+      </if>
+      <if test="type != null">
+        AND ios.type = #{type}
+      </if>
+      <if test="startTime != null and startTime != ''">
+        AND ios.create_time >= #{startTime}
+      </if>
+      <if test="endTime != null and endTime != ''">
+        AND ios.create_time <![CDATA[ <= ]]> #{endTime}
+      </if>
+      <if test="source != null and source != ''">
+        AND ios.source LIKE CONCAT('%', #{source}, '%')
+      </if>
+      <if test="project != null and project != '' ">
+        AND p.name LIKE CONCAT('%', #{project}, '%')
+      </if>
+      <if test="product != null and product != ''">
+        AND s.product LIKE CONCAT('%', #{product}, '%')
+      </if>
+      <if test="model != null and model != ''">
+        AND s.model LIKE CONCAT('%', #{model}, '%')
+      </if>
+    </where>
+    order by ios.create_time desc
+  </select>
+
+</mapper>

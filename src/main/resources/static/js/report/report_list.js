@@ -44,6 +44,8 @@ $(function(){
 function load(pageNum){
 	var project = $("#project").val();
 	var product = $("#product").val();
+    var model = $("#model").val();
+    var source = $("#source").val();
 	var startDate = $("#startDate").val();
 	var endDate = $("#endDate").val();
 	var type = $("#type").val();
@@ -60,6 +62,8 @@ function load(pageNum){
         		"warehouseId":warehouseId,
         		"project":project,
         		"product":product,
+                "model":model,
+                "source":source,
         		"startTime":startDate,
         		"endTime":endDate
         		}),
@@ -117,7 +121,9 @@ function exportExcel(){
     var warehouseId = $("#warehouseId").val();
     var project = encodeURI($("#project").val());
     var product = encodeURI($("#product").val());
+    var model = encodeURI($("#model").val());
+    var source = encodeURI($("#source").val());
     var startDate = $("#startDate").val();
     var endDate = $("#endDate").val();
-    window.location.href="../inoutStock/exportInoutStock?type="+type+"&warehouseId="+warehouseId+"&project="+project+"&product="+product+"&startTime="+startDate+"&endTime="+endDate;
+    window.location.href="../inoutStock/exportInoutStock?type="+type+"&warehouseId="+warehouseId+"&project="+project+"&product="+product+"&model="+model+"&source="+source+"&startTime="+startDate+"&endTime="+endDate;
 }

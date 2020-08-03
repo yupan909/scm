@@ -15,13 +15,10 @@ import com.java.scm.util.StringUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 import tk.mybatis.mapper.entity.Example;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 /**
  * 工程
@@ -150,18 +147,14 @@ public class ProjectServiceImpl implements ProjectService {
      * @return
      */
     @Override
-    public List<String> getProjectByName(List<String> nameList) {
+    public List<Project> getProjectByName(List<String> nameList) {
         AssertUtils.notEmpty(nameList, "工程名称不能为空");
         Example example = new Example(Project.class);
         Example.Criteria criteria =  example.createCriteria();
         criteria.andIn("name", nameList);
         criteria.andEqualTo("state", StateEnum.启用.getType());
         List<Project> projects = projectDao.selectByExample(example);
-        if (CollectionUtils.isEmpty(projects)) {
-            return Collections.EMPTY_LIST;
-        }
-        List<String> projectNamelist = projects.stream().map(p -> p.getName()).collect(Collectors.toList());
-        return projectNamelist;
+        return projects;
     }
 
     /**

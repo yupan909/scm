@@ -58,9 +58,9 @@ public interface ProjectService {
     BaseResult stopUsing(String id);
 
     /**
-     * 根据工程名称查询存在的工程名称
+     * 根据工程名称查询工程
      * @return
      */
-    List<String> getProjectByName(List<String> nameList);
+    List<Project> getProjectByName(List<String> nameList);
 
 }

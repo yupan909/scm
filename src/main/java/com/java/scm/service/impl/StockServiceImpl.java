@@ -157,67 +157,68 @@ public class StockServiceImpl implements StockService {
 
         Page<StockRecord> stockRecordPage = stockRecordDao.listStockRecord(stockRecordSO);
         // 变更类型
-        stockRecordPage.toPageInfo().getList().forEach(p -> {
-            p.setTypeInfo(StockRecordTypeEnum.getEnumByValue(p.getType()));
-        });
+        if (!CollectionUtils.isEmpty(stockRecordPage.toPageInfo().getList())) {
+            stockRecordPage.toPageInfo().getList().forEach(p -> {
+                p.setTypeInfo(StockRecordTypeEnum.getEnumByValue(p.getType()));
+            });
+
+        }
         return new BaseResult(stockRecordPage.toPageInfo().getList(), stockRecordPage.getTotal());
     }
 
     /**
      * 批量变更库存
      */
+    @Transactional(rollbackFor = Exception.class)
     @Override
-    public void insertStock(List<InoutStock> inoutStockList) {
+    public void changeStock(List<InoutStock> inoutStockList) {
         if (CollectionUtils.isEmpty(inoutStockList)) {
             throw new BusinessException("变更库存参数不能为空");
         }
         inoutStockList.forEach(inoutStock -> {
-            Stock oldStock = getStockBySelective(inoutStock.getWarehouseId(), inoutStock.getProduct(), inoutStock.getModel());
+            Stock oldStock = stockDao.selectByPrimaryKey(inoutStock.getStockId());
             if (oldStock == null) {
-                throw new BusinessException(String.format("%s（%s）没有库存，请检查后再重新导入！", inoutStock.getProduct(), inoutStock.getModel()));
+                throw new BusinessException("库存不存在，请检查后再重新导入！");
             }
             // 新库存数量
             Stock newStock = new Stock();
             newStock.setId(oldStock.getId());
             newStock.setCount(oldStock.getCount() + inoutStock.getCount());
+            newStock.setUpdateUserId(inoutStock.getCreateUserId());
             stockDao.updateByPrimaryKeySelective(newStock);
 
             // 库存记录
             StockRecord stockRecord = new StockRecord();
-            stockRecord.setStockId(oldStock.getId());
-            stockRecord.setProject(inoutStock.getProject());
+            stockRecord.setStockId(inoutStock.getStockId());
+            stockRecord.setInoutStockId(inoutStock.getId());
             stockRecord.setCount(inoutStock.getCount());
             stockRecord.setType(inoutStock.getType());
-            stockRecord.setInoutStockId(inoutStock.getId());
-            stockRecord.setCreateUser(inoutStock.getCreateUser());
+            stockRecord.setCreateUserId(inoutStock.getCreateUserId());
             stockRecordDao.insertSelective(stockRecord);
         });
     }
 
     /**
-     * 按条件查询库存
-     *
+     * 按条件查询库存Id
      * @return
      */
-    private Stock getStockBySelective(String warehouseId, String product, String model) {
+    @Override
+    public String getStockBySelective(Stock stock) {
         Example example = new Example(Stock.class);
         Example.Criteria criteria = example.createCriteria();
-        criteria.andEqualTo("warehouseId", warehouseId);
-        criteria.andEqualTo("product", product);
-        criteria.andEqualTo("model", model);
+        criteria.andEqualTo("warehouseId", stock.getWarehouseId());
+        criteria.andEqualTo("product", stock.getProduct());
+        criteria.andEqualTo("model", stock.getModel());
+        criteria.andEqualTo("unit", stock.getUnit());
         List<Stock> stockList = stockDao.selectByExample(example);
         if (CollectionUtils.isEmpty(stockList)) {
             return null;
         }
-        return stockList.get(0);
+        return stockList.get(0).getId();
     }
 
     /**
      * 校验库存唯一
-     * @param id
-     * @param warehouseId
-     * @param product
-     * @param model
      * @return
      */
     private boolean stockCheck(String id, String warehouseId, String product, String model, String unit){

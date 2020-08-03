@@ -18,10 +18,10 @@
       <if test="warehouseId != null">
         AND s.warehouse_id = #{warehouseId}
       </if>
-      <if test="product != null">
+      <if test="product != null and product != ''">
         AND s.product LIKE CONCAT('%', #{product}, '%')
       </if>
-      <if test="model != null">
+      <if test="model != null and model != ''">
         AND s.model LIKE CONCAT('%', #{model}, '%')
       </if>
     </where>

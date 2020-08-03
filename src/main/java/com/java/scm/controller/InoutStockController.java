@@ -10,6 +10,7 @@ import com.java.scm.config.exception.BusinessException;
 import com.java.scm.enums.InoutStockTypeEnum;
 import com.java.scm.service.InoutStockService;
 import com.java.scm.util.RequestUtil;
+import com.java.scm.util.StringUtil;
 import com.java.scm.util.excel.ExcelTypeEnum;
 import com.java.scm.util.excel.ExcelUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,14 +57,26 @@ public class InoutStockController {
                                  @RequestParam("warehouseId") String warehouseId,
                                  @RequestParam("project") String project,
                                  @RequestParam("product") String product,
+                                 @RequestParam("model") String model,
+                                 @RequestParam("source") String source,
                                  @RequestParam("startTime") String startTime,
                                  @RequestParam("endTime") String endTime,
                                  HttpServletResponse response) throws Exception {
         InoutStockSO inoutStockSO = new InoutStockSO();
         inoutStockSO.setType(type);
         inoutStockSO.setWarehouseId(warehouseId);
-        inoutStockSO.setProject(URLDecoder.decode(project, "utf-8"));
-        inoutStockSO.setProduct(URLDecoder.decode(product, "utf-8"));
+        if (StringUtil.isNotEmpty(project)) {
+            inoutStockSO.setProject(URLDecoder.decode(project, "utf-8"));
+        }
+        if (StringUtil.isNotEmpty(product)) {
+            inoutStockSO.setProduct(URLDecoder.decode(product, "utf-8"));
+        }
+        if (StringUtil.isNotEmpty(model)) {
+            inoutStockSO.setModel(URLDecoder.decode(model, "utf-8"));
+        }
+        if (StringUtil.isNotEmpty(source)) {
+            inoutStockSO.setSource(URLDecoder.decode(source, "utf-8"));
+        }
         inoutStockSO.setStartTime(startTime);
         inoutStockSO.setEndTime(endTime);
         PageInfo<InoutStock> pageInfo = inoutStockService.listInoutStock(inoutStockSO);

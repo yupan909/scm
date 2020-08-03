@@ -5,7 +5,9 @@ import lombok.*;
 import tk.mybatis.mapper.annotation.KeySql;
 import tk.mybatis.mapper.code.ORDER;
 
-import javax.persistence.*;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Transient;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -42,23 +44,37 @@ public class InoutStock {
     private String warehouseName;
 
     /**
+     * 工程id
+     */
+    private String projectId;
+
+    /**
      * 工程名称
      */
+    @Transient
     private String project;
+
+    /**
+     * 库存id
+     */
+    private String stockId;
 
     /**
      * 物资名称
      */
+    @Transient
     private String product;
 
     /**
      * 物资型号
      */
+    @Transient
     private String model;
 
     /**
      * 单位
      */
+    @Transient
     private String unit;
 
     /**
@@ -67,9 +83,9 @@ public class InoutStock {
     private Integer count;
 
     /**
-     * 经手人
+     * 物资单价（元）
      */
-    private String handle;
+    private BigDecimal price;
 
     /**
      * 物资来源
@@ -77,9 +93,9 @@ public class InoutStock {
     private String source;
 
     /**
-     * 物资单价（元）
+     * 经手人
      */
-    private BigDecimal price;
+    private String handle;
 
     /**
      * 备注
@@ -104,7 +120,13 @@ public class InoutStock {
     private Date createTime;
 
     /**
+     * 创建人id
+     */
+    private String createUserId;
+
+    /**
      * 创建人
      */
+    @Transient
     private String createUser;
 }

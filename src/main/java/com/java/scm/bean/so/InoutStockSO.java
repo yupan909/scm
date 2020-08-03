@@ -30,6 +30,16 @@ public class InoutStockSO extends PageCondition {
     private String product;
 
     /**
+     * 物资型号
+     */
+    private String model;
+
+    /**
+     * 物资来源
+     */
+    private String source;
+
+    /**
      * 类别 0：入库 1：出库
      */
     private Byte type;
