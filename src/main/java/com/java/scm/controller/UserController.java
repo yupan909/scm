@@ -1,9 +1,9 @@
 package com.java.scm.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java.scm.aop.anno.AdminRight;
 import com.java.scm.bean.User;
 import com.java.scm.bean.base.BaseResult;
+import com.java.scm.config.aop.anno.AdminRight;
 import com.java.scm.enums.CommonConsts;
 import com.java.scm.service.UserService;
 import com.java.scm.util.RequestUtil;

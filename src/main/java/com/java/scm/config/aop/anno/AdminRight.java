@@ -1,4 +1,4 @@
-package com.java.scm.aop.anno;
+package com.java.scm.config.aop.anno;
 
 import java.lang.annotation.*;
 

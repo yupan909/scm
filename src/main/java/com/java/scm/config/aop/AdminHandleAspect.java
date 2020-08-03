@@ -1,4 +1,4 @@
-package com.java.scm.aop;
+package com.java.scm.config.aop;
 
 import com.java.scm.bean.User;
 import com.java.scm.config.exception.BusinessException;
@@ -23,7 +23,7 @@ import java.util.Objects;
 @Slf4j
 public class AdminHandleAspect {
 
-    @Pointcut("@annotation(com.java.scm.aop.anno.AdminRight)")
+    @Pointcut("@annotation(com.java.scm.config.aop.anno.AdminRight)")
     public void serviceAspect() {
         // 以注解作为切点
     }
