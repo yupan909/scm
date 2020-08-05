@@ -360,7 +360,7 @@ function validate(){
                     notEmpty: {message: '请输入库存数量'},
                     stringLength: { max: 10, message: '不能超过10个字符'},
                     regexp:{
-                        regexp: /^[1-9]\d*|0$/,  //正则规则用两个/包裹起来
+                        regexp: /((^[1-9]\d*)|^0)$/,  //正则规则用两个/包裹起来
                         message: '请输入正确的库存数量'
                     }
                 }
@@ -419,7 +419,7 @@ function validate(){
                     notEmpty: {message: '请输入库存数量'},
                     stringLength: { max: 10, message: '不能超过10个字符'},
                     regexp:{
-                        regexp: /^[1-9]\d*|0$/,  //正则规则用两个/包裹起来
+                        regexp: /((^[1-9]\d*)|^0)$/,  //正则规则用两个/包裹起来
                         message: '请输入正确的库存数量'
                     }
                 }

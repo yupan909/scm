@@ -280,7 +280,7 @@ function validate(){
                 validators: {
                     stringLength: { max: 13, message: '不能超过13个字符'},
                     regexp:{
-                        regexp: /^([1-9]\d*)|0|([0]\.\d{1,2})|([1-9]\d*\.\d{1,2})$/,  //正则规则用两个/包裹起来
+                        regexp: /((^[1-9]\d*)|^0)(\.\d{0,2}){0,1}$/,  //正则规则用两个/包裹起来
                         message: '请输入正确的合同金额'
                     }
                 }
@@ -289,7 +289,7 @@ function validate(){
                 validators: {
                     stringLength: { max: 13, message: '不能超过13个字符'},
                     regexp:{
-                        regexp: /^([1-9]\d*)|0|([0]\.\d{1,2})|([1-9]\d*\.\d{1,2})$/,  //正则规则用两个/包裹起来
+                        regexp: /((^[1-9]\d*)|^0)(\.\d{0,2}){0,1}$/,  //正则规则用两个/包裹起来
                         message: '请输入正确的结算金额'
                     }
                 }
@@ -322,7 +322,7 @@ function validate(){
                 validators: {
                     stringLength: { max: 13, message: '不能超过13个字符'},
                     regexp:{
-                        regexp: /^([1-9]\d*)|0|([0]\.\d{1,2})|([1-9]\d*\.\d{1,2})$/,  //正则规则用两个/包裹起来
+                        regexp: /((^[1-9]\d*)|^0)(\.\d{0,2}){0,1}$/,  //正则规则用两个/包裹起来
                         message: '请输入正确的合同金额'
                     }
                 }
@@ -331,7 +331,7 @@ function validate(){
                 validators: {
                     stringLength: { max: 13, message: '不能超过13个字符'},
                     regexp:{
-                        regexp: /^([1-9]\d*)|0|([0]\.\d{1,2})|([1-9]\d*\.\d{1,2})$/,  //正则规则用两个/包裹起来
+                        regexp: /((^[1-9]\d*)|^0)(\.\d{0,2}){0,1}$/,  //正则规则用两个/包裹起来
                         message: '请输入正确的结算金额'
                     }
                 }
