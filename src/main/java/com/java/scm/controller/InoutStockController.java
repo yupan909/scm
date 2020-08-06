@@ -3,22 +3,26 @@ package com.java.scm.controller;
 import com.github.pagehelper.PageInfo;
 import com.java.scm.bean.InoutStock;
 import com.java.scm.bean.base.BaseResult;
+import com.java.scm.bean.excel.InoutStockExportTemplate;
 import com.java.scm.bean.excel.InoutStockReportTemplate;
-import com.java.scm.bean.excel.InoutStockTemplate;
+import com.java.scm.bean.excel.InoutStockImportTemplate;
 import com.java.scm.bean.so.InoutStockSO;
 import com.java.scm.config.exception.BusinessException;
 import com.java.scm.enums.InoutStockTypeEnum;
 import com.java.scm.service.InoutStockService;
+import com.java.scm.util.DateUtils;
 import com.java.scm.util.RequestUtil;
 import com.java.scm.util.StringUtil;
 import com.java.scm.util.excel.ExcelTypeEnum;
 import com.java.scm.util.excel.ExcelUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,24 +53,136 @@ public class InoutStockController {
     }
 
     /**
-     * 导出
+     * 新增出入库
+     * @return
+     */
+    @PostMapping("/save")
+    public BaseResult listInoutStock(@RequestBody InoutStock inoutStock) {
+        inoutStockService.saveInoutStock(inoutStock);
+        return BaseResult.successResult();
+    }
+
+    /**
+     * 导入
+     * @throws Exception
+     */
+    @PostMapping("/import/{type}")
+    public BaseResult importInoutStock(@RequestParam("file")MultipartFile file, @PathVariable("type") Byte type) throws Exception {
+        if (file.getOriginalFilename().indexOf(ExcelTypeEnum.XLS.getValue()) == -1 && file.getOriginalFilename().indexOf(ExcelTypeEnum.XLSX.getValue()) == -1) {
+            throw new BusinessException("导入文件类型不正确，只能导入.xls和.xlsx后缀的文件！");
+        }
+
+        // 获取导入的excel数据
+        List<InoutStockImportTemplate> importList = ExcelUtils.importExcel(file, 1,1, InoutStockImportTemplate.class);
+        if (CollectionUtils.isEmpty(importList)) {
+            throw new BusinessException("导入excel数据为空！");
+        }
+
+        Byte inoutStockType = InoutStockTypeEnum.入库.getType();
+        if (Objects.equals(type, InoutStockTypeEnum.出库.getType())) {
+            inoutStockType = InoutStockTypeEnum.出库.getType();
+        }
+
+        inoutStockService.importInoutStock(importList, inoutStockType);
+        return BaseResult.successResult();
+    }
+
+    /**
+     * 导出模版
+     * @throws Exception
+     */
+    @GetMapping("/exportTemplate/{type}")
+    public void exportTemplate(HttpServletResponse response, @PathVariable("type") Byte type) throws Exception {
+        String title = "入库单";
+        String fileName = "入库单模版";
+        if (Objects.equals(type, InoutStockTypeEnum.出库.getType())) {
+            title = "出库单";
+            fileName = "出库单模版";
+        }
+        ExcelUtils.exportExcel(new ArrayList<>(), InoutStockImportTemplate.class, title, fileName, response);
+    }
+
+    /**
+     * 导出出入库管理
      * @throws Exception
      */
     @GetMapping("/exportInoutStock")
     public void exportInoutStock(@RequestParam("type") Byte type,
-                                 @RequestParam("warehouseId") String warehouseId,
-                                 @RequestParam("project") String project,
-                                 @RequestParam("product") String product,
-                                 @RequestParam("model") String model,
-                                 @RequestParam("source") String source,
-                                 @RequestParam("startTime") String startTime,
-                                 @RequestParam("endTime") String endTime,
-                                 HttpServletResponse response) throws Exception {
+                                       @RequestParam("project") String project,
+                                       @RequestParam("product") String product,
+                                       @RequestParam("model") String model,
+                                       @RequestParam("source") String source,
+                                       @RequestParam("startTime") String startTime,
+                                       @RequestParam("endTime") String endTime,
+                                       HttpServletResponse response) throws Exception {
+        // 查询数据
+        PageInfo<InoutStock> pageInfo = getInoutStockPageInfo(type, project, product, model, source, startTime, endTime, null);
+
+        List<InoutStockExportTemplate> exportList = new ArrayList<>();
+        if (!CollectionUtils.isEmpty(pageInfo.getList())) {
+            for(int i = 0; i < pageInfo.getList().size(); i++) {
+                InoutStock inoutStock = pageInfo.getList().get(i);
+                InoutStockExportTemplate template = new InoutStockExportTemplate();
+                BeanUtils.copyProperties(inoutStock, template);
+                template.setNum(String.valueOf(i+1));
+                template.setCount(String.valueOf(inoutStock.getCount()));
+                template.setPrice(inoutStock.getPrice().toString());
+                template.setCreateTime(DateUtils.formatDateTime(inoutStock.getCreateTime()));
+                exportList.add(template);
+            }
+        }
+        String fileName = "入库管理";
+        if (Objects.equals(type, InoutStockTypeEnum.出库.getType())) {
+            fileName = "出库管理";
+        }
+        ExcelUtils.exportExcel(exportList, InoutStockExportTemplate.class, fileName, fileName, response);
+    }
+
+
+
+    /**
+     * 导出出入库报表统计
+     * @throws Exception
+     */
+    @GetMapping("/exportInoutStockReport")
+    public void exportInoutStockReport(@RequestParam("type") Byte type,
+                                       @RequestParam("warehouseId") String warehouseId,
+                                       @RequestParam("project") String project,
+                                       @RequestParam("product") String product,
+                                       @RequestParam("model") String model,
+                                       @RequestParam("source") String source,
+                                       @RequestParam("startTime") String startTime,
+                                       @RequestParam("endTime") String endTime,
+                                       HttpServletResponse response) throws Exception {
+        // 查询数据
+        PageInfo<InoutStock> pageInfo = getInoutStockPageInfo(type, project, product, model, source, startTime, endTime, warehouseId);
+
+        List<InoutStockReportTemplate> exportList = new ArrayList<>();
+        if (!CollectionUtils.isEmpty(pageInfo.getList())) {
+            for(int i = 0; i < pageInfo.getList().size(); i++) {
+                InoutStock inoutStock = pageInfo.getList().get(i);
+                InoutStockReportTemplate template = new InoutStockReportTemplate();
+                BeanUtils.copyProperties(inoutStock, template);
+                template.setNum(String.valueOf(i+1));
+                template.setType(inoutStock.getTypeText());
+                template.setWarehouse(inoutStock.getWarehouseName());
+                template.setCount(String.valueOf(inoutStock.getCount()));
+                template.setPrice(inoutStock.getPrice().toString());
+                template.setCreateTime(DateUtils.formatDateTime(inoutStock.getCreateTime()));
+                exportList.add(template);
+            }
+        }
+        ExcelUtils.exportExcel(exportList, InoutStockReportTemplate.class, "出入库报表统计", "出入库报表统计", response);
+    }
+
+    /**
+     * 查询出入库数据
+     */
+    private PageInfo<InoutStock> getInoutStockPageInfo(Byte type, String project, String product, String model, String source, String startTime, String endTime, String warehouseId) throws UnsupportedEncodingException {
         InoutStockSO inoutStockSO = new InoutStockSO();
         inoutStockSO.setType(type);
-        // 当前仓库为空时，获取当前人所属仓库id
-        if (StringUtil.isEmpty(warehouseId)) {
-            warehouseId = RequestUtil.getWarehouseId();
+        if (warehouseId == null) {
+            inoutStockSO.setWarehouseId(RequestUtil.getWarehouseId());
         }
         inoutStockSO.setWarehouseId(warehouseId);
         if (StringUtil.isNotEmpty(project)) {
@@ -83,83 +199,7 @@ public class InoutStockController {
         }
         inoutStockSO.setStartTime(startTime);
         inoutStockSO.setEndTime(endTime);
-        PageInfo<InoutStock> pageInfo = inoutStockService.listInoutStock(inoutStockSO);
-        List<InoutStockReportTemplate> exportList = new ArrayList<>();
-        if (!CollectionUtils.isEmpty(pageInfo.getList())) {
-            for(int i = 0; i < pageInfo.getList().size(); i++) {
-                InoutStock inoutStock = pageInfo.getList().get(i);
-                InoutStockReportTemplate template = new InoutStockReportTemplate();
-                template.setNum(String.valueOf(i+1));
-                template.setType(inoutStock.getTypeText());
-                template.setWarehouse(inoutStock.getWarehouseName());
-                template.setProject(inoutStock.getProject());
-                template.setProduct(inoutStock.getProduct());
-                template.setModel(inoutStock.getModel());
-                template.setUnit(inoutStock.getUnit());
-                template.setCount(String.valueOf(inoutStock.getCount()));
-                template.setPrice(inoutStock.getPrice().toString());
-                template.setSource(inoutStock.getSource());
-                template.setHandle(inoutStock.getHandle());
-                template.setRemark(inoutStock.getRemark());
-                exportList.add(template);
-            }
-        }
-        String fileName = "出入库统计";
-        if (Objects.equals(type, InoutStockTypeEnum.入库.getType())) {
-            fileName = "入库统计";
-        } else if (Objects.equals(type, InoutStockTypeEnum.出库.getType())) {
-            fileName = "出库统计";
-        }
-        ExcelUtils.exportExcel(exportList, InoutStockReportTemplate.class, fileName, fileName, response);
+        return inoutStockService.listInoutStock(inoutStockSO);
     }
 
-    /**
-     * 导出模版
-     * @throws Exception
-     */
-    @GetMapping("/exportTemplate/{type}")
-    public void exportTemplate(HttpServletResponse response, @PathVariable("type") Byte type) throws Exception {
-        String title = "入库单";
-        String fileName = "入库单模版";
-        if (Objects.equals(type, InoutStockTypeEnum.出库.getType())) {
-            title = "出库单";
-            fileName = "出库单模版";
-        }
-        ExcelUtils.exportExcel(new ArrayList<>(), InoutStockTemplate.class, title, fileName, response);
-    }
-
-    /**
-     * 导入
-     * @throws Exception
-     */
-    @PostMapping("/import/{type}")
-    public BaseResult importInoutStock(@RequestParam("file")MultipartFile file, @PathVariable("type") Byte type) throws Exception {
-        if (file.getOriginalFilename().indexOf(ExcelTypeEnum.XLS.getValue()) == -1 && file.getOriginalFilename().indexOf(ExcelTypeEnum.XLSX.getValue()) == -1) {
-            throw new BusinessException("导入文件类型不正确，只能导入.xls和.xlsx后缀的文件！");
-        }
-
-        // 获取导入的excel数据
-        List<InoutStockTemplate> importList = ExcelUtils.importExcel(file, 1,1, InoutStockTemplate.class);
-        if (CollectionUtils.isEmpty(importList)) {
-            throw new BusinessException("导入excel数据为空！");
-        }
-
-        Byte inoutStockType = InoutStockTypeEnum.入库.getType();
-        if (Objects.equals(type, InoutStockTypeEnum.出库.getType())) {
-            inoutStockType = InoutStockTypeEnum.出库.getType();
-        }
-
-        inoutStockService.importInoutStock(importList, inoutStockType);
-        return BaseResult.successResult();
-    }
-
-    /**
-     * 新增出入库
-     * @return
-     */
-    @PostMapping("/save")
-    public BaseResult listInoutStock(@RequestBody InoutStock inoutStock) {
-        inoutStockService.saveInoutStock(inoutStock);
-        return BaseResult.successResult();
-    }
 }

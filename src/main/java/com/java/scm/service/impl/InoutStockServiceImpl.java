@@ -6,7 +6,7 @@ import com.java.scm.bean.InoutStock;
 import com.java.scm.bean.Project;
 import com.java.scm.bean.Stock;
 import com.java.scm.bean.User;
-import com.java.scm.bean.excel.InoutStockTemplate;
+import com.java.scm.bean.excel.InoutStockImportTemplate;
 import com.java.scm.bean.so.InoutStockSO;
 import com.java.scm.config.exception.BusinessException;
 import com.java.scm.dao.InoutStockDao;
@@ -72,7 +72,7 @@ public class InoutStockServiceImpl implements InoutStockService {
      */
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void importInoutStock(List<InoutStockTemplate> importList, Byte inoutStockType) {
+    public void importInoutStock(List<InoutStockImportTemplate> importList, Byte inoutStockType) {
         if (CollectionUtils.isEmpty(importList)) {
             throw new BusinessException("导入excel数据为空！");
         }
@@ -121,7 +121,7 @@ public class InoutStockServiceImpl implements InoutStockService {
 
         // 2、保存出入表
         List<InoutStock> inoutStockList = new ArrayList<>();
-        for (InoutStockTemplate template : importList) {
+        for (InoutStockImportTemplate template : importList) {
             // 判断工程是否存在
             Optional<Project> projectOptional = projectList.stream().filter(p -> Objects.equals(p.getName(), template.getProject())).findFirst();
             if (!projectOptional.isPresent()) {

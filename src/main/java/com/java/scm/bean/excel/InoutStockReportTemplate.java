@@ -50,4 +50,7 @@ public class InoutStockReportTemplate {
     @Excel(name = "备注", orderNum = "11")
     private String remark;
 
+    @Excel(name = "出/入库时间", orderNum = "12",  width = 20.0D)
+    private String createTime;
+
 }

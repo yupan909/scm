@@ -125,5 +125,5 @@ function exportExcel(){
     var source = encodeURI($("#source").val());
     var startDate = $("#startDate").val();
     var endDate = $("#endDate").val();
-    window.location.href="../inoutStock/exportInoutStock?type="+type+"&warehouseId="+warehouseId+"&project="+project+"&product="+product+"&model="+model+"&source="+source+"&startTime="+startDate+"&endTime="+endDate;
+    window.location.href="../inoutStock/exportInoutStockReport?type="+type+"&warehouseId="+warehouseId+"&project="+project+"&product="+product+"&model="+model+"&source="+source+"&startTime="+startDate+"&endTime="+endDate;
 }
