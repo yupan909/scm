@@ -162,4 +162,64 @@ public class InoutStockServiceImpl implements InoutStockService {
         // 3、变更库存
         stockService.changeStock(inoutStockList);
     }
+
+    /**
+     * 新增出入库
+     */
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public void saveInoutStock(InoutStock inoutStock) {
+        // 获取当前登陆用户
+        User user = RequestUtil.getCurrentUser();
+        if (user == null || user.getWarehouseId() == null) {
+            throw new BusinessException("当前用户所属仓库为空，无法新增！");
+        }
+
+        // 校验
+        AssertUtils.notNull(inoutStock, "新增出入库参数不能为空！");
+        AssertUtils.notNull(inoutStock.getType(), "类别不能为空！");
+        AssertUtils.notEmpty(inoutStock.getProject(), "工程名称不能为空！");
+        AssertUtils.notEmpty(inoutStock.getProduct(), "物资名称不能为空！");
+        AssertUtils.notEmpty(inoutStock.getModel(), "物资型号不能为空！");
+        AssertUtils.notEmpty(inoutStock.getUnit(), "单位不能为空！");
+        AssertUtils.notNull(inoutStock.getCount(), "数量不能为空！");
+        AssertUtils.notNull(inoutStock.getPrice(), "物资单价不能为空！");
+        AssertUtils.notEmpty(inoutStock.getSource(), "物资来源不能为空！");
+        AssertUtils.notEmpty(inoutStock.getHandle(), "经手人不能为空！");
+
+        // 根据工程名称查询工程
+        List<Project> projectList = projectService.getProjectByName(Arrays.asList(inoutStock.getProject()));
+        if (CollectionUtils.isEmpty(projectList)) {
+            throw new BusinessException("新增失败，工程名称不存在！");
+        }
+
+        // 判断库存是否存在
+        Stock stock = new Stock();
+        stock.setWarehouseId(user.getWarehouseId());
+        stock.setProduct(inoutStock.getProduct());
+        stock.setModel(inoutStock.getModel());
+        stock.setUnit(inoutStock.getUnit());
+        String stockId = stockService.getStockBySelective(stock);
+        if (stockId == null) {
+            throw new BusinessException("新增失败，库存不存在！");
+        }
+
+        // (1)新增出入库
+        inoutStock.setProjectId(projectList.get(0).getId());
+        inoutStock.setStockId(stockId);
+        inoutStock.setWarehouseId(user.getWarehouseId());
+        inoutStock.setCreateUserId(user.getId());
+        inoutStockDao.insertSelective(inoutStock);
+
+        // (2)变更库存
+        // 出库数量为负(计算库存)
+        if (Objects.equals(inoutStock.getType(), InoutStockTypeEnum.出库.getType())) {
+            inoutStock.setCount(-1 * inoutStock.getCount());
+        }
+        List<InoutStock> inoutStockList = new ArrayList<>();
+        inoutStockList.add(inoutStock);
+        stockService.changeStock(inoutStockList);
+    }
+
+
 }

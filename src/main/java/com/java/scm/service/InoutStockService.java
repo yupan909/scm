@@ -26,4 +26,8 @@ public interface InoutStockService {
      */
     void importInoutStock(List<InoutStockTemplate> importList, Byte inoutStockType);
 
+    /**
+     * 新增出入库
+     */
+    void saveInoutStock(InoutStock inoutStock);
 }

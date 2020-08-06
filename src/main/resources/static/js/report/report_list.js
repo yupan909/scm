@@ -114,7 +114,7 @@ function load(pageNum){
 }
 
 /**
- * 下载模版
+ * 导出
  */
 function exportExcel(){
     var type = $("#type").val();

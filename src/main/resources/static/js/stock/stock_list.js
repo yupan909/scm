@@ -320,8 +320,8 @@ function loadDetail(pageNum){
         }
     });
 
-
 }
+
 function validate(){
     $('#save-form').bootstrapValidator({
         message: '不能为空', //为每个字段指定通用错误提示语

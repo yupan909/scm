@@ -17,25 +17,27 @@ var pageSize = 20;
 var stockType = 0;
 $(function(){
 	load(curr);
+    // 表单校验
+    validate();
 
     //开始时间
     layui.laydate.render({
-        elem: '#startDate'
+        elem: '#startDateQuery'
     });
     //结束时间
     layui.laydate.render({
-        elem: '#endDate'
+        elem: '#endDateQuery'
     });
 });
 
 
 function load(pageNum){
-	var project = $("#project").val();
-	var product = $("#product").val();
-	var model = $("#model").val();
-	var source = $("#source").val();
-	var startDate = $("#startDate").val();
-	var endDate = $("#endDate").val();
+	var project = $("#projectQuery").val();
+	var product = $("#productQuery").val();
+	var model = $("#modelQuery").val();
+	var source = $("#sourceQuery").val();
+	var startDate = $("#startDateQuery").val();
+	var endDate = $("#endDateQuery").val();
 	$.ajax({
         url: "../inoutStock/list",
         type: "POST",
@@ -144,4 +146,155 @@ function importFile() {
             }
         }
     });
+}
+
+/**
+ * 导出
+ */
+function exportExcel(){
+    var project = encodeURI($("#projectQuery").val());
+    var product = encodeURI($("#productQuery").val());
+    var model = encodeURI($("#modelQuery").val());
+    var source = encodeURI($("#sourceQuery").val());
+    var startDate = $("#startDateQuery").val();
+    var endDate = $("#endDateQuery").val();
+    window.location.href="../inoutStock/exportInoutStock?type="+stockType+"&project="+project+"&product="+product+"&model="+model+"&source="+source+"&startTime="+startDate+"&endTime="+endDate;
+}
+
+/**
+ * 打开新增窗口
+  */
+function openSave(){
+    // 打开模态窗口
+    Public.openModal("saveModal");
+    // 重置校验
+    Public.resetValidate("save-form");
+    // 添加校验
+    validate();
+}
+
+/**
+ * 保存
+ */
+function save(){
+    var validate = Public.doValidate("save-form");
+    if(!validate){
+        return;
+    }
+    var project = $("#project").val();
+    var product = $("#product").val();
+    var model = $("#model").val();
+    var unit = $("#unit").val();
+    var count = $("#count").val();
+    var price = $("#price").val();
+    var source = $("#source").val();
+    var handle = $("#handle").val();
+    var remark = $("#remark").val();
+    $.ajax({
+        url: "../inoutStock/save",
+        type: "POST",
+        contentType:"application/json;charset=utf-8",
+        dataType: "json",
+        data: JSON.stringify({
+            "type":stockType,
+            "project":project,
+            "product":product,
+            "model":model,
+            "unit":unit,
+            "count":count,
+            "price":price,
+            "source":source,
+            "handle":handle,
+            "remark":remark
+        }),
+        async: false,
+        success: function (data) {
+            if(data.flag){
+                Public.closeModal("saveModal");
+                Public.alert(1,"新增成功");
+                load(1);
+            }else{
+                Public.alert(2, data.message);
+            }
+        }
+    });
+}
+
+/**
+ * 表单验证
+ */
+function validate(){
+    $('#save-form').bootstrapValidator({
+        message: '不能为空', //为每个字段指定通用错误提示语
+        feedbackIcons: {   //输入框不同状态，显示图片的样式
+            valid: 'glyphicon glyphicon-ok',
+            invalid: 'glyphicon glyphicon-remove',
+            validating: 'glyphicon glyphicon-refresh'
+        },
+        live : 'enabled', //enabled代表当表单控件内容发生变化时就触发验证，默认提交时验证，
+        fields: {
+            project: {
+                validators: {
+                    notEmpty: {message: '请输入工程名称'},
+                    stringLength: { max: 50, message: '不能超过50个字符'}
+                }
+            },
+            product: {
+                validators: {
+                    notEmpty: {message: '请输入物资名称'},
+                    stringLength: { max: 50, message: '不能超过50个字符'}
+                }
+            },
+            model: {
+                validators: {
+                    notEmpty: {message: '请输入物资型号'},
+                    stringLength: { max: 50, message: '不能超过50个字符'}
+                }
+            },
+            unit: {
+                validators: {
+                    notEmpty: {message: '请输入单位'},
+                    stringLength: { max: 20, message: '不能超过20个字符'}
+                }
+            },
+            count: {
+                validators: {
+                    notEmpty: {message: '请输入数量'},
+                    stringLength: { max: 10, message: '不能超过10个字符'},
+                    regexp:{
+                        regexp: /((^[1-9]\d*)|^0)$/,  //正则规则用两个/包裹起来
+                        message: '请输入正确的数量'
+                    }
+                }
+            },
+            price: {
+                validators: {
+                    notEmpty: {message: '请输入物资单价'},
+                    stringLength: { max: 10, message: '不能超过11个字符'},
+                    regexp:{
+                        regexp: /((^[1-9]\d*)|^0)(\.\d{0,2}){0,1}$/,  //正则规则用两个/包裹起来
+                        message: '请输入正确的物资单价'
+                    }
+                }
+            },
+            source: {
+                validators: {
+                    notEmpty: {message: '请输入物资来源'},
+                    stringLength: { max: 50, message: '不能超过50个字符'}
+                }
+            },
+            handle: {
+                validators: {
+                    notEmpty: {message: '请输入经手人'},
+                    stringLength: { max: 50, message: '不能超过50个字符'}
+                }
+            },
+            remark: {
+                validators: {
+                    stringLength: { max: 500, message: '不能超过500个字符'}
+                }
+            }
+        }
+    });
+
 }

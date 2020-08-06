@@ -64,6 +64,10 @@ public class InoutStockController {
                                  HttpServletResponse response) throws Exception {
         InoutStockSO inoutStockSO = new InoutStockSO();
         inoutStockSO.setType(type);
+        // 当前仓库为空时，获取当前人所属仓库id
+        if (StringUtil.isEmpty(warehouseId)) {
+            warehouseId = RequestUtil.getWarehouseId();
+        }
         inoutStockSO.setWarehouseId(warehouseId);
         if (StringUtil.isNotEmpty(project)) {
             inoutStockSO.setProject(URLDecoder.decode(project, "utf-8"));
@@ -100,7 +104,13 @@ public class InoutStockController {
                 exportList.add(template);
             }
         }
-        ExcelUtils.exportExcel(exportList, InoutStockReportTemplate.class, "出入库统计", "出入库统计", response);
+        String fileName = "出入库统计";
+        if (Objects.equals(type, InoutStockTypeEnum.入库.getType())) {
+            fileName = "入库统计";
+        } else if (Objects.equals(type, InoutStockTypeEnum.出库.getType())) {
+            fileName = "出库统计";
+        }
+        ExcelUtils.exportExcel(exportList, InoutStockReportTemplate.class, fileName, fileName, response);
     }
 
     /**
@@ -140,6 +150,16 @@ public class InoutStockController {
         }
 
         inoutStockService.importInoutStock(importList, inoutStockType);
+        return BaseResult.successResult();
+    }
+
+    /**
+     * 新增出入库
+     * @return
+     */
+    @PostMapping("/save")
+    public BaseResult listInoutStock(@RequestBody InoutStock inoutStock) {
+        inoutStockService.saveInoutStock(inoutStock);
         return BaseResult.successResult();
     }
 }
