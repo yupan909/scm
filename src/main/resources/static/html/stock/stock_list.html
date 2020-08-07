@@ -29,7 +29,10 @@
                     <div class="buttonDIV">
                         <button type="button" class="btn btn-primary" onclick="load('1')"><span class="glyphicon glyphicon-search"></span> 查询</button>
                         <button type="reset" class="btn btn-default"><span class="glyphicon glyphicon-trash"></span> 清空</button>
-                        <button type="button" class="admin btn btn-success" onclick="openSave();"><span class="glyphicon glyphicon-plus"></span> 新增物资</button>
+                        <button type="button" class="admin btn btn-warning" onclick="exportTemplate();"><span class="glyphicon glyphicon-save"></span> 下载模版</button>
+                        <button type="button" class="admin btn btn-info" onclick="openImportFile();"><span class="glyphicon glyphicon-open"></span> 导入</button>
+                        <button type="button" class="admin btn btn-danger" onclick="exportExcel();"><span class="glyphicon glyphicon-save"></span> 导出</button>
+                        <button type="button" class="admin btn btn-success" onclick="openSave();"><span class="glyphicon glyphicon-plus"></span> 新增</button>
                     </div>
                 </form>
             </div>
@@ -52,7 +55,7 @@
                     <tbody id = "tbody">
                     </tbody>
                 </table>
-                <div id="page" style="float: right;" class="tr"></div>
+                <div id="page" style="float: right;"></div>
             </div>
         </div>
     </div>
@@ -76,29 +79,28 @@
                     <div class="form-group">
                         <label for="product" class="col-md-3 control-label">物资名称</label>
                         <div class="col-md-9">
-                            <input type="text" class="form-control" id="product" name = "product" placeholder="物资名称" autocomplete="off">
+                            <input type="text" class="form-control" id="product" name="product" placeholder="物资名称">
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label for="model" class="col-md-3 control-label">物资型号</label>
                         <div class="col-md-9">
-                            <input type="text" class="form-control" id="model" name = "model" placeholder="物资型号" autocomplete="new-password">
+                            <input type="text" class="form-control" id="model" name="model" placeholder="物资型号">
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label for="unit" class="col-md-3 control-label">单位</label>
                         <div class="col-md-9">
-                            <input type="text" class="form-control" id="unit" name = "unit" placeholder="单位" autocomplete="new-password">
+                            <input type="text" class="form-control" id="unit" name="unit" placeholder="单位">
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label for="warehouseId" class="col-md-3 control-label">所属仓库</label>
                         <div class="col-md-9">
-                            <select id="warehouseId" name="warehouseId" class="form-control selectpicker" data-live-search="true">
-
+                            <select class="form-control" id="warehouseId" name="warehouseId" >
                             </select>
                         </div>
                     </div>
@@ -106,7 +108,7 @@
                     <div class="form-group">
                         <label for="count" class="col-md-3 control-label">库存数量</label>
                         <div class="col-md-9">
-                            <input type="text" class="form-control" id="count" name = "count" placeholder="库存数量" autocomplete="new-password">
+                            <input type="text" class="form-control" id="count" name="count" placeholder="库存数量">
                         </div>
                     </div>
 
@@ -116,8 +118,8 @@
                 <button type="button" class="btn btn-default" id = "save-close-btn" data-dismiss="modal">关闭</button>
                 <button type="button" class="btn btn-primary" onclick="save()">保存</button>
             </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal -->
+        </div>
+    </div>
 </div>
 
 
@@ -135,7 +137,7 @@
             </div>
             <div class="modal-body">
                 <form id = "edit-form"  class="form-horizontal" style="margin-right: 10%;">
-                    <input type="hidden" id = "id_e">
+                    <input type="hidden" id="id_e" name="id_e">
                     <div class="form-group">
                         <label for="product_e" class="col-md-3 control-label">物资名称</label>
                         <div class="col-md-9">
@@ -160,8 +162,7 @@
                     <div class="form-group">
                         <label for="warehouseId_e" class="col-md-3 control-label">所属仓库</label>
                         <div class="col-md-9">
-                            <select id="warehouseId_e" name="warehouseId_e" class="form-control selectpicker" data-live-search="true">
-
+                            <select class="form-control" id="warehouseId_e" name="warehouseId_e">
                             </select>
                         </div>
                     </div>
@@ -171,8 +172,8 @@
                 <button type="button" class="btn btn-default" id = "edit-close-btn" data-dismiss="modal">关闭</button>
                 <button type="button" class="btn btn-primary" onclick="editSave()">修改</button>
             </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal -->
+        </div>
+    </div>
 </div>
 
 <!-- 修改库存信息 -->
@@ -189,11 +190,11 @@
             </div>
             <div class="modal-body">
                 <form id = "edit-form-count"  class="form-horizontal" style="margin-right: 10%;">
-                    <input type="hidden" id = "id_count_e">
+                    <input type="hidden" id="id_count_e" name="id_count_e">
                     <div class="form-group">
                         <label for="count_e" class="col-md-3 control-label">库存数量</label>
                         <div class="col-md-9">
-                            <input type="text" class="form-control" id="count_e" name = "count_e" placeholder="库存数量" autocomplete="off">
+                            <input type="text" class="form-control" id="count_e" name="count_e" placeholder="库存数量">
                         </div>
                     </div>
                 </form>
@@ -202,8 +203,8 @@
                 <button type="button" class="btn btn-default" id = "edit-count-close-btn" data-dismiss="modal">关闭</button>
                 <button type="button" class="btn btn-primary" onclick="editCountSave()">修改</button>
             </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal -->
+        </div>
+    </div>
 </div>
 
 
@@ -224,10 +225,10 @@
                 <div class="row ">
                     <div class="col-md-12 queryDIV form-inline">
                         <form>
-                            <input type="hidden" id = "detail_id">
+                            <input type="hidden" id="stockId" name="stockId">
                             <label>变更时间</label>
-                            <input type="text" class="form-control" id="startDate" name="startDate" placeholder="开始时间" readonly="readonly">
-                            至 <input type="text" class="form-control" id="endDate" name="endDate" placeholder="结束时间" readonly="readonly">
+                            <input type="text" class="form-control" id="startDateDetail" name="startDateDetail" placeholder="开始时间" readonly="readonly">
+                            至 <input type="text" class="form-control" id="endDateDetail" name="endDateDetail" placeholder="结束时间" readonly="readonly">
                             <button type="button" class="btn btn-primary" onclick="loadDetail('1')"><span class="glyphicon glyphicon-search"></span>查询</button>
                             <button type="reset" class="btn btn-default"><span class="glyphicon glyphicon-trash"></span> 清空</button>
                         </form>
@@ -249,7 +250,7 @@
                             <tbody id = "tdetailbody">
                             </tbody>
                         </table>
-                        <div id="detailpage" style="float: right;" class="tr"></div>
+                        <div id="detailpage" style="float: right;"></div>
                     </div>
                 </div>
 
@@ -257,8 +258,40 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" id = "detail-close-btn" data-dismiss="modal">关闭</button>
             </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal -->
+        </div>
+    </div>
+</div>
+
+<!-- 导入文件模态框 -->
+<div class="modal fade" id="importModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title">
+                    导入文件
+                </h4>
+            </div>
+            <div class="modal-body">
+
+                <form id="uploadForm" class="modal-form" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <input type="file" class="form-control" id="file" name="file" accept=".xls, .xlsx">
+                        </div>
+                    </div>
+                </form>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="import-close-btn">关闭</button>
+                <button type="button" class="btn btn-primary" onclick="importFile()">导入</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script src="../js/stock/stock_list.js"></script>

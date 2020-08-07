@@ -25,15 +25,6 @@ $(function(){
     Public.initWarehouse("warehouseId", "warehouseId_e");
     // 表单校验
     validate();
-
-    //开始时间
-    layui.laydate.render({
-        elem: '#startDate'
-    });
-    //结束时间
-    layui.laydate.render({
-        elem: '#endDate'
-    });
 });
 
 // 列表
@@ -68,8 +59,7 @@ function load(pageNum){
                         "<td>"+Public.ifNull(item.count)+"</td>"+
                         "<td>"+Public.ifNull(item.warehouseName)+"</td>"+
                         "<td>"+Public.ifNull(item.createTime)+"</td>"+
-                        "<td> " + buttonInfo + "<button class= \"btn btn-success btn-xs\" onclick=\"detail('"+item.id+"');\">明细</button>" +
-                        " </td>"+
+                        "<td> " + buttonInfo + "<button class= \"btn btn-success btn-xs\" onclick=\"detail('"+item.id+"');\">明细</button>" +"</td>"+
                         "</tr>";
                 });
                 if(html == ""){
@@ -95,6 +85,65 @@ function load(pageNum){
         }
     });
 }
+
+/**
+ * 下载模版
+ */
+function exportTemplate(){
+    window.location.href="../stock/exportTemplate";
+}
+
+/**
+ * 打开导入页面
+ */
+function openImportFile(){
+    // 打开模态窗口
+    Public.openModal("importModal");
+}
+
+/**
+ * 导入
+ */
+function importFile() {
+
+    var file = $("#file").val();
+    if (!file) {
+        Public.alert(2,"请选择导入文件！");
+        return;
+    }
+
+    var formData = new FormData($('#uploadForm')[0]);
+    $.ajax({
+        type: "POST",
+        url:"../inoutStock/import/" + stockType,
+        data: formData,
+        processData: false,
+        contentType: false,
+        async: false,
+        error: function(request) {
+            Public.alert(2,"上传出现异常！");
+        },
+        success: function(data) {
+            if(data.flag == true){
+                Public.closeModal("importModal");
+                Public.alert(1,"导入成功！");
+                load(1);
+            }else{
+                Public.alert(2, data.message);
+            }
+        }
+    });
+}
+
+/**
+ * 导出
+ */
+function exportExcel(){
+    var product = encodeURI($("#productQuery").val());
+    var model = encodeURI($("#modelQuery").val());
+    window.location.href="../inoutStock/exportInoutStock?product="+product+"&model="+model;
+}
+
 
 // 打开新增库存页面
 function openSave(){
@@ -212,7 +261,6 @@ function editCount(id){
 
 function loadOneForCount(id){
     $.ajax({
-        cache: true,
         type: "GET",
         url:"../stock/get/"+id ,
         async: false,
@@ -266,21 +314,30 @@ function detail(id){
     // 打开模态窗口
     Public.openModal("detail");
 
-    $("#detail_id").val(id);
+    $("#stockId").val(id);
     loadDetail(detailCnt);
+
+    //开始时间
+    layui.laydate.render({
+        elem: '#startDateDetail'
+    });
+    //结束时间
+    layui.laydate.render({
+        elem: '#endDateDetail'
+    });
 }
 
 function loadDetail(pageNum){
-    var startDate = $("#startDate").val();
-    var endDate = $("#endDate").val();
-    var detailId = $("#detail_id").val();
+    var startDate = $("#startDateDetail").val();
+    var endDate = $("#endDateDetail").val();
+    var stockId = $("#stockId").val();
     $.ajax({
         url: "../stock/detail",
         dataType: "json",
         type: "POST",
         data: JSON.stringify({ "pageNum":pageNum,
             "pageSize":detailPageSize,
-            "stockId":detailId,
+            "stockId":stockId,
             "startTime":startDate,
             "endTime":endDate
         }),
