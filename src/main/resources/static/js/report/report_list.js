@@ -15,7 +15,6 @@ var curr = 1;
 var pageSize = 20;
 // 出入库区分
 var stockTypeMap = {0:"入库", 1:"出库"};
-var warehouseMap = {};
 $(function(){
 
     // 类型下拉回显
@@ -26,7 +25,7 @@ $(function(){
     $("#type").html(typeHtml);
 
     // 加载仓库下拉列表
-    warehouseMap = Public.initWarehouse("warehouseId");
+    Public.initWarehouse(new Array("warehouseId"));
 
 	load(curr);
 

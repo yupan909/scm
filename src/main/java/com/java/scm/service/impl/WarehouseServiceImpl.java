@@ -1,19 +1,19 @@
 package com.java.scm.service.impl;
 
-import com.java.scm.bean.User;
 import com.java.scm.bean.Warehouse;
 import com.java.scm.dao.WarehouseDao;
-import com.java.scm.enums.RoleEnum;
 import com.java.scm.service.WarehouseService;
 import com.java.scm.util.AssertUtils;
-import com.java.scm.util.RequestUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import tk.mybatis.mapper.entity.Example;
 
 import javax.annotation.Resource;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author hujunhui
@@ -26,19 +26,19 @@ public class WarehouseServiceImpl implements WarehouseService {
     @Resource
     private WarehouseDao warehouseDao;
 
+    /**
+     * 获取所有的仓库
+     * @return
+     */
     @Override
     public List<Warehouse> getAllWarehouse() {
-        User user = RequestUtil.getCurrentUser();
-        if(Objects.equals(RoleEnum.仓库管理员.getType(), user.getRole())){
-            return warehouseDao.selectAll();
-        }else{
-            Warehouse query = new Warehouse();
-            query.setId(user.getWarehouseId());
-            return warehouseDao.select(query);
-        }
-
+        return warehouseDao.selectAll();
     }
 
+    /**
+     * 查询仓库id对应名称集合
+     * @return
+     */
     @Override
     public Map<String, String> getWarehouseMap(List<String> ids) {
         AssertUtils.notEmpty(ids, "仓库id不能为空");

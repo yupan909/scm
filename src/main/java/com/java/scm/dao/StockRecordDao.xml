@@ -19,7 +19,7 @@
     LEFT JOIN project p on ios.project_id = p.id
     LEFT JOIN user u ON sr.create_user_id = u.id
     <where>
-      <if test="stockId != null">
+      <if test="stockId != null and stockId != ''">
         AND sr.stock_id = #{stockId}
       </if>
       <if test="startTime != null and startTime != ''">

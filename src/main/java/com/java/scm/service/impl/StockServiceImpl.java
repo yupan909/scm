@@ -1,11 +1,10 @@
 package com.java.scm.service.impl;
 
 import com.github.pagehelper.Page;
-import com.java.scm.bean.InoutStock;
-import com.java.scm.bean.Stock;
-import com.java.scm.bean.StockRecord;
-import com.java.scm.bean.User;
+import com.github.pagehelper.PageInfo;
+import com.java.scm.bean.*;
 import com.java.scm.bean.base.BaseResult;
+import com.java.scm.bean.excel.StockImportTemplate;
 import com.java.scm.bean.so.StockRecordSO;
 import com.java.scm.bean.so.StockSO;
 import com.java.scm.config.exception.BusinessException;
@@ -13,9 +12,12 @@ import com.java.scm.dao.StockDao;
 import com.java.scm.dao.StockRecordDao;
 import com.java.scm.enums.StockRecordTypeEnum;
 import com.java.scm.service.StockService;
+import com.java.scm.service.WarehouseService;
 import com.java.scm.util.AssertUtils;
 import com.java.scm.util.RequestUtil;
+import com.java.scm.util.StringUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -23,6 +25,8 @@ import tk.mybatis.mapper.entity.Example;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 /**
  * @author hujunhui
@@ -37,6 +41,9 @@ public class StockServiceImpl implements StockService {
 
     @Resource
     private StockRecordDao stockRecordDao;
+
+    @Resource
+    private WarehouseService warehouseService;
 
     /**
      * 初始化库存
@@ -55,17 +62,13 @@ public class StockServiceImpl implements StockService {
 
         User user = RequestUtil.getCurrentUser();
         if(!stockCheck(null, stock.getWarehouseId(), stock.getProduct(), stock.getModel(), stock.getUnit())){
-            return new BaseResult(false,"物资已存在，无法重复添加！");
+            return new BaseResult(false,"物资库存已存在，无法重复添加！");
         }
         stock.setCreateUserId(user.getId());
         stockDao.insertSelective(stock);
 
-        StockRecord stockRecord = new StockRecord();
-        stockRecord.setStockId(stock.getId());
-        stockRecord.setCount(stock.getCount());
-        stockRecord.setType(StockRecordTypeEnum.手动修改.getType());
-        stockRecord.setCreateUserId(user.getId());
-        stockRecordDao.insertSelective(stockRecord);
+        // 新增库存变更记录
+        insertStockRecord(stock, user.getId());
         return new BaseResult(true,"库存初始化成功！");
     }
 
@@ -111,15 +114,9 @@ public class StockServiceImpl implements StockService {
         stock.setUpdateUserId(user.getId());
         stockDao.updateByPrimaryKeySelective(stock);
 
-        Integer oldStockCount = oldStock.getCount();
-        Integer newCount = stock.getCount();
-        Integer diff = newCount - oldStockCount;
-        StockRecord stockRecord = new StockRecord();
-        stockRecord.setStockId(stock.getId());
-        stockRecord.setCount(diff);
-        stockRecord.setType(StockRecordTypeEnum.手动修改.getType());
-        stockRecord.setCreateUserId(user.getId());
-        stockRecordDao.insertSelective(stockRecord);
+        // 新增库存变更记录
+        stock.setCount(stock.getCount()-oldStock.getCount());
+        insertStockRecord(stock, user.getId());
         return new BaseResult(true,"库存数量更新成功！");
     }
 
@@ -128,11 +125,9 @@ public class StockServiceImpl implements StockService {
      * @return
      */
     @Override
-    public BaseResult listStock(StockSO stockSO) {
-        // 获取当前登录人仓库
-        stockSO.setWarehouseId(RequestUtil.getWarehouseId());
+    public PageInfo<Stock> listStock(StockSO stockSO) {
         Page<Stock> stockList = stockDao.listStock(stockSO);
-        return new BaseResult(stockList.toPageInfo().getList(), stockList.getTotal());
+        return stockList.toPageInfo();
     }
 
     @Override
@@ -215,6 +210,81 @@ public class StockServiceImpl implements StockService {
             return null;
         }
         return stockList.get(0).getId();
+    }
+
+    /**
+     * 导入库存
+     */
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public void importStock(List<StockImportTemplate> importList) {
+        if (CollectionUtils.isEmpty(importList)) {
+            throw new BusinessException("导入excel数据为空！");
+        }
+
+        // 1、校验数据
+        importList.forEach(p -> {
+            // 去空格
+            p.setProduct(StringUtil.trim(p.getProduct()));
+            p.setModel(StringUtil.trim(p.getModel()));
+            p.setUnit(StringUtil.trim(p.getUnit()));
+            p.setCount(StringUtil.trim(p.getCount()));
+            p.setWarehouseName(StringUtil.trim(p.getWarehouseName()));
+
+            // 校验
+            AssertUtils.notEmpty(p.getProduct(), "物资名称不能为空");
+            AssertUtils.maxlength(p.getProduct(), 50, "物资名称长度不能超过50");
+            AssertUtils.notEmpty(p.getModel(), "物资型号不能为空！");
+            AssertUtils.maxlength(p.getModel(), 50, "物资型号长度不能超过50");
+            AssertUtils.notEmpty(p.getUnit(), "单位不能为空！");
+            AssertUtils.maxlength(p.getUnit(), 50, "单位长度不能超过50");
+            AssertUtils.notEmpty(p.getCount(), "库存数量不能为空");
+            AssertUtils.isInteger(p.getCount(), "库存数量格式有问题，必须是数字");
+            AssertUtils.maxlength(p.getCount(), 11, "库存数量长度不能超过11");
+            AssertUtils.notEmpty(p.getWarehouseName(), "所属仓库不能为空");
+            AssertUtils.maxlength(p.getWarehouseName(), 50, "所属仓库长度不能超过50");
+        });
+
+        // 获取所有仓库
+        List<Warehouse> warehouseList = warehouseService.getAllWarehouse();
+
+        // 2、保存库存
+        User user = RequestUtil.getCurrentUser();
+        for (StockImportTemplate template : importList) {
+            // 判断仓库是否存在
+            Optional<Warehouse> warehouseOptional = warehouseList.stream().filter(p -> Objects.equals(p.getName(), template.getWarehouseName())).findFirst();
+            if (!warehouseOptional.isPresent()) {
+                throw new BusinessException(String.format("导入失败，当前仓库不存在：[%s]", template.getWarehouseName()));
+            }
+
+            // 判断库存是否重复
+            if(!stockCheck(null, warehouseOptional.get().getId(), template.getProduct(), template.getModel(), template.getUnit())){
+                throw new BusinessException(String.format("导入失败，当前库存已存在：[物资名称：%s，物资型号：%s，单位：%s，所属仓库：%s]", template.getProduct(), template.getModel(), template.getUnit(), template.getWarehouseName()));
+            }
+
+            // 新增库存
+            Stock stock = new Stock();
+            BeanUtils.copyProperties(template, stock);
+            stock.setCount(Integer.valueOf(template.getCount()));
+            stock.setWarehouseId(warehouseOptional.get().getId());
+            stock.setCreateUserId(user.getId());
+            stockDao.insertSelective(stock);
+
+            // 新增库存变更记录
+            insertStockRecord(stock, user.getId());
+        }
+    }
+
+    /**
+     * 新增库存变更记录
+     */
+    private void insertStockRecord(Stock stock, String userId) {
+        StockRecord stockRecord = new StockRecord();
+        stockRecord.setStockId(stock.getId());
+        stockRecord.setCount(stock.getCount());
+        stockRecord.setType(StockRecordTypeEnum.手动修改.getType());
+        stockRecord.setCreateUserId(userId);
+        stockRecordDao.insertSelective(stockRecord);
     }
 
     /**

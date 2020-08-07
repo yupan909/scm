@@ -15,7 +15,7 @@
     FROM stock s
     LEFT JOIN warehouse w ON s.warehouse_id = w.id
     <where>
-      <if test="warehouseId != null">
+      <if test="warehouseId != null and warehouseId != ''">
         AND s.warehouse_id = #{warehouseId}
       </if>
       <if test="product != null and product != ''">

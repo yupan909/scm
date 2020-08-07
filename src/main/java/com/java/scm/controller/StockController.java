@@ -1,18 +1,30 @@
 package com.java.scm.controller;
 
+import com.github.pagehelper.PageInfo;
 import com.java.scm.bean.Stock;
 import com.java.scm.bean.base.BaseResult;
+import com.java.scm.bean.excel.StockExportTemplate;
 import com.java.scm.bean.excel.StockImportTemplate;
 import com.java.scm.bean.so.StockRecordSO;
 import com.java.scm.bean.so.StockSO;
+import com.java.scm.config.exception.BusinessException;
 import com.java.scm.service.StockService;
+import com.java.scm.util.DateUtils;
+import com.java.scm.util.RequestUtil;
+import com.java.scm.util.StringUtil;
+import com.java.scm.util.excel.ExcelTypeEnum;
 import com.java.scm.util.excel.ExcelUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
+import java.net.URLDecoder;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author hujunhui
@@ -61,7 +73,11 @@ public class StockController {
      */
     @PostMapping("/list")
     public BaseResult listStock(@RequestBody StockSO stockSO){
-        return stockService.listStock(stockSO);
+        if (StringUtil.isEmpty(stockSO.getWarehouseId())) {
+            stockSO.setWarehouseId(RequestUtil.getWarehouseId());
+        }
+        PageInfo<Stock> pageInfo = stockService.listStock(stockSO);
+        return new BaseResult(pageInfo.getList(), pageInfo.getTotal());
     }
 
     /**
@@ -94,11 +110,64 @@ public class StockController {
     }
 
     /**
+     * 导入
+     * @throws Exception
+     */
+    @PostMapping("/import")
+    public BaseResult importInoutStock(@RequestParam("file") MultipartFile file) throws Exception {
+        if (file.getOriginalFilename().indexOf(ExcelTypeEnum.XLS.getValue()) == -1 && file.getOriginalFilename().indexOf(ExcelTypeEnum.XLSX.getValue()) == -1) {
+            throw new BusinessException("导入文件类型不正确，只能导入.xls和.xlsx后缀的文件！");
+        }
+        // 获取导入的excel数据
+        List<StockImportTemplate> importList = ExcelUtils.importExcel(file, 1,1, StockImportTemplate.class);
+        if (CollectionUtils.isEmpty(importList)) {
+            throw new BusinessException("导入excel数据为空！");
+        }
+        stockService.importStock(importList);
+        return BaseResult.successResult();
+    }
+
+    /**
      * 导出模版
      * @throws Exception
      */
     @GetMapping("/exportTemplate")
     public void exportTemplate(HttpServletResponse response) throws Exception {
         ExcelUtils.exportExcel(new ArrayList<>(), StockImportTemplate.class, "库存管理", "库存模版", response);
+    }
+
+    /**
+     * 导出库存
+     * @throws Exception
+     */
+    @GetMapping("/exportStock")
+    public void exportStock(@RequestParam("warehouseId") String warehouseId,
+                            @RequestParam("product") String product,
+                            @RequestParam("model") String model,
+                            HttpServletResponse response) throws Exception {
+        // 查询数据
+        StockSO stockSO = new StockSO();
+        stockSO.setWarehouseId(warehouseId);
+        if (StringUtil.isNotEmpty(product)) {
+            stockSO.setProduct(URLDecoder.decode(product, "utf-8"));
+        }
+        if (StringUtil.isNotEmpty(model)) {
+            stockSO.setModel(URLDecoder.decode(model, "utf-8"));
+        }
+        PageInfo<Stock> pageInfo = stockService.listStock(stockSO);
+
+        List<StockExportTemplate> exportList = new ArrayList<>();
+        if (!CollectionUtils.isEmpty(pageInfo.getList())) {
+            for(int i = 0; i < pageInfo.getList().size(); i++) {
+                Stock stock = pageInfo.getList().get(i);
+                StockExportTemplate template = new StockExportTemplate();
+                BeanUtils.copyProperties(stock, template);
+                template.setNum(String.valueOf(i+1));
+                template.setCount(String.valueOf(stock.getCount()));
+                template.setCreateTime(DateUtils.formatDateTime(stock.getCreateTime()));
+                exportList.add(template);
+            }
+        }
+        ExcelUtils.exportExcel(exportList, StockExportTemplate.class, "库存管理", "库存管理", response);
     }
 }

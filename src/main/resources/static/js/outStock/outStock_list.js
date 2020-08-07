@@ -134,8 +134,8 @@ function importFile() {
             Public.alert(2,"上传出现异常！");
         },
         success: function(data) {
+            Public.closeModal("importModal");
             if(data.flag == true){
-                Public.closeModal("importModal");
                 Public.alert(1,"导入成功！");
                 load(1);
             }else{

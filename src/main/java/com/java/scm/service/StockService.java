@@ -1,8 +1,10 @@
 package com.java.scm.service;
 
+import com.github.pagehelper.PageInfo;
 import com.java.scm.bean.InoutStock;
 import com.java.scm.bean.Stock;
 import com.java.scm.bean.base.BaseResult;
+import com.java.scm.bean.excel.StockImportTemplate;
 import com.java.scm.bean.so.StockRecordSO;
 import com.java.scm.bean.so.StockSO;
 
@@ -40,7 +42,7 @@ public interface StockService {
      * 列表展示
      * @return
      */
-    BaseResult listStock(StockSO stockSO);
+    PageInfo<Stock> listStock(StockSO stockSO);
 
     /**
      * 根据id 删除库存信息
@@ -72,5 +74,10 @@ public interface StockService {
      * @return
      */
     String getStockBySelective(Stock stock);
+
+    /**
+     * 导入库存
+     */
+    void importStock(List<StockImportTemplate> importList);
 
 }

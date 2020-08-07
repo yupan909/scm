@@ -17,7 +17,7 @@ var curr = 1;
 var pageSize = 20;
 $(function(){
 	load(curr);
-    Public.initWarehouse("warehouseId", "warehouseId_e");
+    Public.initWarehouse(new Array("warehouseId", "warehouseId_e"));
     // 表单校验
     validate();
 });

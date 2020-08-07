@@ -97,19 +97,25 @@ public class InoutStockServiceImpl implements InoutStockService {
             p.setRemark(StringUtil.trim(p.getRemark()));
 
             // 校验
-            AssertUtils.notEmpty(p.getProject(), "工程名称不能为空！");
-            AssertUtils.notEmpty(p.getProduct(), "物资名称不能为空！");
-            AssertUtils.notEmpty(p.getModel(), "物资型号不能为空！");
-            AssertUtils.notEmpty(p.getUnit(), "单位不能为空！");
-            AssertUtils.notEmpty(p.getCount(), "数量不能为空！");
-            AssertUtils.isInteger(p.getCount(), "数量格式有问题，必须是数字！");
-            AssertUtils.notEmpty(p.getPrice(), "物资单价不能为空！");
-            AssertUtils.isBigDecimal(p.getPrice(), "物资单价格式有问题，必须是数字！");
-            AssertUtils.notEmpty(p.getSource(), "物资来源不能为空！");
-            AssertUtils.maxlength(p.getSource(), 50, "物资来源长度不能超过50！");
-            AssertUtils.notEmpty(p.getHandle(), "经手人不能为空！");
-            AssertUtils.maxlength(p.getHandle(), 50, "经手人长度不能超过50！");
-            AssertUtils.maxlength(p.getRemark(), 500, "备注长度不能超过50！");
+            AssertUtils.notEmpty(p.getProject(), "工程名称不能为空");
+            AssertUtils.maxlength(p.getProject(), 50, "工程名称长度不能超过50");
+            AssertUtils.notEmpty(p.getProduct(), "物资名称不能为空");
+            AssertUtils.maxlength(p.getProduct(), 50, "物资名称长度不能超过50");
+            AssertUtils.notEmpty(p.getModel(), "物资型号不能为空");
+            AssertUtils.maxlength(p.getModel(), 50, "物资型号长度不能超过50");
+            AssertUtils.notEmpty(p.getUnit(), "单位不能为空");
+            AssertUtils.maxlength(p.getUnit(), 50, "单位长度不能超过50");
+            AssertUtils.notEmpty(p.getCount(), "数量不能为空");
+            AssertUtils.isInteger(p.getCount(), "数量格式有问题，必须是数字");
+            AssertUtils.maxlength(p.getCount(), 11, "数量长度不能超过11");
+            AssertUtils.notEmpty(p.getPrice(), "物资单价不能为空");
+            AssertUtils.isBigDecimal(p.getPrice(), "物资单价格式有问题，必须是数字");
+            AssertUtils.maxlength(p.getPrice(), 11, "物资单价长度不能超过11");
+            AssertUtils.notEmpty(p.getSource(), "物资来源不能为空");
+            AssertUtils.maxlength(p.getSource(), 50, "物资来源长度不能超过50");
+            AssertUtils.notEmpty(p.getHandle(), "经手人不能为空");
+            AssertUtils.maxlength(p.getHandle(), 50, "经手人长度不能超过50");
+            AssertUtils.maxlength(p.getRemark(), 500, "备注长度不能超过50");
         });
 
         // 根据工程名称查询工程

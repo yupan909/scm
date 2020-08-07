@@ -284,8 +284,7 @@ var Public = {
         },
 
 		// 加载仓库下拉列表
-		initWarehouse:function(val, val2){
-			var warehouseMap = {};
+		initWarehouse:function(arr){
 			// 仓库下拉回显
 			$.ajax({
 				url: "../warehouse/list",
@@ -297,18 +296,13 @@ var Public = {
 					if (data.flag == true) {
 						$.each(data.data, function (i, item) {
 							html += '<option value="' + item.id + '">' + item.name + '</option>';
-							warehouseMap[item.id] = item.name;
 						});
-						if (val) {
-							$("#" + val).html(html);
-						}
-						if (val2) {
-							$("#" + val2).html(html);
+						for(var i=0; i<arr.length ; i++){
+							$("#" + arr[i]).html(html);
 						}
 					}
 				}
 			});
-			return warehouseMap;
 		},
 
 		// 重置验证信息

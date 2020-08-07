@@ -22,7 +22,7 @@ $(function(){
         $(".admin").remove();
     }
     load(curr);
-    Public.initWarehouse("warehouseId", "warehouseId_e");
+    Public.initWarehouse(new Array("warehouseId", "warehouseId_e", "warehouseIdQuery"));
     // 表单校验
     validate();
 });
@@ -31,6 +31,7 @@ $(function(){
 function load(pageNum){
     var product = $("#productQuery").val();
     var model = $("#modelQuery").val();
+    var warehouseId = $("#warehouseIdQuery").val();
     $.ajax({
         url: "../stock/list",
         type: "POST",
@@ -39,7 +40,8 @@ function load(pageNum){
         data: JSON.stringify({ "pageNum":pageNum,
             "pageSize":pageSize,
             "product":product,
-            "model":model
+            "model":model,
+            "warehouseId":warehouseId
         }),
         success: function (data) {
             var html= "";
@@ -115,7 +117,7 @@ function importFile() {
     var formData = new FormData($('#uploadForm')[0]);
     $.ajax({
         type: "POST",
-        url:"../inoutStock/import/" + stockType,
+        url:"../stock/import",
         data: formData,
         processData: false,
         contentType: false,
@@ -124,8 +126,8 @@ function importFile() {
             Public.alert(2,"上传出现异常！");
         },
         success: function(data) {
+            Public.closeModal("importModal");
             if(data.flag == true){
-                Public.closeModal("importModal");
                 Public.alert(1,"导入成功！");
                 load(1);
             }else{
@@ -141,7 +143,8 @@ function importFile() {
 function exportExcel(){
     var product = encodeURI($("#productQuery").val());
     var model = encodeURI($("#modelQuery").val());
-    window.location.href="../inoutStock/exportInoutStock?product="+product+"&model="+model;
+    var warehouseId = $("#warehouseIdQuery").val();
+    window.location.href="../stock/exportStock?product="+product+"&model="+model+"&warehouseId="+warehouseId;
 }
 
 
