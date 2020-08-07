@@ -2,6 +2,7 @@ package com.java.scm.controller;
 
 import com.github.pagehelper.PageInfo;
 import com.java.scm.bean.Stock;
+import com.java.scm.bean.StockRecord;
 import com.java.scm.bean.base.BaseResult;
 import com.java.scm.bean.excel.StockExportTemplate;
 import com.java.scm.bean.excel.StockImportTemplate;
@@ -44,7 +45,8 @@ public class StockController {
      */
     @PostMapping("/init")
     public BaseResult initStock(@RequestBody Stock stock){
-        return stockService.initStock(stock);
+        stockService.initStock(stock);
+        return BaseResult.successResult();
     }
 
     /**
@@ -54,7 +56,8 @@ public class StockController {
      */
     @PostMapping("/modifyStockInfo")
     public BaseResult modifyStockInfo(@RequestBody Stock stock){
-        return stockService.modifyStockInfo(stock);
+        stockService.modifyStockInfo(stock);
+        return BaseResult.successResult();
     }
 
     /**
@@ -64,7 +67,8 @@ public class StockController {
      */
     @PostMapping("/modifyStockCount")
     public BaseResult modifyStockCount(@RequestBody Stock stock){
-        return stockService.modifyStockCount(stock);
+        stockService.modifyStockCount(stock);
+        return BaseResult.successResult();
     }
 
     /**
@@ -87,7 +91,8 @@ public class StockController {
      */
     @GetMapping("/delete")
     public BaseResult deleteStock(String id){
-        return stockService.deleteStock(id);
+        stockService.deleteStock(id);
+        return BaseResult.successResult();
     }
 
     /**
@@ -97,7 +102,8 @@ public class StockController {
      */
     @GetMapping("/get/{id}")
     public BaseResult getStockById(@PathVariable("id") String id){
-        return stockService.getStockById(id);
+        Stock stock = stockService.getStockById(id);
+        return new BaseResult(stock);
     }
 
     /**
@@ -106,7 +112,8 @@ public class StockController {
      */
     @PostMapping("detail")
     public BaseResult getChangeDetail(@RequestBody StockRecordSO stockRecordSO){
-        return stockService.getChangeDetail(stockRecordSO);
+        PageInfo<StockRecord> pageInfo = stockService.getChangeDetail(stockRecordSO);
+        return new BaseResult(pageInfo.getList(), pageInfo.getTotal());
     }
 
     /**

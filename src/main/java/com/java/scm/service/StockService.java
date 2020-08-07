@@ -3,7 +3,7 @@ package com.java.scm.service;
 import com.github.pagehelper.PageInfo;
 import com.java.scm.bean.InoutStock;
 import com.java.scm.bean.Stock;
-import com.java.scm.bean.base.BaseResult;
+import com.java.scm.bean.StockRecord;
 import com.java.scm.bean.excel.StockImportTemplate;
 import com.java.scm.bean.so.StockRecordSO;
 import com.java.scm.bean.so.StockSO;
@@ -22,21 +22,21 @@ public interface StockService {
      * @param stock
      * @return
      */
-    BaseResult initStock(Stock stock);
+    void initStock(Stock stock);
 
     /**
      * 修改库存基本信息
      * @param stock
      * @return
      */
-    BaseResult modifyStockInfo(Stock stock);
+    void modifyStockInfo(Stock stock);
 
     /**
      * 修改库存数量
      * @param stock
      * @return
      */
-    BaseResult modifyStockCount(Stock stock);
+    void modifyStockCount(Stock stock);
 
     /**
      * 列表展示
@@ -49,20 +49,20 @@ public interface StockService {
      * @param id
      * @return
      */
-    BaseResult deleteStock(String id);
+    void deleteStock(String id);
 
     /**
      * 根据id 获取库存信息
      * @param id
      * @return
      */
-    BaseResult getStockById(String id);
+    Stock getStockById(String id);
 
     /**
      * 获取变更记录
      * @return
      */
-    BaseResult getChangeDetail(StockRecordSO stockRecordSO);
+    PageInfo<StockRecord> getChangeDetail(StockRecordSO stockRecordSO);
 
     /**
      * 出入库变更库存

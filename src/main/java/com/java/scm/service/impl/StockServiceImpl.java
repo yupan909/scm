@@ -3,7 +3,6 @@ package com.java.scm.service.impl;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageInfo;
 import com.java.scm.bean.*;
-import com.java.scm.bean.base.BaseResult;
 import com.java.scm.bean.excel.StockImportTemplate;
 import com.java.scm.bean.so.StockRecordSO;
 import com.java.scm.bean.so.StockSO;
@@ -52,7 +51,7 @@ public class StockServiceImpl implements StockService {
      */
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public BaseResult initStock(Stock stock) {
+    public void initStock(Stock stock) {
         AssertUtils.notNull(stock, "初始化库存不能为空");
         AssertUtils.notNull(stock.getWarehouseId(), "仓库id不能为空");
         AssertUtils.notNull(stock.getProduct(), "物资名称不能为空");
@@ -62,14 +61,13 @@ public class StockServiceImpl implements StockService {
 
         User user = RequestUtil.getCurrentUser();
         if(!stockCheck(null, stock.getWarehouseId(), stock.getProduct(), stock.getModel(), stock.getUnit())){
-            return new BaseResult(false,"物资库存已存在，无法重复添加！");
+            throw new BusinessException("物资库存已存在，无法重复添加！");
         }
         stock.setCreateUserId(user.getId());
         stockDao.insertSelective(stock);
 
         // 新增库存变更记录
         insertStockRecord(stock, user.getId());
-        return new BaseResult(true,"库存初始化成功！");
     }
 
     /**
@@ -78,7 +76,7 @@ public class StockServiceImpl implements StockService {
      * @return
      */
     @Override
-    public BaseResult modifyStockInfo(Stock stock) {
+    public void modifyStockInfo(Stock stock) {
         AssertUtils.notNull(stock, "修改库存物资不能为空");
         AssertUtils.notNull(stock.getId(), "库存id不能为空");
         AssertUtils.notNull(stock.getWarehouseId(), "仓库id不能为空");
@@ -87,12 +85,11 @@ public class StockServiceImpl implements StockService {
         AssertUtils.notNull(stock.getUnit(), "单位不能为空");
 
         if(!stockCheck(stock.getId(),stock.getWarehouseId(),stock.getProduct(),stock.getModel(), stock.getUnit())){
-            return new BaseResult(false,"无法修改成已存在的物资！");
+            throw new BusinessException("无法修改成已存在的物资！");
         }
         User user = RequestUtil.getCurrentUser();
         stock.setUpdateUserId(user.getId());
         stockDao.updateByPrimaryKeySelective(stock);
-        return new BaseResult(true,"物资信息修改成功！");
     }
 
     /**
@@ -102,7 +99,7 @@ public class StockServiceImpl implements StockService {
      */
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public BaseResult modifyStockCount(Stock stock) {
+    public void modifyStockCount(Stock stock) {
         AssertUtils.notNull(stock, "修改库存参数不能为空");
         AssertUtils.notNull(stock.getId(), "库存id不能为空");
         AssertUtils.notNull(stock.getCount(), "库存数量不能为空");
@@ -117,7 +114,6 @@ public class StockServiceImpl implements StockService {
         // 新增库存变更记录
         stock.setCount(stock.getCount()-oldStock.getCount());
         insertStockRecord(stock, user.getId());
-        return new BaseResult(true,"库存数量更新成功！");
     }
 
     /**
@@ -131,14 +127,14 @@ public class StockServiceImpl implements StockService {
     }
 
     @Override
-    public BaseResult deleteStock(String id) {
-        return new BaseResult(true,"暂不支持删除库存");
+    public void deleteStock(String id) {
+
     }
 
     @Override
-    public BaseResult getStockById(String id) {
-        Stock stock =  stockDao.selectByPrimaryKey(id);
-        return new BaseResult(stock);
+    public Stock getStockById(String id) {
+        AssertUtils.notNull(id, "库存id不能为空");
+        return stockDao.selectByPrimaryKey(id);
     }
 
     /**
@@ -146,7 +142,7 @@ public class StockServiceImpl implements StockService {
      * @return
      */
     @Override
-    public BaseResult getChangeDetail(StockRecordSO stockRecordSO) {
+    public PageInfo<StockRecord> getChangeDetail(StockRecordSO stockRecordSO) {
         AssertUtils.notNull(stockRecordSO, "库存明细参数不能为空");
         AssertUtils.notNull(stockRecordSO.getStockId(), "库存id不能为空");
 
@@ -158,7 +154,7 @@ public class StockServiceImpl implements StockService {
             });
 
         }
-        return new BaseResult(stockRecordPage.toPageInfo().getList(), stockRecordPage.getTotal());
+        return stockRecordPage.toPageInfo();
     }
 
     /**
