@@ -1,7 +1,8 @@
 package com.java.scm.service;
 
+import com.github.pagehelper.PageInfo;
 import com.java.scm.bean.Project;
-import com.java.scm.bean.base.BaseResult;
+import com.java.scm.bean.so.ProjectSO;
 
 import java.util.List;
 
@@ -18,44 +19,41 @@ public interface ProjectService {
      * @param id
      * @return
      */
-    BaseResult getProject(String id);
+    Project getProject(String id);
 
     /**
      * 保存工程
      * @param project
      * @return
      */
-    BaseResult saveProject(Project project);
+    void saveProject(Project project);
 
     /**
      * 修改工程
      * @param project
      * @return
      */
-    BaseResult modifyProject(Project project);
+    void modifyProject(Project project);
 
     /**
      * 删除工程
      * @param id
      * @return
      */
-    BaseResult deleteProject(String id);
+    void deleteProject(String id);
 
     /**
      * 展示工程列表
-     * @param name
-     * @param pageNum
-     * @param pageSize
      * @return
      */
-    BaseResult listProject(String name,int pageNum,int pageSize);
+    PageInfo<Project> listProject(ProjectSO projectSO);
 
     /**
      * 停用启用工程
      * @param id
      * @return
      */
-    BaseResult stopUsing(String id);
+    void stopUsing(String id);
 
     /**
      * 根据工程名称查询工程

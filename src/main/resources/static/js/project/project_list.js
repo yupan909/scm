@@ -27,11 +27,15 @@ $(function(){
 
 // 列表
 function load(pageNum){
-    var name = $("#key").val();
+    var name = $("#nameQuery").val();
     $.ajax({
         url: "../project/list?name="+name+"&pageNum="+pageNum+"&pageSize="+pageSize,
         dataType: "json",
-        type: "GET",
+        type: "POST",
+        data: JSON.stringify({ "pageNum":pageNum,
+            "pageSize":pageSize,
+            "name":name
+        }),
         success: function (data) {
             var html= "";
             if(data.flag){
@@ -123,6 +127,7 @@ function save(){
         dataType: "json",
         type: "POST",
         data: data,
+        async: false,
         success: function (data) {
             if(data.flag){
                 Public.closeModal("saveModal");
@@ -218,6 +223,7 @@ function editSave(){
         dataType: "json",
         type: "POST",
         data: data,
+        async: false,
         success: function (data) {
             if(data.flag){
                 Public.closeModal("editModal");
@@ -243,7 +249,7 @@ function stopUsing(id){
         },
         success: function(data) {
             if(data.flag){
-                Public.alert(1,data.message);
+                Public.alert(1, "修改成功！");
                 load(curr);
             }else{
                 Public.alert(2,data.message);

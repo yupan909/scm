@@ -42,6 +42,9 @@ public class ProjectRecord {
      */
     private Byte type;
 
+    @Transient
+    private String typeInfo;
+
     /**
      * 日期
      */
@@ -83,5 +86,11 @@ public class ProjectRecord {
      * 修改人id
      */
     private String updateUserId;
+
+    /**
+     * 创建人
+     */
+    @Transient
+    private String createUser;
 
 }

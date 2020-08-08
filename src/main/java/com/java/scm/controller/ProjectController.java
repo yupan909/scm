@@ -1,7 +1,9 @@
 package com.java.scm.controller;
 
+import com.github.pagehelper.PageInfo;
 import com.java.scm.bean.Project;
 import com.java.scm.bean.base.BaseResult;
+import com.java.scm.bean.so.ProjectSO;
 import com.java.scm.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +27,8 @@ public class ProjectController {
      */
     @GetMapping("/getProject/{id}")
     public BaseResult getProject(@PathVariable("id") String id) {
-        return  projectService.getProject(id);
+        Project project = projectService.getProject(id);
+        return new BaseResult(project);
     }
 
     /**
@@ -34,7 +37,8 @@ public class ProjectController {
      */
     @PostMapping("/save")
     public BaseResult saveProject(@RequestBody Project project){
-        return projectService.saveProject(project);
+        projectService.saveProject(project);
+        return BaseResult.successResult();
     }
 
     /**
@@ -43,7 +47,8 @@ public class ProjectController {
      */
     @PostMapping("/modify")
     public BaseResult modifyProject(@RequestBody Project project){
-        return projectService.modifyProject(project);
+        projectService.modifyProject(project);
+        return BaseResult.successResult();
     }
 
     /**
@@ -52,16 +57,18 @@ public class ProjectController {
      */
     @GetMapping("/delete/{id}")
     public BaseResult deleteProject(@PathVariable("id") String id){
-        return projectService.deleteProject(id);
+        projectService.deleteProject(id);
+        return BaseResult.successResult();
     }
 
     /**
      * 查询工程列表
      * @return
      */
-    @GetMapping("/list")
-    public BaseResult listProject(String name,int pageNum,int pageSize){
-        return projectService.listProject(name,pageNum,pageSize);
+    @PostMapping("/list")
+    public BaseResult listProject(@RequestBody ProjectSO projectSO){
+        PageInfo<Project> pageInfo = projectService.listProject(projectSO);
+        return new BaseResult(pageInfo.getList(), pageInfo.getTotal());
     }
 
     /**
@@ -70,6 +77,7 @@ public class ProjectController {
      */
     @GetMapping("/stopUsing/{id}")
     public BaseResult stopUsing(@PathVariable("id") String id){
-        return projectService.stopUsing(id);
+        projectService.stopUsing(id);
+        return BaseResult.successResult();
     }
 }
