@@ -1,11 +1,10 @@
 package com.java.scm.dao;
 
+import com.github.pagehelper.Page;
 import com.java.scm.bean.User;
+import com.java.scm.bean.so.UserSO;
 import com.java.scm.tk.TkMapper;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-
-import java.util.List;
 
 /**
  * @author hujunhui
@@ -14,7 +13,11 @@ import java.util.List;
 @Mapper
 public interface UserDao extends TkMapper<User> {
 
-    List<User> listUser(@Param("key") String key);
+    /**
+     * 用户列表
+     * @return
+     */
+    Page<User> listUser(UserSO userSO);
 
 
 }

@@ -1,8 +1,9 @@
 package com.java.scm.controller;
 
-import com.alibaba.fastjson.JSONObject;
+import com.github.pagehelper.PageInfo;
 import com.java.scm.bean.User;
 import com.java.scm.bean.base.BaseResult;
+import com.java.scm.bean.so.UserSO;
 import com.java.scm.config.aop.anno.AdminRight;
 import com.java.scm.enums.CommonConsts;
 import com.java.scm.service.UserService;
@@ -35,7 +36,8 @@ public class UserController {
         HttpServletRequest request = RequestUtil.getRequest();
         String userName = request.getParameter("userName");
         String password = request.getParameter("password");
-        return userService.login(userName,password);
+        User user = userService.login(userName,password);
+        return new BaseResult(user);
     }
 
     /**
@@ -44,8 +46,8 @@ public class UserController {
      */
     @GetMapping("/logout")
     public BaseResult logout(){
-        return userService.logout();
-
+        userService.logout();
+        return BaseResult.successResult();
     }
 
     /**
@@ -56,7 +58,8 @@ public class UserController {
     @PostMapping("/add")
     @AdminRight
     public BaseResult addUser(@RequestBody User user){
-        return userService.addUser(user);
+        userService.addUser(user);
+        return BaseResult.successResult();
     }
 
     /**
@@ -67,7 +70,8 @@ public class UserController {
     @PostMapping("/modify")
     @AdminRight
     public BaseResult modifyUser(@RequestBody User user){
-        return userService.modifyUser(user);
+        userService.modifyUser(user);
+        return BaseResult.successResult();
     }
 
     /**
@@ -77,7 +81,8 @@ public class UserController {
     @GetMapping("/stopUsing/{id}")
     @AdminRight
     public BaseResult stopUsing(@PathVariable("id") String id){
-        return userService.stopUsing(id);
+        userService.stopUsing(id);
+        return BaseResult.successResult();
     }
 
     /**
@@ -88,20 +93,18 @@ public class UserController {
     @GetMapping("/delete/{id}")
     @AdminRight
     public BaseResult deleteUser(@PathVariable("id") String id){
-        return userService.deleteUser(id);
+        userService.deleteUser(id);
+        return BaseResult.successResult();
     }
-
 
     /**
      * 修改密码
-     * @param params
      * @return
      */
     @PostMapping("/updatePassword")
-    public BaseResult updatePassword(@RequestBody JSONObject params){
-        String id = params.getString("id");
-        String password = params.getString("password");
-        return userService.updatePassword(id,password);
+    public BaseResult updatePassword(@RequestBody User user){
+        userService.updatePassword(user.getId(), user.getPassword());
+        return BaseResult.successResult();
     }
 
     /**
@@ -111,20 +114,19 @@ public class UserController {
     @GetMapping("/resetPassword/{id}")
     @AdminRight
     public BaseResult resetPassword(@PathVariable("id") String id){
-        return userService.updatePassword(id, CommonConsts.RESET_PASSWORD);
+         userService.updatePassword(id, CommonConsts.RESET_PASSWORD);
+        return BaseResult.successResult();
     }
 
     /**
      * 查询人员列表
-     * @param key  关键字，根据姓名，手机号
-     * @param pageNum
-     * @param pageSize
      * @return
      */
-    @GetMapping("/list")
+    @PostMapping("/list")
     @AdminRight
-    public BaseResult list(String key,int pageNum,int pageSize){
-        return userService.list(key,pageNum,pageSize);
+    public BaseResult list(@RequestBody UserSO userSO){
+        PageInfo<User> pageInfo = userService.list(userSO);
+        return new BaseResult(pageInfo.getList(), pageInfo.getTotal());
     }
 
     /**
@@ -134,7 +136,8 @@ public class UserController {
      */
     @GetMapping("/get/{id}")
     public BaseResult getOne(@PathVariable("id") String id){
-        return userService.getUserById(id);
+        User user = userService.getUserById(id);
+        return new BaseResult(user);
     }
 
     /**
@@ -143,6 +146,6 @@ public class UserController {
     @GetMapping("/authority")
     public BaseResult authority(){
         User user = RequestUtil.getCurrentUser();
-        return  new BaseResult(user);
+        return new BaseResult(user);
     }
 }

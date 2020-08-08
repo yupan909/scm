@@ -53,7 +53,6 @@ function load(pageNum){
         		"startTime":startDate,
         		"endTime":endDate
         		}),
-        async: false,
         success: function (data) {
             var html= "";
             if(data.flag == true){

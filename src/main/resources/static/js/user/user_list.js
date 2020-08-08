@@ -25,10 +25,13 @@ $(function(){
 function load(pageNum){
 	var key = $("#key").val();
 	$.ajax({
-        url: "../user/list?key="+key+"&pageNum="+pageNum+"&pageSize="+pageSize,
+        url: "../user/list",
         dataType: "json",
-        type: "GET",
-        //data: {"name":name,"mobile":mobile,"pageNum":cnt,"pageSize":10},
+        type: "POST",
+        data: JSON.stringify({ "pageNum":pageNum,
+            "pageSize":pageSize,
+            "key":key
+        }),
         success: function (data) {
             var html= "";
             if(data.flag){
@@ -106,6 +109,7 @@ function save(){
         dataType: "json",
         type: "POST",
         data: data,
+        async: false,
         success: function (data) {
             if(data.flag){
                 Public.closeModal("saveModal");
@@ -156,10 +160,10 @@ function stopUsing(id){
         },
         success: function(data) {
             if(data.flag){
-                Public.alert(1,data.message);
+                Public.alert(1, "修改成功！");
                 load(curr);
             }else{
-                Public.alert(2,data.message);
+                Public.alert(2, data.message);
             }
         }
     });

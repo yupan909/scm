@@ -1,7 +1,8 @@
 package com.java.scm.service;
 
+import com.github.pagehelper.PageInfo;
 import com.java.scm.bean.User;
-import com.java.scm.bean.base.BaseResult;
+import com.java.scm.bean.so.UserSO;
 
 /**
  * 用户相关服务
@@ -16,62 +17,59 @@ public interface UserService {
      * @param password
      * @return
      */
-    BaseResult login(String userName,String password);
+    User login(String userName,String password);
 
     /**
      * 登出
      * @return
      */
-    BaseResult logout();
+    void logout();
 
     /**
      * 创建用户
      * @param user
      * @return
      */
-    BaseResult addUser(User user);
+    void addUser(User user);
 
     /**
      * 修改用户
      * @param user
      * @return
      */
-    BaseResult modifyUser(User user);
+    void modifyUser(User user);
 
     /**
      * 停用账户
      * @param id
      * @return
      */
-    BaseResult stopUsing(String id);
+    void stopUsing(String id);
 
     /**
      * 删除账户
      * @param id
      * @return
      */
-    BaseResult deleteUser(String id);
+    void deleteUser(String id);
 
     /**
      * 密码重置
      * @param id
      * @return
      */
-    BaseResult updatePassword(String id, String password);
+    void updatePassword(String id, String password);
 
     /**
      * 用户列表展示
-     * @param key
-     * @param pageNum
-     * @param pageSize
      * @return
      */
-    BaseResult list(String key,int pageNum,int pageSize);
+    PageInfo<User> list(UserSO userSO);
 
     /**
      * 根据主键获取用户信息
      * @param id
      * @return
      */
-    BaseResult getUserById(String id);
+    User getUserById(String id);
 }

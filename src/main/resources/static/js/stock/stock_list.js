@@ -175,6 +175,7 @@ function save(){
         dataType: "json",
         type: "POST",
         data: data,
+        async: false,
         success: function (data) {
             if(data.flag){
                 Public.closeModal("saveModal");
@@ -239,6 +240,7 @@ function editSave(){
         dataType: "json",
         type: "POST",
         data: data,
+        async: false,
         success: function (data) {
             if(data.flag){
                 Public.closeModal("editModal");
@@ -295,6 +297,7 @@ function editCountSave(){
         dataType: "json",
         type: "POST",
         data: data,
+        async: false,
         success: function (data) {
             if(data.flag){
                 Public.closeModal("editModal_count");

@@ -1,9 +1,9 @@
 package com.java.scm.service.impl;
 
-import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageInfo;
 import com.java.scm.bean.User;
-import com.java.scm.bean.base.BaseResult;
+import com.java.scm.bean.so.UserSO;
 import com.java.scm.config.exception.BusinessException;
 import com.java.scm.dao.UserDao;
 import com.java.scm.enums.CommonConsts;
@@ -16,6 +16,7 @@ import com.java.scm.util.RequestUtil;
 import com.java.scm.util.StringUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import tk.mybatis.mapper.entity.Example;
 
 import javax.annotation.Resource;
@@ -46,29 +47,24 @@ public class UserServiceImpl implements UserService {
      * @return
      */
     @Override
-    public BaseResult login(String userName, String password) {
+    public User login(String userName, String password) {
         AssertUtils.notEmpty(userName, "用户名不能为空");
         AssertUtils.notEmpty(password, "密码不能为空");
         User query = new User();
         query.setName(userName);
         query.setPassword(password);
         List<User> users = userDao.select(query);
-        if(users !=null && !users.isEmpty()){
-            User user = users.get(0);
-            if(Objects.equals(user.getState(), StateEnum.禁用.getType())){
-                throw new BusinessException("账号已被停用");
-            }else{
-                Map<String, String> warehouseMap = warehouseService.getWarehouseMap(Arrays.asList(user.getWarehouseId()));
-                user.setWarehouseName(StringUtil.isNotEmpty(warehouseMap.get(user.getWarehouseId())) ? warehouseMap.get(user.getWarehouseId()) : "");
-                RequestUtil.setLoginUser(user);
-                BaseResult result = new BaseResult(user);
-                result.setMessage("登录成功");
-                return result;
-            }
-        }else{
+        if (CollectionUtils.isEmpty(users)) {
             throw new BusinessException("账号或密码错误");
         }
-
+        User user = users.get(0);
+        if(Objects.equals(user.getState(), StateEnum.禁用.getType())){
+            throw new BusinessException("账号已被停用");
+        }
+        Map<String, String> warehouseMap = warehouseService.getWarehouseMap(Arrays.asList(user.getWarehouseId()));
+        user.setWarehouseName(StringUtil.isNotEmpty(warehouseMap.get(user.getWarehouseId())) ? warehouseMap.get(user.getWarehouseId()) : "");
+        RequestUtil.setLoginUser(user);
+        return user;
     }
 
     /**
@@ -76,9 +72,8 @@ public class UserServiceImpl implements UserService {
      * @return
      */
     @Override
-    public BaseResult logout() {
+    public void logout() {
         RequestUtil.removeLoginUser();
-        return new BaseResult(true,"退出登录");
     }
 
     /**
@@ -87,7 +82,7 @@ public class UserServiceImpl implements UserService {
      * @return
      */
     @Override
-    public BaseResult addUser(User user) {
+    public void addUser(User user) {
         AssertUtils.notNull(user, "用户信息不能为空");
         AssertUtils.notEmpty(user.getName(), "用户名不能为空");
 
@@ -100,7 +95,6 @@ public class UserServiceImpl implements UserService {
         user.setPassword(CommonConsts.RESET_PASSWORD);
         user.setCreateUserId(RequestUtil.getCurrentUser().getId());
         userDao.insertSelective(user);
-        return new BaseResult(true,"新增成功");
     }
 
     /**
@@ -109,7 +103,7 @@ public class UserServiceImpl implements UserService {
      * @return
      */
     @Override
-    public BaseResult modifyUser(User user) {
+    public void modifyUser(User user) {
         AssertUtils.notNull(user, "用户信息不能为空");
         AssertUtils.notNull(user.getId(), "用户ID不能为空");
         AssertUtils.notEmpty(user.getName(), "用户名不能为空");
@@ -124,7 +118,6 @@ public class UserServiceImpl implements UserService {
         }
         user.setUpdateUserId(RequestUtil.getCurrentUser().getId());
         userDao.updateByPrimaryKeySelective(user);
-        return new BaseResult(true,"修改成功");
     }
 
     /**
@@ -133,7 +126,7 @@ public class UserServiceImpl implements UserService {
      * @return
      */
     @Override
-    public BaseResult stopUsing(String id) {
+    public void stopUsing(String id) {
         AssertUtils.notNull(id, "用户ID不能为空");
         User user = userDao.selectByPrimaryKey(id);
         if (user == null) {
@@ -142,14 +135,11 @@ public class UserServiceImpl implements UserService {
         String msg;
         if(Objects.equals(user.getState(), StateEnum.禁用.getType())){
             user.setState(StateEnum.启用.getType());
-            msg = "账号已启用";
         }else{
             user.setState(StateEnum.禁用.getType());
-            msg = "账号已停用";
         }
         user.setUpdateUserId(RequestUtil.getCurrentUser().getId());
         userDao.updateByPrimaryKeySelective(user);
-        return new BaseResult(true,msg);
     }
 
     /**
@@ -158,10 +148,9 @@ public class UserServiceImpl implements UserService {
      * @return
      */
     @Override
-    public BaseResult deleteUser(String id) {
+    public void deleteUser(String id) {
         AssertUtils.notNull(id, "用户ID不能为空");
         userDao.deleteByPrimaryKey(id);
-        return new BaseResult(true,"账号已删除");
     }
 
     /**
@@ -169,7 +158,7 @@ public class UserServiceImpl implements UserService {
      * @return
      */
     @Override
-    public BaseResult updatePassword(String id, String password) {
+    public void updatePassword(String id, String password) {
         AssertUtils.notNull(id, "用户ID不能为空");
         AssertUtils.notEmpty(password, "密码不能为空");
         User user = new User();
@@ -177,26 +166,20 @@ public class UserServiceImpl implements UserService {
         user.setPassword(password);
         user.setUpdateUserId(RequestUtil.getCurrentUser().getId());
         userDao.updateByPrimaryKeySelective(user);
-        return BaseResult.successResult();
     }
 
     /**
      * 用户列表
-     * @param key
-     * @param pageNum
-     * @param pageSize
      * @return
      */
     @Override
-    public BaseResult list(String key, int pageNum, int pageSize) {
-        PageHelper.startPage(pageNum,pageSize);
-        List<User> users  = userDao.listUser(key);
+    public PageInfo<User> list(UserSO userSO) {
+        Page<User> users  = userDao.listUser(userSO);
         for (User user : users){
             user.setStateInfo(StateEnum.getEnumByValue(user.getState()));
             user.setRoleInfo(RoleEnum.getEnumByValue(user.getRole()));
         }
-        PageInfo<Map> pageInfo = new PageInfo(users);
-        return new BaseResult(users,pageInfo.getTotal());
+        return users.toPageInfo();
     }
 
     /**
@@ -205,10 +188,10 @@ public class UserServiceImpl implements UserService {
      * @return
      */
     @Override
-    public BaseResult getUserById(String id) {
+    public User getUserById(String id) {
         AssertUtils.notNull(id, "用户ID不能为空");
         User user = userDao.selectByPrimaryKey(id);
-        return  new BaseResult(user);
+        return user;
     }
 
 }
