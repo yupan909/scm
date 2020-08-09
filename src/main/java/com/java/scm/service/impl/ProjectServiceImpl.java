@@ -8,8 +8,8 @@ import com.java.scm.bean.User;
 import com.java.scm.bean.so.ProjectRecordSO;
 import com.java.scm.bean.so.ProjectSO;
 import com.java.scm.config.exception.BusinessException;
-import com.java.scm.dao.ProjectDao;
-import com.java.scm.dao.ProjectRecordDao;
+import com.java.scm.dao.ProjectMapper;
+import com.java.scm.dao.ProjectRecordMapper;
 import com.java.scm.enums.ProjectRecordTypeEnum;
 import com.java.scm.enums.StateEnum;
 import com.java.scm.service.ProjectService;
@@ -37,10 +37,10 @@ import java.util.stream.Collectors;
 public class ProjectServiceImpl implements ProjectService {
 
     @Autowired
-    private ProjectDao projectDao;
+    private ProjectMapper projectMapper;
 
     @Autowired
-    private ProjectRecordDao projectRecordDao;
+    private ProjectRecordMapper projectRecordMapper;
 
     /**
      * 获取工程
@@ -50,7 +50,7 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public Project getProject(String id) {
         AssertUtils.notNull(id, "工程id不能为空");
-        Project project = projectDao.selectByPrimaryKey(id);
+        Project project = projectMapper.selectByPrimaryKey(id);
         return project;
     }
 
@@ -68,7 +68,7 @@ public class ProjectServiceImpl implements ProjectService {
         }
         User user = RequestUtil.getCurrentUser();
         project.setCreateUserId(user.getId());
-        projectDao.insertSelective(project);
+        projectMapper.insertSelective(project);
     }
 
     /**
@@ -86,7 +86,7 @@ public class ProjectServiceImpl implements ProjectService {
         }
         User user = RequestUtil.getCurrentUser();
         project.setUpdateUserId(user.getId());
-        projectDao.updateByPrimaryKeySelective(project);
+        projectMapper.updateByPrimaryKeySelective(project);
     }
 
     /**
@@ -97,7 +97,7 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public void deleteProject(String id) {
         AssertUtils.notNull(id, "工程id不能为空");
-        projectDao.deleteByPrimaryKey(id);
+        projectMapper.deleteByPrimaryKey(id);
     }
 
     /**
@@ -106,12 +106,12 @@ public class ProjectServiceImpl implements ProjectService {
      */
     @Override
     public PageInfo<Project> listProject(ProjectSO projectSO) {
-        Page<Project> projectPage = projectDao.listProject(projectSO);
+        Page<Project> projectPage = projectMapper.listProject(projectSO);
         PageInfo<Project> pageInfo = projectPage.toPageInfo();
         if (!CollectionUtils.isEmpty(pageInfo.getList())) {
             // 获取流水帐统计金额
             List<String> projectIds = pageInfo.getList().stream().map(p -> p.getId()).collect(Collectors.toList());
-            List<ProjectRecord> projectRecordList = projectRecordDao.getProjectRecordMoney(projectIds);
+            List<ProjectRecord> projectRecordList = projectRecordMapper.getProjectRecordMoney(projectIds);
 
             pageInfo.getList().forEach(p -> {
                 p.setStateInfo(StateEnum.getEnumByValue(p.getState()));
@@ -142,7 +142,7 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public void stopUsing(String id) {
         AssertUtils.notNull(id, "工程id不能为空");
-        Project project = projectDao.selectByPrimaryKey(id);
+        Project project = projectMapper.selectByPrimaryKey(id);
         if (project == null) {
             throw new BusinessException("工程不存在！");
         }
@@ -153,7 +153,7 @@ public class ProjectServiceImpl implements ProjectService {
         }
         User user = RequestUtil.getCurrentUser();
         project.setUpdateUserId(user.getId());
-        projectDao.updateByPrimaryKeySelective(project);
+        projectMapper.updateByPrimaryKeySelective(project);
     }
 
     /**
@@ -167,7 +167,7 @@ public class ProjectServiceImpl implements ProjectService {
         Example.Criteria criteria =  example.createCriteria();
         criteria.andIn("name", nameList);
         criteria.andEqualTo("state", StateEnum.启用.getType());
-        List<Project> projects = projectDao.selectByExample(example);
+        List<Project> projects = projectMapper.selectByExample(example);
         return projects;
     }
 
@@ -184,7 +184,7 @@ public class ProjectServiceImpl implements ProjectService {
             criteria.andNotEqualTo("id",id);
         }
         criteria.andEqualTo("name",name);
-        int count = projectDao.selectCountByExample(example);
+        int count = projectMapper.selectCountByExample(example);
         if(count >0){
             return false;
         }else{
@@ -200,7 +200,7 @@ public class ProjectServiceImpl implements ProjectService {
     public PageInfo<ProjectRecord> listProjectRecord(ProjectRecordSO projectRecordSO){
         AssertUtils.notNull(projectRecordSO, "工程明细列表参数不能为空");
         AssertUtils.notNull(projectRecordSO.getProjectId(), "工程id不能为空");
-        Page<ProjectRecord> projectRecordPage = projectRecordDao.listProjectRecord(projectRecordSO);
+        Page<ProjectRecord> projectRecordPage = projectRecordMapper.listProjectRecord(projectRecordSO);
         // 类型
         if (!CollectionUtils.isEmpty(projectRecordPage.toPageInfo().getList())) {
             projectRecordPage.toPageInfo().getList().forEach(p -> {
@@ -217,7 +217,7 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public ProjectRecord getProjectRecord(String recordId) {
         AssertUtils.notNull(recordId, "工程明细id不能为空");
-        ProjectRecord record = projectRecordDao.selectByPrimaryKey(recordId);
+        ProjectRecord record = projectRecordMapper.selectByPrimaryKey(recordId);
         return record;
     }
 
@@ -233,7 +233,7 @@ public class ProjectServiceImpl implements ProjectService {
         AssertUtils.notNull(projectRecord.getMoney(), "金额不能为空");
         User user = RequestUtil.getCurrentUser();
         projectRecord.setCreateUserId(user.getId());
-        projectRecordDao.insertSelective(projectRecord);
+        projectRecordMapper.insertSelective(projectRecord);
     }
 
     /**
@@ -245,7 +245,7 @@ public class ProjectServiceImpl implements ProjectService {
         AssertUtils.notNull(projectRecord.getId(), "工程明细id不能为空");
         User user = RequestUtil.getCurrentUser();
         projectRecord.setUpdateUserId(user.getId());
-        projectRecordDao.updateByPrimaryKeySelective(projectRecord);
+        projectRecordMapper.updateByPrimaryKeySelective(projectRecord);
     }
 
     /**
@@ -254,7 +254,7 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public void deleteProjectRecord(String recordId) {
         AssertUtils.notNull(recordId, "工程明细id不能为空");
-        projectRecordDao.deleteByPrimaryKey(recordId);
+        projectRecordMapper.deleteByPrimaryKey(recordId);
     }
 
 }

@@ -1,7 +1,7 @@
 package com.java.scm.service.impl;
 
 import com.java.scm.bean.Warehouse;
-import com.java.scm.dao.WarehouseDao;
+import com.java.scm.dao.WarehouseMapper;
 import com.java.scm.service.WarehouseService;
 import com.java.scm.util.AssertUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +24,7 @@ import java.util.Map;
 public class WarehouseServiceImpl implements WarehouseService {
 
     @Resource
-    private WarehouseDao warehouseDao;
+    private WarehouseMapper warehouseMapper;
 
     /**
      * 获取所有的仓库
@@ -32,7 +32,7 @@ public class WarehouseServiceImpl implements WarehouseService {
      */
     @Override
     public List<Warehouse> getAllWarehouse() {
-        return warehouseDao.selectAll();
+        return warehouseMapper.selectAll();
     }
 
     /**
@@ -45,7 +45,7 @@ public class WarehouseServiceImpl implements WarehouseService {
         Example example = new Example(Warehouse.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andIn("id", ids);
-        List<Warehouse> warehouseList = warehouseDao.selectByExample(example);
+        List<Warehouse> warehouseList = warehouseMapper.selectByExample(example);
         if (CollectionUtils.isEmpty(warehouseList)) {
             return Collections.EMPTY_MAP;
         }

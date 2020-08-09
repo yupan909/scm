@@ -7,8 +7,8 @@ import com.java.scm.bean.excel.StockImportTemplate;
 import com.java.scm.bean.so.StockRecordSO;
 import com.java.scm.bean.so.StockSO;
 import com.java.scm.config.exception.BusinessException;
-import com.java.scm.dao.StockDao;
-import com.java.scm.dao.StockRecordDao;
+import com.java.scm.dao.StockMapper;
+import com.java.scm.dao.StockRecordMapper;
 import com.java.scm.enums.StockRecordTypeEnum;
 import com.java.scm.service.StockService;
 import com.java.scm.service.WarehouseService;
@@ -36,10 +36,10 @@ import java.util.Optional;
 public class StockServiceImpl implements StockService {
 
     @Resource
-    private StockDao stockDao;
+    private StockMapper stockMapper;
 
     @Resource
-    private StockRecordDao stockRecordDao;
+    private StockRecordMapper stockRecordMapper;
 
     @Resource
     private WarehouseService warehouseService;
@@ -64,7 +64,7 @@ public class StockServiceImpl implements StockService {
             throw new BusinessException("物资库存已存在，无法重复添加！");
         }
         stock.setCreateUserId(user.getId());
-        stockDao.insertSelective(stock);
+        stockMapper.insertSelective(stock);
 
         // 新增库存变更记录
         insertStockRecord(stock, user.getId());
@@ -89,7 +89,7 @@ public class StockServiceImpl implements StockService {
         }
         User user = RequestUtil.getCurrentUser();
         stock.setUpdateUserId(user.getId());
-        stockDao.updateByPrimaryKeySelective(stock);
+        stockMapper.updateByPrimaryKeySelective(stock);
     }
 
     /**
@@ -105,11 +105,11 @@ public class StockServiceImpl implements StockService {
         AssertUtils.notNull(stock.getCount(), "库存数量不能为空");
 
         String id  = stock.getId();
-        Stock oldStock = stockDao.selectByPrimaryKey(id);
+        Stock oldStock = stockMapper.selectByPrimaryKey(id);
 
         User user = RequestUtil.getCurrentUser();
         stock.setUpdateUserId(user.getId());
-        stockDao.updateByPrimaryKeySelective(stock);
+        stockMapper.updateByPrimaryKeySelective(stock);
 
         // 新增库存变更记录
         stock.setCount(stock.getCount()-oldStock.getCount());
@@ -122,7 +122,7 @@ public class StockServiceImpl implements StockService {
      */
     @Override
     public PageInfo<Stock> listStock(StockSO stockSO) {
-        Page<Stock> stockList = stockDao.listStock(stockSO);
+        Page<Stock> stockList = stockMapper.listStock(stockSO);
         return stockList.toPageInfo();
     }
 
@@ -134,7 +134,7 @@ public class StockServiceImpl implements StockService {
     @Override
     public Stock getStockById(String id) {
         AssertUtils.notNull(id, "库存id不能为空");
-        return stockDao.selectByPrimaryKey(id);
+        return stockMapper.selectByPrimaryKey(id);
     }
 
     /**
@@ -146,7 +146,7 @@ public class StockServiceImpl implements StockService {
         AssertUtils.notNull(stockRecordSO, "库存明细参数不能为空");
         AssertUtils.notNull(stockRecordSO.getStockId(), "库存id不能为空");
 
-        Page<StockRecord> stockRecordPage = stockRecordDao.listStockRecord(stockRecordSO);
+        Page<StockRecord> stockRecordPage = stockRecordMapper.listStockRecord(stockRecordSO);
         // 变更类型
         if (!CollectionUtils.isEmpty(stockRecordPage.toPageInfo().getList())) {
             stockRecordPage.toPageInfo().getList().forEach(p -> {
@@ -167,7 +167,7 @@ public class StockServiceImpl implements StockService {
             throw new BusinessException("变更库存参数不能为空");
         }
         inoutStockList.forEach(inoutStock -> {
-            Stock oldStock = stockDao.selectByPrimaryKey(inoutStock.getStockId());
+            Stock oldStock = stockMapper.selectByPrimaryKey(inoutStock.getStockId());
             if (oldStock == null) {
                 throw new BusinessException("库存不存在，请检查后再重新导入！");
             }
@@ -176,7 +176,7 @@ public class StockServiceImpl implements StockService {
             newStock.setId(oldStock.getId());
             newStock.setCount(oldStock.getCount() + inoutStock.getCount());
             newStock.setUpdateUserId(inoutStock.getCreateUserId());
-            stockDao.updateByPrimaryKeySelective(newStock);
+            stockMapper.updateByPrimaryKeySelective(newStock);
 
             // 库存记录
             StockRecord stockRecord = new StockRecord();
@@ -185,7 +185,7 @@ public class StockServiceImpl implements StockService {
             stockRecord.setCount(inoutStock.getCount());
             stockRecord.setType(inoutStock.getType());
             stockRecord.setCreateUserId(inoutStock.getCreateUserId());
-            stockRecordDao.insertSelective(stockRecord);
+            stockRecordMapper.insertSelective(stockRecord);
         });
     }
 
@@ -201,7 +201,7 @@ public class StockServiceImpl implements StockService {
         criteria.andEqualTo("product", stock.getProduct());
         criteria.andEqualTo("model", stock.getModel());
         criteria.andEqualTo("unit", stock.getUnit());
-        List<Stock> stockList = stockDao.selectByExample(example);
+        List<Stock> stockList = stockMapper.selectByExample(example);
         if (CollectionUtils.isEmpty(stockList)) {
             return null;
         }
@@ -264,7 +264,7 @@ public class StockServiceImpl implements StockService {
             stock.setCount(Integer.valueOf(template.getCount()));
             stock.setWarehouseId(warehouseOptional.get().getId());
             stock.setCreateUserId(user.getId());
-            stockDao.insertSelective(stock);
+            stockMapper.insertSelective(stock);
 
             // 新增库存变更记录
             insertStockRecord(stock, user.getId());
@@ -280,7 +280,7 @@ public class StockServiceImpl implements StockService {
         stockRecord.setCount(stock.getCount());
         stockRecord.setType(StockRecordTypeEnum.手动修改.getType());
         stockRecord.setCreateUserId(userId);
-        stockRecordDao.insertSelective(stockRecord);
+        stockRecordMapper.insertSelective(stockRecord);
     }
 
     /**
@@ -297,7 +297,7 @@ public class StockServiceImpl implements StockService {
         criteria.andEqualTo("product",product);
         criteria.andEqualTo("model",model);
         criteria.andEqualTo("unit",unit);
-        int count = stockDao.selectCountByExample(example);
+        int count = stockMapper.selectCountByExample(example);
         if(count >0){
             return false;
         }else{

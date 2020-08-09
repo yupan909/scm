@@ -11,7 +11,7 @@ import org.apache.ibatis.annotations.Mapper;
  * @date 2020/6/28
  */
 @Mapper
-public interface StockRecordDao  extends TkMapper<StockRecord> {
+public interface StockRecordMapper extends TkMapper<StockRecord> {
 
     /**
      * 库存明细列表

@@ -11,6 +11,6 @@ import org.apache.ibatis.annotations.Mapper;
  * @date 2020-06-23 22:08
  */
 @Mapper
-public interface WarehouseDao extends TkMapper<Warehouse> {
+public interface WarehouseMapper extends TkMapper<Warehouse> {
 
 }

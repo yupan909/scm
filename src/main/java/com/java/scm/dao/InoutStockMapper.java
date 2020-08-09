@@ -13,7 +13,7 @@ import org.apache.ibatis.annotations.Mapper;
  * @date 2020-06-24 12:04
  */
 @Mapper
-public interface InoutStockDao extends TkMapper<InoutStock> {
+public interface InoutStockMapper extends TkMapper<InoutStock> {
 
     /**
      * 出入库列表

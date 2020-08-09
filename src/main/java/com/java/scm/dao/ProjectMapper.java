@@ -13,7 +13,7 @@ import org.apache.ibatis.annotations.Mapper;
  * @date 2020-06-23 22:08
  */
 @Mapper
-public interface ProjectDao extends TkMapper<Project> {
+public interface ProjectMapper extends TkMapper<Project> {
 
     /**
      * 工程列表

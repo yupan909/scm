@@ -14,7 +14,7 @@ import java.util.List;
  * @date 2020/6/28
  */
 @Mapper
-public interface ProjectRecordDao extends TkMapper<ProjectRecord> {
+public interface ProjectRecordMapper extends TkMapper<ProjectRecord> {
 
     /**
      * 工程明细列表

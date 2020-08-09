@@ -5,7 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.java.scm.bean.User;
 import com.java.scm.bean.so.UserSO;
 import com.java.scm.config.exception.BusinessException;
-import com.java.scm.dao.UserDao;
+import com.java.scm.dao.UserMapper;
 import com.java.scm.enums.CommonConsts;
 import com.java.scm.enums.RoleEnum;
 import com.java.scm.enums.StateEnum;
@@ -35,7 +35,7 @@ import java.util.Objects;
 public class UserServiceImpl implements UserService {
 
     @Resource
-    private UserDao userDao;
+    private UserMapper userMapper;
 
     @Resource
     private WarehouseService warehouseService;
@@ -53,7 +53,7 @@ public class UserServiceImpl implements UserService {
         User query = new User();
         query.setName(userName);
         query.setPassword(password);
-        List<User> users = userDao.select(query);
+        List<User> users = userMapper.select(query);
         if (CollectionUtils.isEmpty(users)) {
             throw new BusinessException("账号或密码错误");
         }
@@ -88,13 +88,13 @@ public class UserServiceImpl implements UserService {
 
         User queryName = new User();
         queryName.setName(user.getName());
-        int nameCount = userDao.selectCount(queryName);
+        int nameCount = userMapper.selectCount(queryName);
         if(nameCount > 0){
             throw new BusinessException("用户名已存在！（若用户存在重名情况，请使用姓名+编号进行区分）");
         }
         user.setPassword(CommonConsts.RESET_PASSWORD);
         user.setCreateUserId(RequestUtil.getCurrentUser().getId());
-        userDao.insertSelective(user);
+        userMapper.insertSelective(user);
     }
 
     /**
@@ -112,12 +112,12 @@ public class UserServiceImpl implements UserService {
         Example.Criteria criteria =  example.createCriteria();
         criteria.andNotEqualTo("id",user.getId());
         criteria.andEqualTo("name",user.getName());
-        int nameCount = userDao.selectCountByExample(example);
+        int nameCount = userMapper.selectCountByExample(example);
         if(nameCount >0){
             throw new BusinessException("用户姓名："+user.getName()+"已存在，请修改成其他姓名");
         }
         user.setUpdateUserId(RequestUtil.getCurrentUser().getId());
-        userDao.updateByPrimaryKeySelective(user);
+        userMapper.updateByPrimaryKeySelective(user);
     }
 
     /**
@@ -128,7 +128,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void stopUsing(String id) {
         AssertUtils.notNull(id, "用户ID不能为空");
-        User user = userDao.selectByPrimaryKey(id);
+        User user = userMapper.selectByPrimaryKey(id);
         if (user == null) {
             throw new BusinessException("用户信息不存在");
         }
@@ -139,7 +139,7 @@ public class UserServiceImpl implements UserService {
             user.setState(StateEnum.禁用.getType());
         }
         user.setUpdateUserId(RequestUtil.getCurrentUser().getId());
-        userDao.updateByPrimaryKeySelective(user);
+        userMapper.updateByPrimaryKeySelective(user);
     }
 
     /**
@@ -150,7 +150,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUser(String id) {
         AssertUtils.notNull(id, "用户ID不能为空");
-        userDao.deleteByPrimaryKey(id);
+        userMapper.deleteByPrimaryKey(id);
     }
 
     /**
@@ -165,7 +165,7 @@ public class UserServiceImpl implements UserService {
         user.setId(id);
         user.setPassword(password);
         user.setUpdateUserId(RequestUtil.getCurrentUser().getId());
-        userDao.updateByPrimaryKeySelective(user);
+        userMapper.updateByPrimaryKeySelective(user);
     }
 
     /**
@@ -174,7 +174,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public PageInfo<User> list(UserSO userSO) {
-        Page<User> users  = userDao.listUser(userSO);
+        Page<User> users  = userMapper.listUser(userSO);
         for (User user : users){
             user.setStateInfo(StateEnum.getEnumByValue(user.getState()));
             user.setRoleInfo(RoleEnum.getEnumByValue(user.getRole()));
@@ -190,7 +190,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUserById(String id) {
         AssertUtils.notNull(id, "用户ID不能为空");
-        User user = userDao.selectByPrimaryKey(id);
+        User user = userMapper.selectByPrimaryKey(id);
         return user;
     }
 

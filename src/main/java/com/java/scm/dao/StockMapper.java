@@ -1,23 +1,21 @@
 package com.java.scm.dao;
 
 import com.github.pagehelper.Page;
-import com.java.scm.bean.User;
-import com.java.scm.bean.so.UserSO;
+import com.java.scm.bean.Stock;
+import com.java.scm.bean.so.StockSO;
 import com.java.scm.tk.TkMapper;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
  * @author hujunhui
- * @date 2020/6/24
+ * @date 2020/6/28
  */
 @Mapper
-public interface UserDao extends TkMapper<User> {
+public interface StockMapper extends TkMapper<Stock> {
 
     /**
-     * 用户列表
+     * 库存列表
      * @return
      */
-    Page<User> listUser(UserSO userSO);
-
-
+    Page<Stock> listStock(StockSO stockSO);
 }

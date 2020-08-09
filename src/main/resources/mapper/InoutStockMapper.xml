@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.java.scm.dao.InoutStockDao">
+<mapper namespace="com.java.scm.dao.InoutStockMapper">
 
   <select id="listInoutStock" resultType="com.java.scm.bean.InoutStock">
     SELECT

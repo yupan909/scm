@@ -9,7 +9,7 @@ import com.java.scm.bean.User;
 import com.java.scm.bean.excel.InoutStockImportTemplate;
 import com.java.scm.bean.so.InoutStockSO;
 import com.java.scm.config.exception.BusinessException;
-import com.java.scm.dao.InoutStockDao;
+import com.java.scm.dao.InoutStockMapper;
 import com.java.scm.enums.InoutStockTypeEnum;
 import com.java.scm.service.InoutStockService;
 import com.java.scm.service.ProjectService;
@@ -39,7 +39,7 @@ import java.util.stream.Collectors;
 public class InoutStockServiceImpl implements InoutStockService {
 
     @Autowired
-    private InoutStockDao inoutStockDao;
+    private InoutStockMapper inoutStockMapper;
 
     @Autowired
     private WarehouseService warehouseService;
@@ -56,7 +56,7 @@ public class InoutStockServiceImpl implements InoutStockService {
      */
     @Override
     public PageInfo<InoutStock> listInoutStock(InoutStockSO inoutStockSO) {
-        Page<InoutStock> inoutStockPage =  inoutStockDao.listInoutStock(inoutStockSO);
+        Page<InoutStock> inoutStockPage =  inoutStockMapper.listInoutStock(inoutStockSO);
         PageInfo<InoutStock> pageInfo = inoutStockPage.toPageInfo();
         // 出入库类型
         if (!CollectionUtils.isEmpty(pageInfo.getList())) {
@@ -156,7 +156,7 @@ public class InoutStockServiceImpl implements InoutStockService {
             inoutStock.setHandle(template.getHandle());
             inoutStock.setRemark(template.getRemark());
             inoutStock.setCreateUserId(user.getId());
-            inoutStockDao.insertSelective(inoutStock);
+            inoutStockMapper.insertSelective(inoutStock);
 
             // 出库数量为负(计算库存)
             if (Objects.equals(inoutStockType, InoutStockTypeEnum.出库.getType())) {
@@ -215,7 +215,7 @@ public class InoutStockServiceImpl implements InoutStockService {
         inoutStock.setStockId(stockId);
         inoutStock.setWarehouseId(user.getWarehouseId());
         inoutStock.setCreateUserId(user.getId());
-        inoutStockDao.insertSelective(inoutStock);
+        inoutStockMapper.insertSelective(inoutStock);
 
         // (2)变更库存
         // 出库数量为负(计算库存)
