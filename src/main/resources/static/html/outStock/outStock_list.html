@@ -15,6 +15,15 @@
 			<div class="col-md-12 titleDIV">出 库 管 理</div>
 		</div>
 
+        <div class="row">
+            <div class="col-md-12 optionDIV">
+                <button type="button" class="btn btn-success" onclick="openSave();"><span class="glyphicon glyphicon-plus"></span> 新增</button>
+                <button type="button" class="btn btn-warning" onclick="exportTemplate();"><span class="glyphicon glyphicon-save"></span> 下载模版</button>
+                <button type="button" class="btn btn-primary" onclick="openImportFile();"><span class="glyphicon glyphicon-open"></span> 导入</button>
+                <button type="button" class="btn btn-info" onclick="exportExcel();"><span class="glyphicon glyphicon-save"></span> 导出</button>
+            </div>
+        </div>
+
         <div class="mainDIV">
             <div class="row">
                 <div class="col-md-12 queryDIV">
@@ -49,10 +58,6 @@
                         <div class="buttonDIV">
                             <button type="button" class="btn btn-primary" onclick="load('1')"><span class="glyphicon glyphicon-search"></span> 查询</button>
                             <button type="reset" class="btn btn-default"><span class="glyphicon glyphicon-trash"></span> 清空</button>
-                            <button type="button" class="btn btn-warning" onclick="exportTemplate();"><span class="glyphicon glyphicon-save"></span> 下载模版</button>
-                            <button type="button" class="btn btn-info" onclick="openImportFile()"><span class="glyphicon glyphicon-open"></span> 导入</button>
-                            <button type="button" class="btn btn-danger" onclick="exportExcel();"><span class="glyphicon glyphicon-save"></span> 导出</button>
-                            <button type="button" class="btn btn-success" onclick="openSave();"><span class="glyphicon glyphicon-plus"></span> 新增</button>
                         </div>
                     </form>
                 </div>

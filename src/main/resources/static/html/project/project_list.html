@@ -171,7 +171,12 @@
                 </h4>
             </div>
             <div class="modal-body">
-
+                <div class="row">
+                    <div class="col-md-12">
+                        <button type="button" class="btn btn-success" onclick="openDetailSave();"><span class="glyphicon glyphicon-plus"></span> 新增</button>
+                        <button type="button" class="btn btn-info" onclick="exportDetailExcel();"><span class="glyphicon glyphicon-save"></span> 导出</button>
+                    </div>
+                </div>
                 <div class="row ">
                     <div class="col-md-12 queryDIV">
                         <form class="form-inline">
@@ -192,8 +197,6 @@
                             <div class="buttonDIV">
                                 <button type="button" class="btn btn-primary" onclick="loadDetail('1')"><span class="glyphicon glyphicon-search"></span>查询</button>
                                 <button type="reset" class="btn btn-default"><span class="glyphicon glyphicon-trash"></span> 清空</button>
-                                <button type="button" class="btn btn-danger" onclick="exportDetailExcel();"><span class="glyphicon glyphicon-save"></span> 导出</button>
-                                <button type="button" class="btn btn-success" onclick="openDetailSave();"><span class="glyphicon glyphicon-plus"></span> 新增</button>
                             </div>
                         </form>
                     </div>
