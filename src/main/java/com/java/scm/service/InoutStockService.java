@@ -30,4 +30,11 @@ public interface InoutStockService {
      * 新增出入库
      */
     void saveInoutStock(InoutStock inoutStock);
+
+    /**
+     * 工程出入库统计
+     * @return
+     */
+    PageInfo<InoutStock> listInoutStockGroupByProject(InoutStockSO inoutStockSO);
+
 }

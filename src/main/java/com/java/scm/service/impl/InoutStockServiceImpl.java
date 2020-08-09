@@ -227,5 +227,16 @@ public class InoutStockServiceImpl implements InoutStockService {
         stockService.changeStock(inoutStockList);
     }
 
+    /**
+     * 工程出入库统计
+     * @return
+     */
+    @Override
+    public PageInfo<InoutStock> listInoutStockGroupByProject(InoutStockSO inoutStockSO) {
+        Page<InoutStock> inoutStockPage =  inoutStockMapper.listInoutStockGroupByProject(inoutStockSO);
+        PageInfo<InoutStock> pageInfo = inoutStockPage.toPageInfo();
+        return pageInfo;
+    }
+
 
 }

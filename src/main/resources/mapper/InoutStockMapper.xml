@@ -53,7 +53,7 @@
     order by ios.create_time desc
   </select>
 
-  <select id="listInoutStockGroupbyProject" resultType="com.java.scm.bean.InoutStock">
+  <select id="listInoutStockGroupByProject" resultType="com.java.scm.bean.InoutStock">
     SELECT
     p.name as project,
     s.product,

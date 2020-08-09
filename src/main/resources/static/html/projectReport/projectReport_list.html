@@ -7,12 +7,12 @@
 	<meta http-equiv="Cache-Control" content="no-cache" />
 	<meta http-equiv="Expires" content="0" />
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
-    <title>出入库报表</title>
+    <title>工程物资统计</title>
 </head>
 <body>
 	<div class="container-fluid">
 		<div class="row">
-			<div class="col-md-12 titleDIV">出 入 库 报 表</div>
+			<div class="col-md-12 titleDIV">工 程 物 资 统 计</div>
 		</div>
 
         <div class="mainDIV">
@@ -34,32 +34,6 @@
 
                         <div class="clearfix"></div>
 
-                        <div class="form-group col-md-4">
-                            <label for="source" class="t1">物资来源</label>
-                            <input type="text" class="form-control t2" id="source" placeholder="输入要查询的物资来源">
-                        </div>
-                        <div class="form-group col-md-4">
-                            <label for="type" class="t1">类型</label>
-                            <select class="form-control t2" id="type" name="type">
-                                <option value="">--请选择--</option>
-                            </select>
-                        </div>
-                        <div class="form-group col-md-4">
-                            <label for="warehouseId" class="t1">仓库</label>
-                            <select class="form-control t2" id="warehouseId" name="warehouseId">
-                                <option value="">--请选择--</option>
-                            </select>
-                        </div>
-                        <div class="clearfix"></div>
-
-                        <div class="form-group col-md-4">
-                            <label class="t1">出/入库时间</label>
-                            <input type="text" class="form-control date-Input" id="startDate" name="startDate" placeholder="开始时间" readonly="readonly">
-                            至 <input type="text" class="form-control date-Input" id="endDate" name="endDate" placeholder="结束时间" readonly="readonly">
-                        </div>
-
-                        <div class="clearfix"></div>
-
                         <div class="buttonDIV">
                             <button type="button" class="btn btn-primary" onclick="load('1')"><span class="glyphicon glyphicon-search"></span> 查询</button>
                             <button type="reset" class="btn btn-default"><span class="glyphicon glyphicon-trash"></span> 清空</button>
@@ -75,18 +49,12 @@
                         <thead>
                             <tr>
                                 <th>序号</th>
-                                <th>类型</th>
-                                <th>仓库</th>
                                 <th>工程名称</th>
                                 <th>物资名称</th>
                                 <th>物资型号</th>
                                 <th>单位</th>
-                                <th>数量</th>
-                                <th>物资单价</th>
-                                <th>物资来源</th>
-                                <th>经手人</th>
-                                <th>备注</th>
-                                <th>出/入库时间</th>
+                                <th>入库数量</th>
+                                <th>出库数量</th>
                             </tr>
                         </thead>
                         <tbody id="tbody">
@@ -98,6 +66,6 @@
         </div>
 	</div>
 
-	<script src="../js/report/report_list.js"></script>
+	<script src="../js/projectReport/projectReport_list.js"></script>
 </body>
 </html>

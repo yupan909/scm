@@ -60,7 +60,7 @@ public class StockServiceImpl implements StockService {
         AssertUtils.notNull(stock.getCount(), "数量不能为空");
 
         User user = RequestUtil.getCurrentUser();
-        if(!stockCheck(null, stock.getWarehouseId(), stock.getProduct(), stock.getModel(), stock.getUnit())){
+        if(!stockCheck(null, stock.getWarehouseId(), stock.getProduct(), stock.getModel())){
             throw new BusinessException("物资库存已存在，无法重复添加！");
         }
         stock.setCreateUserId(user.getId());
@@ -84,7 +84,7 @@ public class StockServiceImpl implements StockService {
         AssertUtils.notNull(stock.getModel(), "物资型号不能为空");
         AssertUtils.notNull(stock.getUnit(), "单位不能为空");
 
-        if(!stockCheck(stock.getId(),stock.getWarehouseId(),stock.getProduct(),stock.getModel(), stock.getUnit())){
+        if(!stockCheck(stock.getId(),stock.getWarehouseId(),stock.getProduct(),stock.getModel())){
             throw new BusinessException("无法修改成已存在的物资！");
         }
         User user = RequestUtil.getCurrentUser();
@@ -254,7 +254,7 @@ public class StockServiceImpl implements StockService {
             }
 
             // 判断库存是否重复
-            if(!stockCheck(null, warehouseOptional.get().getId(), template.getProduct(), template.getModel(), template.getUnit())){
+            if(!stockCheck(null, warehouseOptional.get().getId(), template.getProduct(), template.getModel())){
                 throw new BusinessException(String.format("导入失败，当前库存已存在：[物资名称：%s，物资型号：%s，单位：%s，所属仓库：%s]", template.getProduct(), template.getModel(), template.getUnit(), template.getWarehouseName()));
             }
 
@@ -287,7 +287,7 @@ public class StockServiceImpl implements StockService {
      * 校验库存唯一
      * @return
      */
-    private boolean stockCheck(String id, String warehouseId, String product, String model, String unit){
+    private boolean stockCheck(String id, String warehouseId, String product, String model){
         Example example = new Example(Stock.class);
         Example.Criteria criteria =  example.createCriteria();
         if(id !=null){
@@ -296,7 +296,6 @@ public class StockServiceImpl implements StockService {
         criteria.andEqualTo("warehouseId",warehouseId);
         criteria.andEqualTo("product",product);
         criteria.andEqualTo("model",model);
-        criteria.andEqualTo("unit",unit);
         int count = stockMapper.selectCountByExample(example);
         if(count >0){
             return false;

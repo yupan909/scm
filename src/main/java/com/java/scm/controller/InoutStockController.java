@@ -6,6 +6,7 @@ import com.java.scm.bean.base.BaseResult;
 import com.java.scm.bean.excel.InoutStockExportTemplate;
 import com.java.scm.bean.excel.InoutStockImportTemplate;
 import com.java.scm.bean.excel.InoutStockReportTemplate;
+import com.java.scm.bean.excel.ProjectReportTemplate;
 import com.java.scm.bean.so.InoutStockSO;
 import com.java.scm.config.exception.BusinessException;
 import com.java.scm.enums.InoutStockTypeEnum;
@@ -116,7 +117,8 @@ public class InoutStockController {
                                        @RequestParam("endTime") String endTime,
                                        HttpServletResponse response) throws Exception {
         // 查询数据
-        PageInfo<InoutStock> pageInfo = getInoutStockPageInfo(type, project, product, model, source, startTime, endTime, null);
+        InoutStockSO inoutStockSO = getInoutStockSO(type, project, product, model, source, startTime, endTime, null);
+        PageInfo<InoutStock> pageInfo = inoutStockService.listInoutStock(inoutStockSO);
 
         List<InoutStockExportTemplate> exportList = new ArrayList<>();
         if (!CollectionUtils.isEmpty(pageInfo.getList())) {
@@ -141,7 +143,7 @@ public class InoutStockController {
 
 
     /**
-     * 导出出入库报表统计
+     * 导出出入库报表
      * @throws Exception
      */
     @GetMapping("/exportInoutStockReport")
@@ -155,7 +157,8 @@ public class InoutStockController {
                                        @RequestParam("endTime") String endTime,
                                        HttpServletResponse response) throws Exception {
         // 查询数据
-        PageInfo<InoutStock> pageInfo = getInoutStockPageInfo(type, project, product, model, source, startTime, endTime, warehouseId);
+        InoutStockSO inoutStockSO = getInoutStockSO(type, project, product, model, source, startTime, endTime, warehouseId);
+        PageInfo<InoutStock> pageInfo = inoutStockService.listInoutStock(inoutStockSO);
 
         List<InoutStockReportTemplate> exportList = new ArrayList<>();
         if (!CollectionUtils.isEmpty(pageInfo.getList())) {
@@ -172,13 +175,13 @@ public class InoutStockController {
                 exportList.add(template);
             }
         }
-        ExcelUtils.exportExcel(exportList, InoutStockReportTemplate.class, "出入库报表统计", "出入库报表统计", response);
+        ExcelUtils.exportExcel(exportList, InoutStockReportTemplate.class, "出入库报表", "出入库报表", response);
     }
 
     /**
-     * 查询出入库数据
+     * 组装出入库查询对象
      */
-    private PageInfo<InoutStock> getInoutStockPageInfo(Byte type, String project, String product, String model, String source, String startTime, String endTime, String warehouseId) throws UnsupportedEncodingException {
+    private InoutStockSO getInoutStockSO(Byte type, String project, String product, String model, String source, String startTime, String endTime, String warehouseId) throws UnsupportedEncodingException {
         InoutStockSO inoutStockSO = new InoutStockSO();
         inoutStockSO.setType(type);
         if (warehouseId == null) {
@@ -199,7 +202,46 @@ public class InoutStockController {
         }
         inoutStockSO.setStartTime(startTime);
         inoutStockSO.setEndTime(endTime);
-        return inoutStockService.listInoutStock(inoutStockSO);
+        return inoutStockSO;
     }
+
+    /**
+     * 工程物资统计
+     * @return
+     */
+    @PostMapping("/listByProject")
+    public BaseResult listInoutStockGroupByProject(@RequestBody InoutStockSO inoutStockSO) {
+        PageInfo<InoutStock> pageInfo = inoutStockService.listInoutStockGroupByProject(inoutStockSO);
+        return new BaseResult(pageInfo.getList(), pageInfo.getTotal());
+    }
+
+    /**
+     * 工程物资统计
+     * @throws Exception
+     */
+    @GetMapping("/exportInoutStockReportByProject")
+    public void exportInoutStockReport(@RequestParam("project") String project,
+                                       @RequestParam("product") String product,
+                                       @RequestParam("model") String model,
+                                       HttpServletResponse response) throws Exception {
+        // 查询数据
+        InoutStockSO inoutStockSO = getInoutStockSO(null, project, product, model, null, null, null, null);
+        PageInfo<InoutStock> pageInfo = inoutStockService.listInoutStockGroupByProject(inoutStockSO);
+
+        List<ProjectReportTemplate> exportList = new ArrayList<>();
+        if (!CollectionUtils.isEmpty(pageInfo.getList())) {
+            for(int i = 0; i < pageInfo.getList().size(); i++) {
+                InoutStock inoutStock = pageInfo.getList().get(i);
+                ProjectReportTemplate template = new ProjectReportTemplate();
+                BeanUtils.copyProperties(inoutStock, template);
+                template.setNum(String.valueOf(i+1));
+                template.setInCount(inoutStock.getInCount() != null ? String.valueOf(inoutStock.getInCount()) : "");
+                template.setOutCount(inoutStock.getOutCount() != null ? String.valueOf(inoutStock.getOutCount()) : "");
+                exportList.add(template);
+            }
+        }
+        ExcelUtils.exportExcel(exportList, ProjectReportTemplate.class, "工程物资统计", "工程物资统计", response);
+    }
+
 
 }
