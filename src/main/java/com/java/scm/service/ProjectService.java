@@ -2,6 +2,8 @@ package com.java.scm.service;
 
 import com.github.pagehelper.PageInfo;
 import com.java.scm.bean.Project;
+import com.java.scm.bean.ProjectRecord;
+import com.java.scm.bean.so.ProjectRecordSO;
 import com.java.scm.bean.so.ProjectSO;
 
 import java.util.List;
@@ -60,5 +62,27 @@ public interface ProjectService {
      * @return
      */
     List<Project> getProjectByName(List<String> nameList);
+
+    /**
+     * 工程明细列表
+     * @return
+     */
+    PageInfo<ProjectRecord> listProjectRecord(ProjectRecordSO projectRecordSO);
+
+    /**
+     * 获取工程明细详情
+     * @return
+     */
+    ProjectRecord getProjectRecord(String recordId);
+
+    /**
+     * 保存工程明细
+     */
+    void saveProjectRecord(ProjectRecord projectRecord);
+
+    /**
+     * 修改工程明细
+     */
+    void updateProjectRecord(ProjectRecord projectRecord);
 
 }

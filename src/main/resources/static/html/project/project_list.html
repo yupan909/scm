@@ -70,28 +70,28 @@
                     <div class="form-group">
                         <label for="name" class="col-md-3 control-label">工程名称</label>
                         <div class="col-md-9">
-                            <input type="text" class="form-control" id="name" name = "name" placeholder="工程名称" autocomplete="off">
+                            <input type="text" class="form-control" id="name" name="name" placeholder="工程名称">
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label for="content" class="col-md-3 control-label">工程内容</label>
                         <div class="col-md-9">
-                            <textarea class="form-control" id="content" name = "content" placeholder="工程内容"></textarea>
+                            <textarea class="form-control" id="content" name="content" placeholder="工程内容"></textarea>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label for="contractMoney" class="col-md-3 control-label">合同金额</label>
                         <div class="col-md-9">
-                            <textarea class="form-control" id="contractMoney" name = "contractMoney" placeholder="合同金额"></textarea>
+                            <textarea class="form-control" id="contractMoney" name="contractMoney" placeholder="合同金额"></textarea>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label for="finalMoney" class="col-md-3 control-label">结算金额</label>
                         <div class="col-md-9">
-                            <textarea class="form-control" id="finalMoney" name = "finalMoney" placeholder="结算金额"></textarea>
+                            <textarea class="form-control" id="finalMoney" name="finalMoney" placeholder="结算金额"></textarea>
                         </div>
                     </div>
                 </form>
@@ -100,8 +100,8 @@
                 <button type="button" id = "save-close-btn" class="btn btn-default" data-dismiss="modal">关闭</button>
                 <button type="button" class="btn btn-primary" onclick="save()">保存</button>
             </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal -->
+        </div>
+    </div>
 </div>
 
 
@@ -124,28 +124,28 @@
                     <div class="form-group">
                         <label for="name_e" class="col-md-3 control-label">工程名称</label>
                         <div class="col-md-9">
-                            <input type="text" class="form-control" id="name_e" name = "name_e" placeholder="工程名称" autocomplete="off">
+                            <input type="text" class="form-control" id="name_e" name="name_e" placeholder="工程名称">
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label for="content_e" class="col-md-3 control-label">工程内容</label>
                         <div class="col-md-9">
-                            <textarea class="form-control" id="content_e" name = "content_e" placeholder="工程内容"></textarea>
+                            <textarea class="form-control" id="content_e" name="content_e" placeholder="工程内容"></textarea>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label for="contractMoney_e" class="col-md-3 control-label">合同金额</label>
                         <div class="col-md-9">
-                            <textarea class="form-control" id="contractMoney_e" name = "contractMoney_e" placeholder="合同金额"></textarea>
+                            <textarea class="form-control" id="contractMoney_e" name="contractMoney_e" placeholder="合同金额"></textarea>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label for="finalMoney_e" class="col-md-3 control-label">结算金额</label>
                         <div class="col-md-9">
-                            <textarea class="form-control" id="finalMoney_e" name = "finalMoney_e" placeholder="结算金额"></textarea>
+                            <textarea class="form-control" id="finalMoney_e" name="finalMoney_e" placeholder="结算金额"></textarea>
                         </div>
                     </div>
                 </form>
@@ -154,9 +154,208 @@
                 <button type="button" class="btn btn-default" id = "edit-close-btn" data-dismiss="modal">关闭</button>
                 <button type="button" class="btn btn-primary" onclick="editSave()">修改</button>
             </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal -->
+        </div>
+    </div>
 </div>
+
+<!-- 工程明细 -->
+<div class="modal fade" id="detail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width: 75%">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title">
+                    工程流水账
+                </h4>
+            </div>
+            <div class="modal-body">
+
+                <div class="row ">
+                    <div class="col-md-12 queryDIV">
+                        <form class="form-inline">
+                            <input type="hidden" id="projectId" name="projectId">
+                            <div class="form-group col-md-6">
+                                <label for="typeQuery" class="t1">类型</label>
+                                <select class="form-control t2" id="typeQuery" name="typeQuery">
+                                    <option value="">--请选择--</option>
+                                    <option value="0">收入</option>
+                                    <option value="1">支出</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="digestQuery" class="t1">摘要</label>
+                                <input type="text" class="form-control t2" id="digestQuery" name="digestQuery" placeholder="输入要查询的摘要">
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="buttonDIV">
+                                <button type="button" class="btn btn-primary" onclick="loadDetail('1')"><span class="glyphicon glyphicon-search"></span>查询</button>
+                                <button type="reset" class="btn btn-default"><span class="glyphicon glyphicon-trash"></span> 清空</button>
+                                <button type="button" class="btn btn-success" onclick="openDetailSave();"><span class="glyphicon glyphicon-plus"></span> 新增</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 listDIV">
+                        <table class="table table-striped table-bordered table-hover">
+                            <thead style="background-color: #EEEEEE;">
+                            <tr>
+                                <th class="col-md-1">序号</th>
+                                <th class="col-md-1">类型</th>
+                                <th class="col-md-1">日期</th>
+                                <th class="col-md-2">摘要</th>
+                                <th class="col-md-1">金额</th>
+                                <th class="col-md-2">备注</th>
+                                <th class="col-md-1">创建时间</th>
+                                <th class="col-md-1">操作</th>
+                            </tr>
+                            </thead>
+                            <tbody id = "tdetailbody">
+                            </tbody>
+                        </table>
+                        <div id="detailpage" style="float: right;"></div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" id = "detail-close-btn" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 新增工程明细-->
+<div class="modal fade" id="saveDetailModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title">
+                    新增流水账
+                </h4>
+            </div>
+            <div class="modal-body">
+                <form id = "saveDetail-form"  class="form-horizontal" style="margin-right: 10%;">
+                    <div class="form-group">
+                        <label for="type" class="col-md-3 control-label">类型</label>
+                        <div class="col-md-9">
+                            <select class="form-control" id="type" name="type">
+                                <option value="">--请选择--</option>
+                                <option value="0">收入</option>
+                                <option value="1">支出</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="recordDate" class="col-md-3 control-label">日期</label>
+                        <div class="col-md-9">
+                            <input type="text" class="form-control" id="recordDate" name="recordDate" placeholder="日期">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="digest" class="col-md-3 control-label">摘要</label>
+                        <div class="col-md-9">
+                            <textarea class="form-control" id="digest" name="digest" placeholder="摘要">
+                            </textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="money" class="col-md-3 control-label">金额</label>
+                        <div class="col-md-9">
+                            <input type="text" class="form-control" id="money" name="money" placeholder="金额">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="remark" class="col-md-3 control-label">备注</label>
+                        <div class="col-md-9">
+                            <textarea class="form-control" id="remark" name="remark" placeholder="备注">
+                            </textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" id="saveDetail-close-btn" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" onclick="saveDetail()">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 修改工程明细-->
+<div class="modal fade" id="editDetailModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title">
+                    修改流水账
+                </h4>
+            </div>
+            <div class="modal-body">
+                <form id = "editDetail-form"  class="form-horizontal" style="margin-right: 10%;">
+                    <input type="hidden" id="recordId_e" name="recordId_e">
+                    <div class="form-group">
+                        <label for="type_e" class="col-md-3 control-label">类型</label>
+                        <div class="col-md-9">
+                            <select class="form-control" id="type_e" name="type_e">
+                                <option value="">--请选择--</option>
+                                <option value="0">收入</option>
+                                <option value="1">支出</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="recordDate_e" class="col-md-3 control-label">日期</label>
+                        <div class="col-md-9">
+                            <input type="text" class="form-control" id="recordDate_e" name="recordDate_e" placeholder="日期">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="digest_e" class="col-md-3 control-label">摘要</label>
+                        <div class="col-md-9">
+                            <textarea class="form-control" id="digest_e" name="digest_e" placeholder="摘要">
+                            </textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="money_e" class="col-md-3 control-label">金额</label>
+                        <div class="col-md-9">
+                            <input type="text" class="form-control" id="money_e" name="money_e" placeholder="金额">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="remark_e" class="col-md-3 control-label">备注</label>
+                        <div class="col-md-9">
+                            <textarea class="form-control" id="remark_e" name="remark_e" placeholder="备注">
+                            </textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" id="editDetail-close-btn" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" onclick="editDetail()">修改</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script src="../js/project/project_list.js"></script>
 </body>
 </html>

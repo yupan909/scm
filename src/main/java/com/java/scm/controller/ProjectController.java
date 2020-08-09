@@ -2,7 +2,9 @@ package com.java.scm.controller;
 
 import com.github.pagehelper.PageInfo;
 import com.java.scm.bean.Project;
+import com.java.scm.bean.ProjectRecord;
 import com.java.scm.bean.base.BaseResult;
+import com.java.scm.bean.so.ProjectRecordSO;
 import com.java.scm.bean.so.ProjectSO;
 import com.java.scm.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,6 +80,46 @@ public class ProjectController {
     @GetMapping("/stopUsing/{id}")
     public BaseResult stopUsing(@PathVariable("id") String id){
         projectService.stopUsing(id);
+        return BaseResult.successResult();
+    }
+
+    /**
+     * 查询工程明细列表
+     * @return
+     */
+    @PostMapping("/detail")
+    public BaseResult listProjectRecord(@RequestBody ProjectRecordSO projectRecordSO){
+        PageInfo<ProjectRecord> pageInfo = projectService.listProjectRecord(projectRecordSO);
+        return new BaseResult(pageInfo.getList(), pageInfo.getTotal());
+    }
+
+    /**
+     * 获取工程明细详情
+     * @return
+     */
+    @GetMapping("/getDetail/{id}")
+    public BaseResult getProjectRecord(@PathVariable("id") String id){
+        ProjectRecord projectRecord = projectService.getProjectRecord(id);
+        return new BaseResult(projectRecord);
+    }
+
+    /**
+     * 保存工程明细
+     * @return
+     */
+    @PostMapping("/addDetail")
+    public BaseResult saveProjectRecord(@RequestBody ProjectRecord projectRecord){
+        projectService.saveProjectRecord(projectRecord);
+        return BaseResult.successResult();
+    }
+
+    /**
+     * 修改工程明细
+     * @return
+     */
+    @PostMapping("/modifyDetail")
+    public BaseResult updateProjectRecord(@RequestBody ProjectRecord projectRecord){
+        projectService.updateProjectRecord(projectRecord);
         return BaseResult.successResult();
     }
 }

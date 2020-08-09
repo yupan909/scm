@@ -110,7 +110,7 @@ public class StockController {
      * 获取库存变更记录
      * @return
      */
-    @PostMapping("detail")
+    @PostMapping("/detail")
     public BaseResult getChangeDetail(@RequestBody StockRecordSO stockRecordSO){
         PageInfo<StockRecord> pageInfo = stockService.getChangeDetail(stockRecordSO);
         return new BaseResult(pageInfo.getList(), pageInfo.getTotal());

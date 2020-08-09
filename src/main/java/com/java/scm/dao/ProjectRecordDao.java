@@ -2,7 +2,6 @@ package com.java.scm.dao;
 
 import com.github.pagehelper.Page;
 import com.java.scm.bean.ProjectRecord;
-import com.java.scm.bean.StockRecord;
 import com.java.scm.bean.so.ProjectRecordSO;
 import com.java.scm.tk.TkMapper;
 import org.apache.ibatis.annotations.Mapper;
@@ -12,7 +11,7 @@ import org.apache.ibatis.annotations.Mapper;
  * @date 2020/6/28
  */
 @Mapper
-public interface ProjectRecordDao extends TkMapper<StockRecord> {
+public interface ProjectRecordDao extends TkMapper<ProjectRecord> {
 
     /**
      * 工程明细列表

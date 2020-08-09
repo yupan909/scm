@@ -3,10 +3,14 @@ package com.java.scm.service.impl;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageInfo;
 import com.java.scm.bean.Project;
+import com.java.scm.bean.ProjectRecord;
 import com.java.scm.bean.User;
+import com.java.scm.bean.so.ProjectRecordSO;
 import com.java.scm.bean.so.ProjectSO;
 import com.java.scm.config.exception.BusinessException;
 import com.java.scm.dao.ProjectDao;
+import com.java.scm.dao.ProjectRecordDao;
+import com.java.scm.enums.ProjectRecordTypeEnum;
 import com.java.scm.enums.StateEnum;
 import com.java.scm.service.ProjectService;
 import com.java.scm.util.AssertUtils;
@@ -32,6 +36,9 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Autowired
     private ProjectDao projectDao;
+
+    @Autowired
+    private ProjectRecordDao projectRecordDao;
 
     /**
      * 获取工程
@@ -164,4 +171,61 @@ public class ProjectServiceImpl implements ProjectService {
             return true;
         }
     }
+
+    /**
+     * 工程明细列表
+     * @return
+     */
+    @Override
+    public PageInfo<ProjectRecord> listProjectRecord(ProjectRecordSO projectRecordSO){
+        AssertUtils.notNull(projectRecordSO, "工程明细列表参数不能为空");
+        AssertUtils.notNull(projectRecordSO.getProjectId(), "工程id不能为空");
+        Page<ProjectRecord> projectRecordPage = projectRecordDao.listProjectRecord(projectRecordSO);
+        // 类型
+        if (!CollectionUtils.isEmpty(projectRecordPage.toPageInfo().getList())) {
+            projectRecordPage.toPageInfo().getList().forEach(p -> {
+                p.setTypeInfo(ProjectRecordTypeEnum.getEnumByValue(p.getType()));
+            });
+        }
+        return projectRecordPage.toPageInfo();
+    }
+
+    /**
+     * 获取工程明细详情
+     * @return
+     */
+    @Override
+    public ProjectRecord getProjectRecord(String recordId) {
+        AssertUtils.notNull(recordId, "工程明细id不能为空");
+        ProjectRecord record = projectRecordDao.selectByPrimaryKey(recordId);
+        return record;
+    }
+
+    /**
+     * 保存工程明细
+     */
+    @Override
+    public void saveProjectRecord(ProjectRecord projectRecord) {
+        AssertUtils.notNull(projectRecord, "工程明细不能为空");
+        AssertUtils.notNull(projectRecord.getProjectId(), "工程id不能为空");
+        AssertUtils.notNull(projectRecord.getType(), "类型不能为空");
+        AssertUtils.notNull(projectRecord.getRecordDate(), "日期不能为空");
+        AssertUtils.notNull(projectRecord.getMoney(), "金额不能为空");
+        User user = RequestUtil.getCurrentUser();
+        projectRecord.setCreateUserId(user.getId());
+        projectRecordDao.insertSelective(projectRecord);
+    }
+
+    /**
+     * 修改工程明细
+     */
+    @Override
+    public void updateProjectRecord(ProjectRecord projectRecord) {
+        AssertUtils.notNull(projectRecord, "工程明细不能为空");
+        AssertUtils.notNull(projectRecord.getId(), "工程明细id不能为空");
+        User user = RequestUtil.getCurrentUser();
+        projectRecord.setUpdateUserId(user.getId());
+        projectRecordDao.updateByPrimaryKeySelective(projectRecord);
+    }
+
 }
