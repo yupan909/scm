@@ -85,4 +85,9 @@ public interface ProjectService {
      */
     void updateProjectRecord(ProjectRecord projectRecord);
 
+    /**
+     * 删除工程明细
+     */
+    void deleteProjectRecord(String recordId);
+
 }

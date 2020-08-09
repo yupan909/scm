@@ -248,4 +248,13 @@ public class ProjectServiceImpl implements ProjectService {
         projectRecordDao.updateByPrimaryKeySelective(projectRecord);
     }
 
+    /**
+     * 删除工程明细
+     */
+    @Override
+    public void deleteProjectRecord(String recordId) {
+        AssertUtils.notNull(recordId, "工程明细id不能为空");
+        projectRecordDao.deleteByPrimaryKey(recordId);
+    }
+
 }

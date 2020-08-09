@@ -390,7 +390,10 @@ function loadDetail(pageNum){
                         "<td>"+Public.ifNull(item.money)+"</td>"+
                         "<td>"+Public.ifNull(item.remark)+"</td>"+
                         "<td>"+Public.ifNull(item.createTime)+"</td>"+
-                        "<td><button class= \"btn btn-primary btn-xs\" onclick=\"openEditDetail('"+item.id+"');\">修改</button></td>"+
+                        "<td>" +
+                        "<button class= \"btn btn-primary btn-xs\" onclick=\"openEditDetail('"+item.id+"');\">修改</button>" +
+                        "<button class= \"btn btn-danger btn-xs\" onclick=\"deleteDetail('"+item.id+"');\">删除</button> "+
+                        "</td>"+
                         "</tr>";
                 });
                 if(html == ""){
@@ -544,6 +547,28 @@ function editDetail(){
                 Public.alert(2,data.message);
             }
         }
+    });
+}
+
+// 删除工程明细
+function deleteDetail(id) {
+    Public.confirm('您确定要删除吗?', function(){
+        $.ajax({
+            type: "GET",
+            url:"../project/deleteDetail/"+id ,
+            async: false,
+            error: function(request) {
+                Public.alert(2,"请求失败！");
+            },
+            success: function(data) {
+                if(data.flag){
+                    Public.alert(1,"删除成功！");
+                    load(curr);
+                }else{
+                    Public.alert(2,"删除失败！");
+                }
+            }
+        });
     });
 }
 

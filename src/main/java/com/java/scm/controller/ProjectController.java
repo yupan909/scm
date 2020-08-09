@@ -136,6 +136,16 @@ public class ProjectController {
     }
 
     /**
+     * 删除工程明细
+     * @return
+     */
+    @GetMapping("/deleteDetail/{id}")
+    public BaseResult deleteProjectRecord(@PathVariable("id") String id){
+        projectService.deleteProjectRecord(id);
+        return BaseResult.successResult();
+    }
+
+    /**
      * 导出工程明细
      * @throws Exception
      */
