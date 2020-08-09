@@ -417,6 +417,16 @@ function loadDetail(pageNum){
     });
 }
 
+/**
+ * 导出流水账
+ */
+function exportDetailExcel(){
+    var projectId = $("#projectId").val();
+    var type = $("#typeQuery").val();
+    var digest = encodeURI($("#digestQuery").val());
+    window.location.href="../project/exportProjectDetail?projectId="+projectId+"&type="+type+"&digest="+digest;
+}
+
 // 打开新增流水账页面
 function openDetailSave(){
     // 打开模态窗口
@@ -456,6 +466,8 @@ function saveDetail(){
                 Public.closeModal("saveDetailModal");
                 Public.alert(1,"新增成功");
                 loadDetail(1);
+                // 刷新工程列表
+                load(curr);
             }else{
                 Public.alert(2,data.message);
             }
@@ -526,6 +538,8 @@ function editDetail(){
                 Public.closeModal("editDetailModal");
                 Public.alert(1,"修改成功！");
                 loadDetail(detailCnt);
+                // 刷新工程列表
+                load(curr);
             }else{
                 Public.alert(2,data.message);
             }

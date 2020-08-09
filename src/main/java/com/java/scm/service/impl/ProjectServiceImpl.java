@@ -23,6 +23,8 @@ import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * 工程
@@ -107,8 +109,26 @@ public class ProjectServiceImpl implements ProjectService {
         Page<Project> projectPage = projectDao.listProject(projectSO);
         PageInfo<Project> pageInfo = projectPage.toPageInfo();
         if (!CollectionUtils.isEmpty(pageInfo.getList())) {
+            // 获取流水帐统计金额
+            List<String> projectIds = pageInfo.getList().stream().map(p -> p.getId()).collect(Collectors.toList());
+            List<ProjectRecord> projectRecordList = projectRecordDao.getProjectRecordMoney(projectIds);
+
             pageInfo.getList().forEach(p -> {
                 p.setStateInfo(StateEnum.getEnumByValue(p.getState()));
+                // 收入金额
+                Optional<ProjectRecord> optionalProjectRecordIn = projectRecordList.stream().filter(record -> Objects.equals(record.getProjectId(), p.getId()) && Objects.equals(record.getType(), ProjectRecordTypeEnum.收入.getType())).findFirst();
+                if (optionalProjectRecordIn.isPresent()) {
+                    p.setInMoney(optionalProjectRecordIn.get().getMoney());
+                    // 合计金额
+                    p.setSumMoney(p.getInMoney());
+                }
+                // 支出金额
+                Optional<ProjectRecord> optionalProjectRecordOut = projectRecordList.stream().filter(record -> Objects.equals(record.getProjectId(), p.getId()) && Objects.equals(record.getType(), ProjectRecordTypeEnum.支出.getType())).findFirst();
+                if (optionalProjectRecordOut.isPresent()) {
+                    p.setOutMoney(optionalProjectRecordOut.get().getMoney());
+                    // 合计金额
+                    p.setSumMoney(p.getSumMoney() != null ? p.getSumMoney().add(p.getOutMoney()) : p.getOutMoney());
+                }
             });
         }
         return pageInfo;

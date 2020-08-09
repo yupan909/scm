@@ -170,7 +170,7 @@ public class StockController {
                 StockExportTemplate template = new StockExportTemplate();
                 BeanUtils.copyProperties(stock, template);
                 template.setNum(String.valueOf(i+1));
-                template.setCount(String.valueOf(stock.getCount()));
+                template.setCount(stock.getCount() != null ? String.valueOf(stock.getCount()) : "");
                 template.setCreateTime(DateUtils.formatDateTime(stock.getCreateTime()));
                 exportList.add(template);
             }

@@ -5,6 +5,9 @@ import com.java.scm.bean.ProjectRecord;
 import com.java.scm.bean.so.ProjectRecordSO;
 import com.java.scm.tk.TkMapper;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * @author hujunhui
@@ -18,4 +21,10 @@ public interface ProjectRecordDao extends TkMapper<ProjectRecord> {
      * @return
      */
     Page<ProjectRecord> listProjectRecord(ProjectRecordSO projectRecordSO);
+
+    /**
+     * 获取工程明细金额
+     * @return
+     */
+    List<ProjectRecord> getProjectRecordMoney(@Param("projectIds") List<String> projectIds);
 }

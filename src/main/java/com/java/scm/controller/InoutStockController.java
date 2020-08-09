@@ -4,8 +4,8 @@ import com.github.pagehelper.PageInfo;
 import com.java.scm.bean.InoutStock;
 import com.java.scm.bean.base.BaseResult;
 import com.java.scm.bean.excel.InoutStockExportTemplate;
-import com.java.scm.bean.excel.InoutStockReportTemplate;
 import com.java.scm.bean.excel.InoutStockImportTemplate;
+import com.java.scm.bean.excel.InoutStockReportTemplate;
 import com.java.scm.bean.so.InoutStockSO;
 import com.java.scm.config.exception.BusinessException;
 import com.java.scm.enums.InoutStockTypeEnum;
@@ -125,8 +125,8 @@ public class InoutStockController {
                 InoutStockExportTemplate template = new InoutStockExportTemplate();
                 BeanUtils.copyProperties(inoutStock, template);
                 template.setNum(String.valueOf(i+1));
-                template.setCount(String.valueOf(inoutStock.getCount()));
-                template.setPrice(inoutStock.getPrice().toString());
+                template.setCount(inoutStock.getCount() != null ? String.valueOf(inoutStock.getCount()) : "");
+                template.setPrice(inoutStock.getPrice() != null ? inoutStock.getPrice().stripTrailingZeros().toPlainString() : "");
                 template.setCreateTime(DateUtils.formatDateTime(inoutStock.getCreateTime()));
                 exportList.add(template);
             }
@@ -166,8 +166,8 @@ public class InoutStockController {
                 template.setNum(String.valueOf(i+1));
                 template.setType(inoutStock.getTypeText());
                 template.setWarehouse(inoutStock.getWarehouseName());
-                template.setCount(String.valueOf(inoutStock.getCount()));
-                template.setPrice(inoutStock.getPrice().toString());
+                template.setCount(inoutStock.getCount() != null ? String.valueOf(inoutStock.getCount()) : "");
+                template.setPrice(inoutStock.getPrice() != null ? inoutStock.getPrice().stripTrailingZeros().toPlainString() : "");
                 template.setCreateTime(DateUtils.formatDateTime(inoutStock.getCreateTime()));
                 exportList.add(template);
             }

@@ -29,4 +29,17 @@
     order by pr.create_time desc
   </select>
 
+  <select id="getProjectRecordMoney" resultType="com.java.scm.bean.ProjectRecord">
+    SELECT
+    project_id as projectId,
+    type,
+    sum(money) as money
+    FROM project_record
+    where project_id in
+    <foreach collection="projectIds" item="item" index="index" open="(" separator="," close=")">
+      #{item}
+    </foreach>
+    group by project_id, type
+  </select>
+
 </mapper>
