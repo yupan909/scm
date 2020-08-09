@@ -129,4 +129,18 @@ public class InoutStock {
      */
     @Transient
     private String createUser;
+
+    /**
+     * 入库数量（工程物资统计）
+     */
+    @Transient
+    private Integer inCount;
+
+    /**
+     * 出库数量（工程物资统计）
+     */
+    @Transient
+    private Integer outCount;
+
+
 }

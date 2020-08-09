@@ -21,8 +21,8 @@
     ios.type,
     ios.create_time as createTime
     FROM inout_stock ios
-    INNER JOIN stock s on ios.stock_id = s.id and ios.warehouse_id = s.warehouse_id
-    LEFT JOIN project p on ios.project_id = p.id
+    INNER JOIN stock s on ios.stock_id = s.id
+    INNER JOIN project p on ios.project_id = p.id
     LEFT JOIN warehouse w ON ios.warehouse_id = w.id
     <where>
       <if test="warehouseId != null and warehouseId != ''">
@@ -51,6 +51,39 @@
       </if>
     </where>
     order by ios.create_time desc
+  </select>
+
+  <select id="listInoutStockGroupbyProject" resultType="com.java.scm.bean.InoutStock">
+    SELECT
+    p.name as project,
+    s.product,
+    s.model,
+    s.unit,
+    (
+     select c.count from
+        (select project_id, stock_id, type, sum(count) as count from inout_stock group by project_id, stock_id, type) c
+	 where c.project_id = ios.project_id and c.stock_id = ios.stock_id and c.type = 0
+	) as inCount,
+	(
+	 select c.count from
+	    (select project_id, stock_id, type, sum(count) as count from inout_stock group by project_id, stock_id, type) c
+	 where c.project_id = ios.project_id and c.stock_id = ios.stock_id and c.type = 1
+	 ) as outCount
+    FROM (select project_id, stock_id from inout_stock group by project_id, stock_id) ios
+    INNER JOIN stock s on ios.stock_id = s.id
+    INNER JOIN project p on ios.project_id = p.id
+    <where>
+      <if test="project != null and project != '' ">
+        AND p.name LIKE CONCAT('%', #{project}, '%')
+      </if>
+      <if test="product != null and product != ''">
+        AND s.product LIKE CONCAT('%', #{product}, '%')
+      </if>
+      <if test="model != null and model != ''">
+        AND s.model LIKE CONCAT('%', #{model}, '%')
+      </if>
+    </where>
+    order by p.name, s.product
   </select>
 
 </mapper>

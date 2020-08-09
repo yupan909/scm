@@ -20,4 +20,10 @@ public interface InoutStockMapper extends TkMapper<InoutStock> {
      * @return
      */
     Page<InoutStock> listInoutStock(InoutStockSO inoutStockSO);
+
+    /**
+     * 工程出入库统计
+     * @return
+     */
+    Page<InoutStock> listInoutStockGroupbyProject(InoutStockSO inoutStockSO);
 }
