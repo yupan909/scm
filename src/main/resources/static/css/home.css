@@ -149,17 +149,20 @@ body {
     padding-bottom: 15px;
 }
 
-.titleDIV { /*标题*/
-    margin-top: 15px;
-    font-size: 18px;
-    line-height: 30px;
+.headDIV{
     border-bottom: 1px solid #e5e5e5;
+    padding-top: 10px;
+    margin-left: -15px;
+    margin-right: -15px;
+}
+
+.titleDIV { /*标题*/
+    font-size: 18px;
+    line-height: 40px;
 }
 
 .optionDIV {
-    margin-top: 10px;
-    margin-left: -15px;
-    margin-right: -15px;
+    text-align: right;
 }
 
 .title2DIV { /*标题2级*/
