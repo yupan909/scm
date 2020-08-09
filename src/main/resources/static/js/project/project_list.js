@@ -391,7 +391,7 @@ function loadDetail(pageNum){
                         "<td>"+Public.ifNull(item.remark)+"</td>"+
                         "<td>"+Public.ifNull(item.createTime)+"</td>"+
                         "<td>" +
-                        "<button class= \"btn btn-primary btn-xs\" onclick=\"openEditDetail('"+item.id+"');\">修改</button>" +
+                        "<button class= \"btn btn-primary btn-xs\" onclick=\"openEditDetail('"+item.id+"');\">修改</button> " +
                         "<button class= \"btn btn-danger btn-xs\" onclick=\"deleteDetail('"+item.id+"');\">删除</button> "+
                         "</td>"+
                         "</tr>";
@@ -563,6 +563,8 @@ function deleteDetail(id) {
             success: function(data) {
                 if(data.flag){
                     Public.alert(1,"删除成功！");
+                    loadDetail(detailCnt);
+                    // 刷新工程列表
                     load(curr);
                 }else{
                     Public.alert(2,"删除失败！");
