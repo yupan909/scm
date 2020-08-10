@@ -15,6 +15,9 @@
       <if test="name != null and name != ''">
         AND p.name LIKE CONCAT('%', #{name}, '%')
       </if>
+      <if test="state != null">
+        AND p.state = #{state}
+      </if>
     </where>
     order by p.create_time desc
   </select>

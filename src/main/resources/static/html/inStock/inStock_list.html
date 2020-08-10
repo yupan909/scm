@@ -135,17 +135,20 @@
                 <div class="modal-body">
                     <form id = "save-form"  class="form-horizontal" style="margin-right: 10%;">
 
-                        <div class="form-group">
+                        <div class="form-group layui-form" lay-filter="projectForm">
                             <label for="project" class="col-md-3 control-label">工程名称</label>
                             <div class="col-md-9">
-                                <input type="text" class="form-control" id="project" name="project" placeholder="工程名称">
+                                <select class="form-control" id="project" name="project" lay-filter="projectSelect" lay-search="">
+                                </select>
                             </div>
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-group layui-form" lay-filter="productForm">
                             <label for="product" class="col-md-3 control-label">物资名称</label>
                             <div class="col-md-9">
-                                <input type="text" class="form-control" id="product" name="product" placeholder="物资名称">
+                                <input type="hidden" id="productHidden" name="productHidden">
+                                <select class="form-control" id="product" name="product" lay-filter="productSelect" lay-search="">
+                                </select>
                             </div>
                         </div>
 

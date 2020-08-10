@@ -19,4 +19,9 @@ public class ProjectSO extends PageCondition {
      */
     private String name;
 
+    /**
+     * 状态 0：启用 1：禁用
+     */
+    private Byte state;
+
 }

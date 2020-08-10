@@ -300,6 +300,75 @@ var Public = {
 						for(var i=0; i<arr.length ; i++){
 							$("#" + arr[i]).html(html);
 						}
+					} else {
+						Public.alert(2, data.message);
+					}
+				}
+			});
+		},
+
+	    // 加载工程选择框
+		initProjectSelect:function(obj, formLayFilter){
+			$.ajax({
+				url: "../project/list",
+				dataType: "json",
+				type: "POST",
+				data: JSON.stringify({"state":0}),
+				success: function (data) {
+					var html = '<option value="">直接选择或搜索选择</option>';;
+					if (data.flag == true) {
+						$.each(data.data, function (i, item) {
+							html += '<option value="' + item.name + '">' + item.name + '</option>';
+						});
+						$("#" + obj).html(html);
+
+						// 刷新select选择框渲染
+						layui.form.render('select', formLayFilter);
+					} else {
+						Public.alert(2,data.message);
+					}
+				}
+			});
+		},
+
+		// 加载物资选择框
+		initProductSelect:function(obj, formLayFilter, selectLayFilter){
+			$.ajax({
+				url: "../stock/list",
+				dataType: "json",
+				type: "POST",
+				data: JSON.stringify({"warehouseId":null}),
+				success: function (data) {
+					var html = '<option value="">直接选择或搜索选择</option>';
+					if (data.flag == true) {
+						var splitVal = "||";
+						$.each(data.data, function (i, item) {
+							html += '<option value="'+ item.product + splitVal + item.model + splitVal + item.unit +'">'+ item.product + '【' + item.model + '】'+'</option>';
+						});
+						$("#" + obj).html(html);
+
+						// 刷新select选择框渲染
+						layui.form.render('select', formLayFilter);
+
+						// 监听select选择
+						layui.form.on('select('+selectLayFilter+')', function(data){
+							if(data.value){
+								var arr = data.value.split(splitVal);
+								if (arr.length>0) {
+									$("#productHidden").val(arr[0]);
+								}
+								if (arr.length>1) {
+									$("#model").val(arr[1]);
+								}
+								if (arr.length>2) {
+									$("#unit").val(arr[2]);
+								}
+							} else {
+								$("#productHidden").val("");
+							}
+						});
+					} else {
+						Public.alert(2,data.message);
 					}
 				}
 			});

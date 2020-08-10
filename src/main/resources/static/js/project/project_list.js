@@ -29,7 +29,7 @@ $(function(){
 function load(pageNum){
     var name = $("#nameQuery").val();
     $.ajax({
-        url: "../project/list?name="+name+"&pageNum="+pageNum+"&pageSize="+pageSize,
+        url: "../project/list",
         dataType: "json",
         type: "POST",
         data: JSON.stringify({ "pageNum":pageNum,
