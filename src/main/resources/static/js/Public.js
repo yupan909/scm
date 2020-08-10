@@ -409,6 +409,21 @@ var Public = {
 				return "";
 			}
 			return value;
-		}
+		},
 
+	    // 判断是否为空
+		isEmpty: function(val) {
+			if (val == null || val == "") {
+				return true;
+			}
+			return false;
+		},
+
+		// 判断是否超过指定长度
+		isMaxLen: function(val, len) {
+			if (!Public.isEmpty(val) && val.length > len) {
+				return true;
+			}
+			return false;
+		}
 }

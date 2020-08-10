@@ -172,7 +172,6 @@ function openSave(){
 
     // 加载工程选择框
     Public.initProjectSelect("project", "projectForm");
-
     // 加载物资选择框
     Public.initProductSelect("product", "productForm", "productSelect");
 }
@@ -194,6 +193,27 @@ function save(){
     var source = $("#source").val();
     var handle = $("#handle").val();
     var remark = $("#remark").val();
+
+    // 验证工程名称
+    if (Public.isEmpty(project)) {
+        Public.alert(2, "请输入工程名称");
+        return;
+    }
+    if (Public.isMaxLen(project, 50)) {
+        Public.alert(2, "工程名称不能超过50个字符");
+        return;
+    }
+
+    // 验证物资名称
+    if (Public.isEmpty(product)) {
+        Public.alert(2, "请输入物资名称");
+        return;
+    }
+    if (Public.isMaxLen(product, 50)) {
+        Public.alert(2, "物资名称不能超过50个字符");
+        return;
+    }
+
     $.ajax({
         url: "../inoutStock/save",
         type: "POST",

@@ -167,6 +167,11 @@ function openSave(){
     Public.resetValidate("save-form");
     // 添加校验
     validate();
+
+    // 加载工程选择框
+    Public.initProjectSelect("project", "projectForm");
+    // 加载物资选择框
+    Public.initProductSelect("product", "productForm", "productSelect");
 }
 
 /**
@@ -178,7 +183,7 @@ function save(){
         return;
     }
     var project = $("#project").val();
-    var product = $("#product").val();
+    var product = $("#productHidden").val();
     var model = $("#model").val();
     var unit = $("#unit").val();
     var count = $("#count").val();
@@ -186,6 +191,26 @@ function save(){
     var source = $("#source").val();
     var handle = $("#handle").val();
     var remark = $("#remark").val();
+
+    // 验证工程名称
+    if (Public.isEmpty(project)) {
+        Public.alert(2, "请输入工程名称");
+        return;
+    }
+    if (Public.isMaxLen(project, 50)) {
+        Public.alert(2, "工程名称不能超过50个字符");
+        return;
+    }
+
+    // 验证物资名称
+    if (Public.isEmpty(product)) {
+        Public.alert(2, "请输入物资名称");
+        return;
+    }
+    if (Public.isMaxLen(product, 50)) {
+        Public.alert(2, "物资名称不能超过50个字符");
+        return;
+    }
     $.ajax({
         url: "../inoutStock/save",
         type: "POST",
@@ -229,18 +254,18 @@ function validate(){
         },
         live : 'enabled', //enabled代表当表单控件内容发生变化时就触发验证，默认提交时验证，
         fields: {
-            project: {
-                validators: {
-                    notEmpty: {message: '请输入工程名称'},
-                    stringLength: { max: 50, message: '不能超过50个字符'}
-                }
-            },
-            product: {
-                validators: {
-                    notEmpty: {message: '请输入物资名称'},
-                    stringLength: { max: 50, message: '不能超过50个字符'}
-                }
-            },
+            // project: {
+            //     validators: {
+            //         notEmpty: {message: '请输入工程名称'},
+            //         stringLength: { max: 50, message: '不能超过50个字符'}
+            //     }
+            // },
+            // product: {
+            //     validators: {
+            //         notEmpty: {message: '请输入物资名称'},
+            //         stringLength: { max: 50, message: '不能超过50个字符'}
+            //     }
+            // },
             model: {
                 validators: {
                     notEmpty: {message: '请输入物资型号'},
