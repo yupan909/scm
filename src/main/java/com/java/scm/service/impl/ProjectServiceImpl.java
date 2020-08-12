@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import tk.mybatis.mapper.entity.Example;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -127,7 +128,7 @@ public class ProjectServiceImpl implements ProjectService {
                 if (optionalProjectRecordOut.isPresent()) {
                     p.setOutMoney(optionalProjectRecordOut.get().getMoney());
                     // 合计金额
-                    p.setSumMoney(p.getSumMoney() != null ? p.getSumMoney().add(p.getOutMoney()) : p.getOutMoney());
+                    p.setSumMoney(p.getSumMoney() != null ? p.getSumMoney().subtract(p.getOutMoney()) : p.getOutMoney().multiply(new BigDecimal("-1")));
                 }
             });
         }
