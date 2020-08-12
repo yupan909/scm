@@ -110,7 +110,7 @@ public class InoutStockController {
                                        @RequestParam("project") String project,
                                        @RequestParam("product") String product,
                                        @RequestParam("model") String model,
-                                       @RequestParam("source") String source,
+                                       @RequestParam(value = "source", required = false) String source,
                                        @RequestParam("startTime") String startTime,
                                        @RequestParam("endTime") String endTime,
                                        HttpServletResponse response) throws Exception {
