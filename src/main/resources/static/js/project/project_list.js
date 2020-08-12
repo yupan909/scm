@@ -22,6 +22,17 @@ $(function(){
     load(curr);
     // 表单校验
     validate();
+
+    // 流水账表单校验
+    validateDetail();
+
+    //流水账日期
+    layui.laydate.render({
+        elem: '#recordDate'
+    });
+    layui.laydate.render({
+        elem: '#recordDate_e'
+    });
 });
 
 
@@ -359,17 +370,6 @@ function detail(id){
 
     $("#projectId").val(id);
     loadDetail(detailCnt);
-
-    // 添加校验
-    validateDetail();
-
-    //日期
-    layui.laydate.render({
-        elem: '#recordDate'
-    });
-    layui.laydate.render({
-        elem: '#recordDate_e'
-    });
 }
 
 function loadDetail(pageNum){
