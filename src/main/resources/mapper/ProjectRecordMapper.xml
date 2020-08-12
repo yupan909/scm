@@ -10,6 +10,7 @@
     pr.record_date as recordDate,
     pr.digest,
     pr.money,
+    pr.handle,
     pr.remark,
     pr.create_time as createTime,
     pr.create_user_id as createUserId

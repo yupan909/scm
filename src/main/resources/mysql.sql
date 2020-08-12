@@ -45,6 +45,7 @@ CREATE TABLE `scm`.`project_record`(
   `record_date` varchar(50) DEFAULT NULL COMMENT '日期',
   `digest` varchar(500) DEFAULT NULL COMMENT '摘要',
   `money` decimal(14,2) DEFAULT 0 COMMENT '金额',
+  `handle` varchar(50) DEFAULT NULL COMMENT '经手人',
   `remark` varchar(500) DEFAULT NULL COMMENT '备注',
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `create_user_id` varchar(32) DEFAULT NULL COMMENT '创建人id',

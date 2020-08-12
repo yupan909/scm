@@ -61,6 +61,11 @@ public class ProjectRecord {
     private BigDecimal money;
 
     /**
+     * 经手人
+     */
+    private String handle;
+
+    /**
      * 备注
      */
     private String remark;

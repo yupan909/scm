@@ -362,6 +362,14 @@ function detail(id){
 
     // 添加校验
     validateDetail();
+
+    //日期
+    layui.laydate.render({
+        elem: '#recordDate'
+    });
+    layui.laydate.render({
+        elem: '#recordDate_e'
+    });
 }
 
 function loadDetail(pageNum){
@@ -388,6 +396,7 @@ function loadDetail(pageNum){
                         "<td>"+Public.ifNull(item.recordDate)+"</td>"+
                         "<td>"+Public.ifNull(item.digest)+"</td>"+
                         "<td>"+Public.ifNull(item.money)+"</td>"+
+                        "<td>"+Public.ifNull(item.handle)+"</td>"+
                         "<td>"+Public.ifNull(item.remark)+"</td>"+
                         "<td>"+Public.ifNull(item.createTime)+"</td>"+
                         "<td>" +
@@ -397,7 +406,7 @@ function loadDetail(pageNum){
                         "</tr>";
                 });
                 if(html == ""){
-                    html = "<tr><td colspan=\"8\">暂无数据</td></tr>";
+                    html = "<tr><td colspan=\"9\">暂无数据</td></tr>";
                 }
                 $("#tdetailbody").html(html);
                 // 分页
@@ -451,6 +460,7 @@ function saveDetail(){
     var recordDate = $("#recordDate").val();
     var digest = $("#digest").val();
     var money = $("#money").val();
+    var handle = $("#handle").val();
     var remark = $("#remark").val();
     $.ajax({
         url: "../project/addDetail",
@@ -461,6 +471,7 @@ function saveDetail(){
             "recordDate":recordDate,
             "digest":digest,
             "money":money,
+            "handle":handle,
             "remark":remark
         }),
         async: false,
@@ -504,6 +515,7 @@ function loadDetailOne(id){
                 $("#recordDate_e").val(data.data.recordDate);
                 $("#digest_e").val(data.data.digest);
                 $("#money_e").val(data.data.money);
+                $("#handle_e").val(data.data.handle);
                 $("#remark_e").val(data.data.remark);
             }else{
                 Public.alert(2,data.message);
@@ -523,6 +535,7 @@ function editDetail(){
     var recordDate = $("#recordDate_e").val();
     var digest = $("#digest_e").val();
     var money = $("#money_e").val();
+    var handle = $("#handle_e").val();
     var remark = $("#remark_e").val();
     $.ajax({
         url: "../project/modifyDetail",
@@ -533,6 +546,7 @@ function editDetail(){
             "recordDate":recordDate,
             "digest":digest,
             "money":money,
+            "handle":handle,
             "remark":remark
         }),
         async: false,
@@ -611,6 +625,11 @@ function validateDetail(){
                     }
                 }
             },
+            handle: {
+                validators: {
+                    stringLength: { max: 50, message: '不能超过50个字符'}
+                }
+            },
             remark: {
                 validators: {
                     stringLength: { max: 500, message: '不能超过500个字符'}
@@ -652,6 +671,11 @@ function validateDetail(){
                         regexp: /((^[1-9]\d*)|^0)(\.\d{0,2}){0,1}$/,  //正则规则用两个/包裹起来
                         message: '请输入正确的金额'
                     }
+                }
+            },
+            handle_e: {
+                validators: {
+                    stringLength: { max: 50, message: '不能超过50个字符'}
                 }
             },
             remark_e: {
