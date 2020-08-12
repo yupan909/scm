@@ -34,7 +34,6 @@ function load(pageNum){
     var project = $("#projectQuery").val();
     var product = $("#productQuery").val();
     var model = $("#modelQuery").val();
-    var source = $("#sourceQuery").val();
     var startDate = $("#startDateQuery").val();
     var endDate = $("#endDateQuery").val();
 	$.ajax({
@@ -48,7 +47,6 @@ function load(pageNum){
         		"project":project,
         		"product":product,
                 "model":model,
-                "source":source,
         		"startTime":startDate,
         		"endTime":endDate
         		}),
@@ -63,15 +61,13 @@ function load(pageNum){
                             "<td>"+Public.ifNull(item.model)+"</td>"+
                             "<td>"+Public.ifNull(item.unit)+"</td>"+
                             "<td>"+Public.ifNull(item.count)+"</td>"+
-                            "<td>"+Public.ifNull(item.price)+"</td>"+
-                            "<td>"+Public.ifNull(item.source)+"</td>"+
                             "<td>"+Public.ifNull(item.handle)+"</td>"+
                             "<td>"+Public.ifNull(item.remark)+"</td>"+
                             "<td>"+Public.ifNull(item.createTime)+"</td>"+
                             "</tr>";
                 });
                 if(html == ""){
-                    html = "<tr><td colspan=\"11\">暂无数据</td></tr>";
+                    html = "<tr><td colspan=\"9\">暂无数据</td></tr>";
                 }
                 $("#tbody").html(html);
                 // 分页
@@ -151,10 +147,9 @@ function exportExcel(){
     var project = encodeURI($("#projectQuery").val());
     var product = encodeURI($("#productQuery").val());
     var model = encodeURI($("#modelQuery").val());
-    var source = encodeURI($("#sourceQuery").val());
     var startDate = $("#startDateQuery").val();
     var endDate = $("#endDateQuery").val();
-    window.location.href="../inoutStock/exportInoutStock?type="+stockType+"&project="+project+"&product="+product+"&model="+model+"&source="+source+"&startTime="+startDate+"&endTime="+endDate;
+    window.location.href="../inoutStock/exportInoutStock?type="+stockType+"&project="+project+"&product="+product+"&model="+model+"&startTime="+startDate+"&endTime="+endDate;
 }
 
 /**
@@ -187,8 +182,6 @@ function save(){
     var model = $("#model").val();
     var unit = $("#unit").val();
     var count = $("#count").val();
-    var price = $("#price").val();
-    var source = $("#source").val();
     var handle = $("#handle").val();
     var remark = $("#remark").val();
 
@@ -223,8 +216,6 @@ function save(){
             "model":model,
             "unit":unit,
             "count":count,
-            "price":price,
-            "source":source,
             "handle":handle,
             "remark":remark
         }),
@@ -286,22 +277,6 @@ function validate(){
                         regexp: /((^[1-9]\d*)|^0)$/,  //正则规则用两个/包裹起来
                         message: '请输入正确的数量'
                     }
-                }
-            },
-            price: {
-                validators: {
-                    notEmpty: {message: '请输入物资单价'},
-                    stringLength: { max: 10, message: '不能超过11个字符'},
-                    regexp:{
-                        regexp: /((^[1-9]\d*)|^0)(\.\d{0,2}){0,1}$/,  //正则规则用两个/包裹起来
-                        message: '请输入正确的物资单价'
-                    }
-                }
-            },
-            source: {
-                validators: {
-                    notEmpty: {message: '请输入物资来源'},
-                    stringLength: { max: 50, message: '不能超过50个字符'}
                 }
             },
             handle: {

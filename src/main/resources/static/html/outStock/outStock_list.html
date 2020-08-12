@@ -27,26 +27,22 @@
             <div class="row">
                 <div class="col-md-12 queryDIV">
                     <form class="form-inline">
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-md-6">
                             <label for="projectQuery" class="t1">工程名称</label>
                             <input type="text" class="form-control t2" id="projectQuery" placeholder="输入要查询的工程名称">
                         </div>
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-md-6">
                             <label for="productQuery" class="t1">物资名称</label>
                             <input type="text" class="form-control t2" id="productQuery" placeholder="输入要查询的物资名称">
-                        </div>
-                        <div class="form-group col-md-4">
-                            <label for="modelQuery" class="t1">物资型号</label>
-                            <input type="text" class="form-control t2" id="modelQuery" placeholder="输入要查询的物资型号">
                         </div>
 
                         <div class="clearfix"></div>
 
-                        <div class="form-group col-md-4">
-                            <label for="sourceQuery" class="t1">物资来源</label>
-                            <input type="text" class="form-control t2" id="sourceQuery" placeholder="输入要查询的物资来源">
+                        <div class="form-group col-md-6">
+                            <label for="modelQuery" class="t1">物资型号</label>
+                            <input type="text" class="form-control t2" id="modelQuery" placeholder="输入要查询的物资型号">
                         </div>
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-md-6">
                             <label class="t1">出库时间</label>
                             <input type="text" class="form-control date-Input" id="startDateQuery" name="startDateQuery" placeholder="开始时间" readonly="readonly">
                             至 <input type="text" class="form-control date-Input" id="endDateQuery" name="endDateQuery" placeholder="结束时间" readonly="readonly">
@@ -67,13 +63,11 @@
                         <thead>
                             <tr>
                                 <th class="col-md-1">序号</th>
-                                <th class="col-md-2">工程名称</th>
-                                <th class="col-md-1">物资名称</th>
+                                <th class="col-md-3">工程名称</th>
+                                <th class="col-md-2">物资名称</th>
                                 <th class="col-md-1">物资型号</th>
                                 <th class="col-md-1">单位</th>
                                 <th class="col-md-1">数量</th>
-                                <th class="col-md-1">物资单价</th>
-                                <th class="col-md-1">物资来源</th>
                                 <th class="col-md-1">经手人</th>
                                 <th class="col-md-1">备注</th>
                                 <th class="col-md-1">出库时间</th>
@@ -169,20 +163,6 @@
                             <label for="count" class="col-md-3 control-label">数量</label>
                             <div class="col-md-9">
                                 <input type="text" class="form-control" id="count" name="count" placeholder="数量">
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="price" class="col-md-3 control-label">物资单价（元）</label>
-                            <div class="col-md-9">
-                                <input type="text" class="form-control" id="price" name="price" placeholder="物资单价">
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="source" class="col-md-3 control-label">物资来源</label>
-                            <div class="col-md-9">
-                                <input type="text" class="form-control" id="source" name="source" placeholder="物资来源">
                             </div>
                         </div>
 

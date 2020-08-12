@@ -6,7 +6,7 @@ import com.java.scm.bean.InoutStock;
 import com.java.scm.bean.Project;
 import com.java.scm.bean.Stock;
 import com.java.scm.bean.User;
-import com.java.scm.bean.excel.InoutStockImportTemplate;
+import com.java.scm.bean.excel.InStockImportTemplate;
 import com.java.scm.bean.so.InoutStockSO;
 import com.java.scm.config.exception.BusinessException;
 import com.java.scm.dao.InoutStockMapper;
@@ -72,7 +72,7 @@ public class InoutStockServiceImpl implements InoutStockService {
      */
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void importInoutStock(List<InoutStockImportTemplate> importList, Byte inoutStockType) {
+    public void importInoutStock(List<InStockImportTemplate> importList, Byte inoutStockType) {
         if (CollectionUtils.isEmpty(importList)) {
             throw new BusinessException("导入excel数据为空！");
         }
@@ -108,11 +108,14 @@ public class InoutStockServiceImpl implements InoutStockService {
             AssertUtils.notEmpty(p.getCount(), "数量不能为空");
             AssertUtils.isInteger(p.getCount(), "数量格式有问题，必须是数字");
             AssertUtils.maxlength(p.getCount(), 11, "数量长度不能超过11");
-            AssertUtils.notEmpty(p.getPrice(), "物资单价不能为空");
-            AssertUtils.isBigDecimal(p.getPrice(), "物资单价格式有问题，必须是数字");
-            AssertUtils.maxlength(p.getPrice(), 11, "物资单价长度不能超过11");
-            AssertUtils.notEmpty(p.getSource(), "物资来源不能为空");
-            AssertUtils.maxlength(p.getSource(), 50, "物资来源长度不能超过50");
+            // 入库才校验物资单价和物资来源
+            if (Objects.equals(inoutStockType, InoutStockTypeEnum.入库.getType())) {
+                AssertUtils.notEmpty(p.getPrice(), "物资单价不能为空");
+                AssertUtils.isBigDecimal(p.getPrice(), "物资单价格式有问题，必须是数字");
+                AssertUtils.maxlength(p.getPrice(), 11, "物资单价长度不能超过11");
+                AssertUtils.notEmpty(p.getSource(), "物资来源不能为空");
+                AssertUtils.maxlength(p.getSource(), 50, "物资来源长度不能超过50");
+            }
             AssertUtils.notEmpty(p.getHandle(), "经手人不能为空");
             AssertUtils.maxlength(p.getHandle(), 50, "经手人长度不能超过50");
             AssertUtils.maxlength(p.getRemark(), 500, "备注长度不能超过50");
@@ -127,7 +130,7 @@ public class InoutStockServiceImpl implements InoutStockService {
 
         // 2、保存出入表
         List<InoutStock> inoutStockList = new ArrayList<>();
-        for (InoutStockImportTemplate template : importList) {
+        for (InStockImportTemplate template : importList) {
             // 判断工程是否存在
             Optional<Project> projectOptional = projectList.stream().filter(p -> Objects.equals(p.getName(), template.getProject())).findFirst();
             if (!projectOptional.isPresent()) {
@@ -151,8 +154,8 @@ public class InoutStockServiceImpl implements InoutStockService {
             inoutStock.setProjectId(projectOptional.get().getId());
             inoutStock.setStockId(stockId);
             inoutStock.setCount(Integer.valueOf(template.getCount()));
-            inoutStock.setPrice(new BigDecimal(template.getPrice()));
-            inoutStock.setSource(template.getSource());
+            inoutStock.setPrice(StringUtil.isNotEmpty(template.getPrice()) ? new BigDecimal(template.getPrice()) : null);
+            inoutStock.setSource(StringUtil.isNotEmpty(template.getSource()) ? template.getSource() : null);
             inoutStock.setHandle(template.getHandle());
             inoutStock.setRemark(template.getRemark());
             inoutStock.setCreateUserId(user.getId());
@@ -189,8 +192,11 @@ public class InoutStockServiceImpl implements InoutStockService {
         AssertUtils.notEmpty(inoutStock.getModel(), "物资型号不能为空！");
         AssertUtils.notEmpty(inoutStock.getUnit(), "单位不能为空！");
         AssertUtils.notNull(inoutStock.getCount(), "数量不能为空！");
-        AssertUtils.notNull(inoutStock.getPrice(), "物资单价不能为空！");
-        AssertUtils.notEmpty(inoutStock.getSource(), "物资来源不能为空！");
+        // 入库才校验物资单价和物资来源
+        if (Objects.equals(inoutStock.getType(), InoutStockTypeEnum.入库.getType())) {
+            AssertUtils.notNull(inoutStock.getPrice(), "物资单价不能为空！");
+            AssertUtils.notEmpty(inoutStock.getSource(), "物资来源不能为空！");
+        }
         AssertUtils.notEmpty(inoutStock.getHandle(), "经手人不能为空！");
 
         // 根据工程名称查询工程

@@ -5,14 +5,14 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * 出入库单模型（导出）
+ * 入库单模型（导出）
  *
  * @author yupan
  * @date 2020-06-25 23:34
  */
 @Getter
 @Setter
-public class InoutStockExportTemplate {
+public class InStockExportTemplate {
 
     @Excel(name = "序号", orderNum = "0")
     private String num;

@@ -2,7 +2,7 @@ package com.java.scm.service;
 
 import com.github.pagehelper.PageInfo;
 import com.java.scm.bean.InoutStock;
-import com.java.scm.bean.excel.InoutStockImportTemplate;
+import com.java.scm.bean.excel.InStockImportTemplate;
 import com.java.scm.bean.so.InoutStockSO;
 
 import java.util.List;
@@ -24,7 +24,7 @@ public interface InoutStockService {
     /**
      * 导入出入库
      */
-    void importInoutStock(List<InoutStockImportTemplate> importList, Byte inoutStockType);
+    void importInoutStock(List<InStockImportTemplate> importList, Byte inoutStockType);
 
     /**
      * 新增出入库

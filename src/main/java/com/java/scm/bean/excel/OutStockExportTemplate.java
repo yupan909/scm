@@ -5,14 +5,14 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * 出入库单模型（导入）
+ * 出库单模型（导出）
  *
  * @author yupan
  * @date 2020-06-25 23:34
  */
 @Getter
 @Setter
-public class InoutStockImportTemplate {
+public class OutStockExportTemplate {
 
     @Excel(name = "序号", orderNum = "0")
     private String num;
@@ -32,16 +32,13 @@ public class InoutStockImportTemplate {
     @Excel(name = "数量", orderNum = "5")
     private String count;
 
-    @Excel(name = "物资单价（元）", orderNum = "6", width = 20.0D)
-    private String price;
-
-    @Excel(name = "物资来源", orderNum = "7", width = 20.0D)
-    private String source;
-
-    @Excel(name = "经手人", orderNum = "8")
+    @Excel(name = "经手人", orderNum = "6")
     private String handle;
 
-    @Excel(name = "备注", orderNum = "9")
+    @Excel(name = "备注", orderNum = "7")
     private String remark;
+
+    @Excel(name = "时间", orderNum = "8",  width = 20.0D)
+    private String createTime;
 
 }

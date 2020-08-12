@@ -3,14 +3,12 @@ package com.java.scm.controller;
 import com.github.pagehelper.PageInfo;
 import com.java.scm.bean.InoutStock;
 import com.java.scm.bean.base.BaseResult;
-import com.java.scm.bean.excel.InoutStockExportTemplate;
-import com.java.scm.bean.excel.InoutStockImportTemplate;
-import com.java.scm.bean.excel.InoutStockReportTemplate;
-import com.java.scm.bean.excel.ProjectReportTemplate;
+import com.java.scm.bean.excel.*;
 import com.java.scm.bean.so.InoutStockSO;
 import com.java.scm.config.exception.BusinessException;
 import com.java.scm.enums.InoutStockTypeEnum;
 import com.java.scm.service.InoutStockService;
+import com.java.scm.util.AssertUtils;
 import com.java.scm.util.DateUtils;
 import com.java.scm.util.RequestUtil;
 import com.java.scm.util.StringUtil;
@@ -69,12 +67,13 @@ public class InoutStockController {
      */
     @PostMapping("/import/{type}")
     public BaseResult importInoutStock(@RequestParam("file")MultipartFile file, @PathVariable("type") Byte type) throws Exception {
+        AssertUtils.notNull(type, "出入库类型不能为空！");
         if (file.getOriginalFilename().indexOf(ExcelTypeEnum.XLS.getValue()) == -1 && file.getOriginalFilename().indexOf(ExcelTypeEnum.XLSX.getValue()) == -1) {
             throw new BusinessException("导入文件类型不正确，只能导入.xls和.xlsx后缀的文件！");
         }
 
         // 获取导入的excel数据
-        List<InoutStockImportTemplate> importList = ExcelUtils.importExcel(file, 1,1, InoutStockImportTemplate.class);
+        List<InStockImportTemplate> importList = ExcelUtils.importExcel(file, 1,1, InStockImportTemplate.class);
         if (CollectionUtils.isEmpty(importList)) {
             throw new BusinessException("导入excel数据为空！");
         }
@@ -94,13 +93,12 @@ public class InoutStockController {
      */
     @GetMapping("/exportTemplate/{type}")
     public void exportTemplate(HttpServletResponse response, @PathVariable("type") Byte type) throws Exception {
-        String title = "入库单";
-        String fileName = "入库单模版";
-        if (Objects.equals(type, InoutStockTypeEnum.出库.getType())) {
-            title = "出库单";
-            fileName = "出库单模版";
+        AssertUtils.notNull(type, "出入库类型不能为空！");
+        if (Objects.equals(type, InoutStockTypeEnum.入库.getType())) {
+            ExcelUtils.exportExcel(new ArrayList<>(), InStockImportTemplate.class, "入库单", "入库单模版", response);
+        } else {
+            ExcelUtils.exportExcel(new ArrayList<>(), OutStockImportTemplate.class, "出库单", "出库单模版", response);
         }
-        ExcelUtils.exportExcel(new ArrayList<>(), InoutStockImportTemplate.class, title, fileName, response);
     }
 
     /**
@@ -116,31 +114,42 @@ public class InoutStockController {
                                        @RequestParam("startTime") String startTime,
                                        @RequestParam("endTime") String endTime,
                                        HttpServletResponse response) throws Exception {
+        AssertUtils.notNull(type, "出入库类型不能为空！");
         // 查询数据
         InoutStockSO inoutStockSO = getInoutStockSO(type, project, product, model, source, startTime, endTime, null);
         PageInfo<InoutStock> pageInfo = inoutStockService.listInoutStock(inoutStockSO);
 
-        List<InoutStockExportTemplate> exportList = new ArrayList<>();
-        if (!CollectionUtils.isEmpty(pageInfo.getList())) {
-            for(int i = 0; i < pageInfo.getList().size(); i++) {
-                InoutStock inoutStock = pageInfo.getList().get(i);
-                InoutStockExportTemplate template = new InoutStockExportTemplate();
-                BeanUtils.copyProperties(inoutStock, template);
-                template.setNum(String.valueOf(i+1));
-                template.setCount(inoutStock.getCount() != null ? String.valueOf(inoutStock.getCount()) : "");
-                template.setPrice(inoutStock.getPrice() != null ? inoutStock.getPrice().stripTrailingZeros().toPlainString() : "");
-                template.setCreateTime(DateUtils.formatDateTime(inoutStock.getCreateTime()));
-                exportList.add(template);
+        if (Objects.equals(type, InoutStockTypeEnum.入库.getType())) {
+            List<InStockExportTemplate> inExportList = new ArrayList<>();
+            if (!CollectionUtils.isEmpty(pageInfo.getList())) {
+                for(int i = 0; i < pageInfo.getList().size(); i++) {
+                    InoutStock inoutStock = pageInfo.getList().get(i);
+                    InStockExportTemplate template = new InStockExportTemplate();
+                    BeanUtils.copyProperties(inoutStock, template);
+                    template.setNum(String.valueOf(i+1));
+                    template.setCount(inoutStock.getCount() != null ? String.valueOf(inoutStock.getCount()) : "");
+                    template.setPrice(inoutStock.getPrice() != null ? inoutStock.getPrice().stripTrailingZeros().toPlainString() : "");
+                    template.setCreateTime(DateUtils.formatDateTime(inoutStock.getCreateTime()));
+                    inExportList.add(template);
+                }
             }
+            ExcelUtils.exportExcel(inExportList, InStockExportTemplate.class, "入库管理", "入库管理", response);
+        } else {
+            List<OutStockExportTemplate> outExportList = new ArrayList<>();
+            if (!CollectionUtils.isEmpty(pageInfo.getList())) {
+                for(int i = 0; i < pageInfo.getList().size(); i++) {
+                    InoutStock inoutStock = pageInfo.getList().get(i);
+                    OutStockExportTemplate template = new OutStockExportTemplate();
+                    BeanUtils.copyProperties(inoutStock, template);
+                    template.setNum(String.valueOf(i+1));
+                    template.setCount(inoutStock.getCount() != null ? String.valueOf(inoutStock.getCount()) : "");
+                    template.setCreateTime(DateUtils.formatDateTime(inoutStock.getCreateTime()));
+                    outExportList.add(template);
+                }
+            }
+            ExcelUtils.exportExcel(outExportList, OutStockExportTemplate.class, "出库管理", "出库管理", response);
         }
-        String fileName = "入库管理";
-        if (Objects.equals(type, InoutStockTypeEnum.出库.getType())) {
-            fileName = "出库管理";
-        }
-        ExcelUtils.exportExcel(exportList, InoutStockExportTemplate.class, fileName, fileName, response);
     }
-
-
 
     /**
      * 导出出入库报表
