@@ -425,5 +425,24 @@ var Public = {
 				return true;
 			}
 			return false;
-		}
+		},
+
+        // 加载角色权限
+        initRoleAuth: function(role){
+            if(role == "0"){
+		        // 普通仓库人员
+                $(".admin").remove();
+                $(".super_admin").remove();
+            }else if(role == "1"){
+                // 仓库管理员
+                $(".normal").remove();
+                $(".super_admin").remove();
+            } else if(role == "2") {
+                // 超级管理员
+                $(".normal").remove();
+                $(".admin").remove();
+            } else {
+                Public.alert(2, "加载角色权限失败！");
+            }
+        }
 }

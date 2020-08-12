@@ -4,7 +4,6 @@ import com.github.pagehelper.PageInfo;
 import com.java.scm.bean.User;
 import com.java.scm.bean.base.BaseResult;
 import com.java.scm.bean.so.UserSO;
-import com.java.scm.config.aop.anno.AdminRight;
 import com.java.scm.enums.CommonConsts;
 import com.java.scm.service.UserService;
 import com.java.scm.util.RequestUtil;
@@ -56,7 +55,6 @@ public class UserController {
      * @return
      */
     @PostMapping("/add")
-    @AdminRight
     public BaseResult addUser(@RequestBody User user){
         userService.addUser(user);
         return BaseResult.successResult();
@@ -68,7 +66,6 @@ public class UserController {
      * @return
      */
     @PostMapping("/modify")
-    @AdminRight
     public BaseResult modifyUser(@RequestBody User user){
         userService.modifyUser(user);
         return BaseResult.successResult();
@@ -79,7 +76,6 @@ public class UserController {
      * @return
      */
     @GetMapping("/stopUsing/{id}")
-    @AdminRight
     public BaseResult stopUsing(@PathVariable("id") String id){
         userService.stopUsing(id);
         return BaseResult.successResult();
@@ -91,7 +87,6 @@ public class UserController {
      * @return
      */
     @GetMapping("/delete/{id}")
-    @AdminRight
     public BaseResult deleteUser(@PathVariable("id") String id){
         userService.deleteUser(id);
         return BaseResult.successResult();
@@ -112,7 +107,6 @@ public class UserController {
      * @return
      */
     @GetMapping("/resetPassword/{id}")
-    @AdminRight
     public BaseResult resetPassword(@PathVariable("id") String id){
          userService.updatePassword(id, CommonConsts.RESET_PASSWORD);
         return BaseResult.successResult();
@@ -123,7 +117,6 @@ public class UserController {
      * @return
      */
     @PostMapping("/list")
-    @AdminRight
     public BaseResult list(@RequestBody UserSO userSO){
         PageInfo<User> pageInfo = userService.list(userSO);
         return new BaseResult(pageInfo.getList(), pageInfo.getTotal());

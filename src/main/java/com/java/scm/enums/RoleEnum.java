@@ -13,7 +13,8 @@ import java.util.stream.Collectors;
 public enum RoleEnum {
 
     仓库普通人员((byte) 0),
-    仓库管理员((byte) 1);
+    仓库管理员((byte) 1),
+    超级管理员((byte) 2);
 
     private byte type;
 

@@ -15,10 +15,9 @@ var curr = 1;
 var pageSize = 20;
 var user = Public.getCurrentUser();
 $(function(){
-    // 页面权限
-    if(user.role == "0"){
-        $(".admin").remove();
-    }
+    // 加载角色权限
+    Public.initRoleAuth(user.role);
+
     load(curr);
     // 表单校验
     validate();
@@ -53,6 +52,7 @@ function load(pageNum){
                 $.each(data.data, function (i, item) {
                     var handel = "";
                     var money = "";
+                    // 管理员
                     if(user.role == "1"){
                         var stopStyle
                         var stopName ;
@@ -65,7 +65,7 @@ function load(pageNum){
                         }
                         handel = "<td> <button class= \"btn btn-primary btn-xs\" onclick=\"edit('"+item.id+"');\">修改</button> " +
                             "<button class= \"btn btn-primary btn-xs "+stopStyle+"\" onclick=\"stopUsing('"+item.id+"');\">"+stopName+"</button> " +
-                            "<button class= \"btn btn-success btn-xs\" onclick=\"detail('"+item.id+"');\">明细</button></td>";
+                            "<button class= \"btn btn-success btn-xs\" onclick=\"detail('"+item.id+"');\">流水账</button></td>";
 
                         // 金额
                         money = "<td>"+Public.ifNull(item.contractMoney)+"</td>"+

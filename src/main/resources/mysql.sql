@@ -114,7 +114,6 @@ CREATE TABLE `scm`.`file`(
     KEY `idx_business_id` (`business_id`)
 ) COMMENT='上传文件表';
 
-
 -- 初始化数据
-insert into `scm`.`user`(id, name, password, role) values (uuid_short(),'管理员', '123456', 1);
+insert into `scm`.`user`(id, name, password, role) values (uuid_short(),'管理员', '123456', 2);
 insert into `scm`.`warehouse`(id, name) values (uuid_short(), '武汉市东西湖区电力设备安装有限公司'), (uuid_short(), '湖北得力电气有限公司');

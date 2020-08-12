@@ -18,9 +18,8 @@ var curr = 1;
 var pageSize = 20;
 var user = Public.getCurrentUser();
 $(function(){
-    if(user.role == "0"){
-        $(".admin").remove();
-    }
+    // 加载角色权限
+    Public.initRoleAuth(user.role);
     load(curr);
     Public.initWarehouse(new Array("warehouseId", "warehouseId_e", "warehouseIdQuery"));
     // 表单校验
@@ -48,7 +47,8 @@ function load(pageNum){
             if(data.flag){
                 $.each(data.data, function (i, item) {
                     var buttonInfo = "";
-                    if(user.role == "1"){
+                    // 超级管理员
+                    if(user.role == "2"){
                         buttonInfo = "<button class= \"btn btn-primary btn-xs\" onclick=\"edit('"+item.id+"');\">修改物资</button> " +
                             "<button class= \"btn btn-info btn-xs\" onclick=\"editCount('"+item.id+"');\">修改库存</button> "
                     }

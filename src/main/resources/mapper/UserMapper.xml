@@ -17,7 +17,7 @@
     FROM user u
     LEFT JOIN warehouse w ON u.warehouse_id = w.id
     <where>
-      u.name != '管理员'
+      u.role != 2
       <if test="key != null and key != ''">
         AND (u.name LIKE CONCAT('%', #{key}, '%') OR u.mobile LIKE CONCAT('%', #{key} ,'%'))
       </if>

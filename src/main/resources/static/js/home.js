@@ -26,11 +26,9 @@ $(function(){
         success: function(data) {
             if(data.flag){
                 Public.setCurrentUser(data.data);
-                if(data.data.role == "1"){
-                    $(".normal").remove();
-                }else if(data.data.role == "0"){
-                    $(".admin").remove();
-                }
+                // 加载角色权限
+                Public.initRoleAuth(data.data.role);
+                // 回显仓库和用户名
                 $("#currentUserName").html(data.data.name);
                 $("#warehouseName").html(data.data.warehouseName);
             }
