@@ -63,7 +63,7 @@ function load(pageNum){
                             "<td>"+Public.ifNull(item.model)+"</td>"+
                             "<td>"+Public.ifNull(item.unit)+"</td>"+
                             "<td>"+Public.ifNull(item.count)+"</td>"+
-                            "<td>"+Public.ifNull(item.price)+"</td>"+
+                            "<td>"+Public.moenyFormat(item.price)+"</td>"+
                             "<td>"+Public.ifNull(item.source)+"</td>"+
                             "<td>"+Public.ifNull(item.handle)+"</td>"+
                             "<td>"+Public.ifNull(item.remark)+"</td>"+

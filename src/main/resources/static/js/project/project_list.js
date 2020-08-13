@@ -70,11 +70,11 @@ function load(pageNum){
                             "<button class= \"btn btn-success btn-xs\" onclick=\"detail('"+item.id+"');\">流水账</button></td>";
 
                         // 金额
-                        money = "<td>"+Public.ifNull(item.contractMoney)+"</td>"+
-                            "<td>"+Public.ifNull(item.finalMoney)+"</td>"+
-                            "<td>"+Public.ifNull(item.inMoney)+"</td>"+
-                            "<td>"+Public.ifNull(item.outMoney)+"</td>"+
-                            "<td>"+Public.ifNull(item.sumMoney)+"</td>";
+                        money = "<td>"+Public.moenyFormat(item.contractMoney)+"</td>"+
+                            "<td>"+Public.moenyFormat(item.finalMoney)+"</td>"+
+                            "<td>"+Public.moenyFormat(item.inMoney)+"</td>"+
+                            "<td>"+Public.moenyFormat(item.outMoney)+"</td>"+
+                            "<td>"+Public.moenyFormat(item.sumMoney)+"</td>";
                     }
                     html +="<tr>"+
                         "<td>"+(i+1)+"</td>"+
@@ -397,7 +397,7 @@ function loadDetail(pageNum){
                         "<td>"+Public.ifNull(item.typeInfo)+"</td>"+
                         "<td>"+Public.ifNull(item.recordDate)+"</td>"+
                         "<td>"+Public.ifNull(item.digest)+"</td>"+
-                        "<td>"+Public.ifNull(item.money)+"</td>"+
+                        "<td>"+Public.moenyFormat(item.money)+"</td>"+
                         "<td>"+Public.ifNull(item.handle)+"</td>"+
                         "<td>"+Public.ifNull(item.remark)+"</td>"+
                         "<td>"+Public.ifNull(item.createTime)+"</td>"+

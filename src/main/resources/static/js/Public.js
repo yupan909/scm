@@ -403,6 +403,16 @@ var Public = {
 			// document.getElementById("edit-close-btn").click();
 		},
 
+		// 货币格式输出 (1234567.00转换为1,234,567.00)
+		moenyFormat: function(value) {
+			if (value == null) {
+				value = "";
+			}
+			var regExpInfo = /(\d{1,3})(?=(\d{3})+(?:$|\.))/g;
+			var val = value.toString().replace(regExpInfo, "$1,");
+			return val;
+		},
+
 		// null转化为""
 		ifNull: function(value) {
 			if (value == null) {
