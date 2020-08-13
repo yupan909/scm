@@ -47,10 +47,11 @@ function load(pageNum){
                             "<td>"+Public.ifNull(item.unit)+"</td>"+
                             "<td>"+Public.ifNull(item.inCount)+"</td>"+
                             "<td>"+Public.ifNull(item.outCount)+"</td>"+
+                            "<td>"+Public.ifNull(item.sumCount)+"</td>"+
                             "</tr>";
                 });
                 if(html == ""){
-                    html = "<tr><td colspan=\"7\">暂无数据</td></tr>";
+                    html = "<tr><td colspan=\"8\">暂无数据</td></tr>";
                 }
                 $("#tbody").html(html);
                 // 分页

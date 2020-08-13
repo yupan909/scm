@@ -142,5 +142,11 @@ public class InoutStock {
     @Transient
     private Integer outCount;
 
+    /**
+     * 合计数量（工程物资统计）
+     */
+    @Transient
+    private Integer sumCount;
+
 
 }

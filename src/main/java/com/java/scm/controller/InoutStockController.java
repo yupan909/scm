@@ -246,6 +246,7 @@ public class InoutStockController {
                 template.setNum(String.valueOf(i+1));
                 template.setInCount(inoutStock.getInCount() != null ? String.valueOf(inoutStock.getInCount()) : "");
                 template.setOutCount(inoutStock.getOutCount() != null ? String.valueOf(inoutStock.getOutCount()) : "");
+                template.setSumCount(inoutStock.getSumCount() != null ? String.valueOf(inoutStock.getSumCount()) : "");
                 exportList.add(template);
             }
         }

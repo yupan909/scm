@@ -35,4 +35,7 @@ public class ProjectReportTemplate {
     @Excel(name = "出库数量", orderNum = "6")
     private String outCount;
 
+    @Excel(name = "合计数量", orderNum = "7")
+    private String sumCount;
+
 }

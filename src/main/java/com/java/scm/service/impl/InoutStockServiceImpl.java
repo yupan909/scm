@@ -241,6 +241,20 @@ public class InoutStockServiceImpl implements InoutStockService {
     public PageInfo<InoutStock> listInoutStockGroupByProject(InoutStockSO inoutStockSO) {
         Page<InoutStock> inoutStockPage =  inoutStockMapper.listInoutStockGroupByProject(inoutStockSO);
         PageInfo<InoutStock> pageInfo = inoutStockPage.toPageInfo();
+        if (!CollectionUtils.isEmpty(pageInfo.getList())) {
+            pageInfo.getList().forEach(p -> {
+                // 合计数量
+                Integer sumCount = null;
+                if (p.getInCount() != null && p.getOutCount() != null) {
+                    sumCount = p.getInCount() - p.getOutCount();
+                } else if (p.getInCount() != null) {
+                    sumCount = p.getInCount();
+                } else if (p.getOutCount() != null) {
+                    sumCount = p.getInCount() * (-1);
+                }
+                p.setSumCount(sumCount);
+            });
+        }
         return pageInfo;
     }
 

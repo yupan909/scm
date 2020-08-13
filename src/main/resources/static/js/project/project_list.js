@@ -291,7 +291,7 @@ function validate(){
             },
             content: {
                 validators: {
-                    notEmpty: {message: '请输入设计内容'},
+                    notEmpty: {message: '请输入工程内容'},
                     stringLength: { max: 500, message: '不能超过500个字符'}
                 }
             },
@@ -333,7 +333,7 @@ function validate(){
             },
             content_e: {
                 validators: {
-                    notEmpty: {message: '请输入设计内容'},
+                    notEmpty: {message: '请输入工程内容'},
                     stringLength: { max: 500, message: '不能超过500个字符'}
                 }
             },
