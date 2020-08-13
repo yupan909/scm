@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.java.scm.dao.FileMapper">
+
+  <select id="listFile" resultType="com.java.scm.bean.File">
+    SELECT
+    id,
+    name,
+    url,
+    business_id as businessId,
+    create_time as createTime,
+    create_user_id as createUserId
+    FROM file
+    <where>
+      businessId = #{businessId}
+    </where>
+    order by create_time desc
+  </select>
+
+</mapper>

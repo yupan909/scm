@@ -4,8 +4,6 @@ import lombok.*;
 import tk.mybatis.mapper.annotation.KeySql;
 import tk.mybatis.mapper.code.ORDER;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 

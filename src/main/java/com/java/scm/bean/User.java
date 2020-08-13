@@ -5,8 +5,9 @@ import lombok.*;
 import tk.mybatis.mapper.annotation.KeySql;
 import tk.mybatis.mapper.code.ORDER;
 
-import javax.persistence.*;
-import java.io.Serializable;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Transient;
 import java.util.Date;
 
 /**
@@ -21,7 +22,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "user")
-public class User implements Serializable {
+public class User{
 
     /**
      * 用户id

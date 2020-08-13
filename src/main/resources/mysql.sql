@@ -104,15 +104,16 @@ CREATE TABLE `scm`.`inout_stock`(
   KEY `idx_create_time` (`create_time`)
 ) COMMENT='出入库表';
 
--- 上传文件表
+-- 附件表
 CREATE TABLE `scm`.`file`(
     `id` varchar(32) PRIMARY KEY COMMENT '文件id',
     `name` varchar(100) DEFAULT NULL COMMENT '文件名',
+    `url` varchar(100) DEFAULT NULL COMMENT '存储路径',
     `business_id` varchar(32) DEFAULT NULL COMMENT '业务id，用于区分业务类别',
     `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `create_user_id` varchar(32) DEFAULT NULL COMMENT '创建人id',
     KEY `idx_business_id` (`business_id`)
-) COMMENT='上传文件表';
+) COMMENT='附件表';
 
 -- 初始化数据
 insert into `scm`.`user`(id, name, password, role) values (uuid_short(),'管理员', '123456', 2);
