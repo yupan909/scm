@@ -12,12 +12,14 @@ import com.java.scm.dao.ProjectMapper;
 import com.java.scm.dao.ProjectRecordMapper;
 import com.java.scm.enums.ProjectRecordTypeEnum;
 import com.java.scm.enums.StateEnum;
+import com.java.scm.service.FileService;
 import com.java.scm.service.ProjectService;
 import com.java.scm.util.AssertUtils;
 import com.java.scm.util.RequestUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import tk.mybatis.mapper.entity.Example;
 
@@ -42,6 +44,9 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Autowired
     private ProjectRecordMapper projectRecordMapper;
+
+    @Autowired
+    private FileService fileService;
 
     /**
      * 获取工程
@@ -252,10 +257,13 @@ public class ProjectServiceImpl implements ProjectService {
     /**
      * 删除工程明细
      */
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public void deleteProjectRecord(String recordId) {
         AssertUtils.notNull(recordId, "工程明细id不能为空");
         projectRecordMapper.deleteByPrimaryKey(recordId);
+        // 删除附件
+        fileService.deleteFileByBusinessId(recordId);
     }
 
 }

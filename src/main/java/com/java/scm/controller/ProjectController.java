@@ -1,21 +1,27 @@
 package com.java.scm.controller;
 
 import com.github.pagehelper.PageInfo;
+import com.java.scm.bean.File;
 import com.java.scm.bean.Project;
 import com.java.scm.bean.ProjectRecord;
 import com.java.scm.bean.base.BaseResult;
 import com.java.scm.bean.excel.ProjectRecordExportTemplate;
+import com.java.scm.bean.so.FileSO;
 import com.java.scm.bean.so.ProjectRecordSO;
 import com.java.scm.bean.so.ProjectSO;
+import com.java.scm.config.exception.BusinessException;
+import com.java.scm.service.FileService;
 import com.java.scm.service.ProjectService;
 import com.java.scm.util.AssertUtils;
 import com.java.scm.util.DateUtils;
+import com.java.scm.util.FileUtils;
 import com.java.scm.util.StringUtil;
 import com.java.scm.util.excel.ExcelUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.net.URLDecoder;
@@ -34,6 +40,9 @@ public class ProjectController {
 
     @Autowired
     private ProjectService projectService;
+
+    @Autowired
+    private FileService fileService;
 
     /**
      * 查询工程详情
@@ -178,5 +187,58 @@ public class ProjectController {
             }
         }
         ExcelUtils.exportExcel(exportList, ProjectRecordExportTemplate.class, "工程流水账", "工程流水账", response);
+    }
+
+    /**
+     * 获取附件列表
+     * @return
+     */
+    @PostMapping("/listFile")
+    public BaseResult listFile(@RequestBody FileSO fileSO){
+        PageInfo<File> pageInfo = fileService.listFile(fileSO);
+        return new BaseResult(pageInfo.getList(), pageInfo.getTotal());
+    }
+
+    /**
+     * 删除附件
+     * @return
+     */
+    @GetMapping("/deleteFile/{id}")
+    public BaseResult deleteFile(@PathVariable("id") String id){
+        AssertUtils.notEmpty(id, "附件id不能为空！");
+        fileService.deleteFile(id);
+        return BaseResult.successResult();
+    }
+
+    /**
+     * 上传附件
+     */
+    @PostMapping("/upload")
+    public BaseResult upload(@RequestParam("file") MultipartFile file, @RequestParam("businessId") String businessId) throws Exception {
+        AssertUtils.notNull(file, "上传文件不能为空！");
+        AssertUtils.notEmpty(businessId, "业务id不能为空！");
+        // 上传服务器
+        String fileUrl = FileUtils.upload(file);
+        // 保存文件表
+        File filePO = new File();
+        filePO.setName(file.getOriginalFilename());
+        filePO.setUrl(fileUrl);
+        filePO.setBusinessId(businessId);
+        fileService.saveFile(filePO);
+        return BaseResult.successResult();
+    }
+
+    /**
+     * 下载附件
+     */
+    @GetMapping("/download/{id}")
+    public BaseResult downloadFile(@PathVariable("id") String id, HttpServletResponse response) throws Exception {
+        AssertUtils.notEmpty(id, "附件id不能为空！");
+        File file = fileService.getFile(id);
+        if (file == null) {
+            throw new BusinessException("找不到附件！");
+        }
+        FileUtils.download(file.getName(), file.getUrl(), response);
+        return null;
     }
 }
