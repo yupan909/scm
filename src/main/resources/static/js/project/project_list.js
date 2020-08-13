@@ -32,8 +32,10 @@ $(function(){
     layui.laydate.render({
         elem: '#recordDate_e'
     });
-});
 
+    //上传附件绑定
+    initUpload();
+});
 
 // 列表
 function load(pageNum){
@@ -402,6 +404,7 @@ function loadDetail(pageNum){
                         "<td>" +
                         "<button class= \"btn btn-primary btn-xs\" onclick=\"openEditDetail('"+item.id+"');\">修改</button> " +
                         "<button class= \"btn btn-danger btn-xs\" onclick=\"deleteDetail('"+item.id+"');\">删除</button> "+
+                        "<button class= \"btn btn-info btn-xs\" onclick=\"openDetailFile('"+item.id+"');\">附件</button> " +
                         "</td>"+
                         "</tr>";
                 });
@@ -684,5 +687,125 @@ function validateDetail(){
                 }
             }
         }
+    });
+}
+
+/**
+ * 工程明细附件
+ */
+var detailFileCnt = 1;
+var detailFilePageSize = 10;
+
+// 打开附件页面
+function openDetailFile(id){
+    // 打开模态窗口
+    Public.openModal("detailFileModal");
+    // 工程明细id
+    $("#detailId").val(id);
+    // 加载工程明细附件列表
+    loadDetailFile(detailFileCnt);
+}
+
+// 加载工程明细附件列表
+function loadDetailFile(pageNum){
+    var detailId = $("#detailId").val();
+    $.ajax({
+        url: "../project/listFile",
+        dataType: "json",
+        type: "POST",
+        data: JSON.stringify({ "pageNum":pageNum,
+            "pageSize":detailFilePageSize,
+            "businessId":detailId
+        }),
+        success: function (data) {
+            var html= "";
+            if(data.flag){
+                $.each(data.data, function (i, item) {
+                    html +="<tr>"+
+                        "<td>"+(i+1)+"</td>"+
+                        "<td>"+Public.ifNull(item.name)+"</td>"+
+                        "<td>"+Public.ifNull(item.createTime)+"</td>"+
+                        "<td>" +
+                        "<button class= \"btn btn-info btn-xs\" onclick=\"downloadDetailFile('"+item.id+"');\">下载</button> "+
+                        "<button class= \"btn btn-danger btn-xs\" onclick=\"deleteDetailFile('"+item.id+"');\">删除</button> "+
+                        "</td>"+
+                        "</tr>";
+                });
+                if(html == ""){
+                    html = "<tr><td colspan=\"4\">暂无数据</td></tr>";
+                }
+                $("#detailFile_tbody").html(html);
+                // 分页
+                layui.laypage.render({
+                    elem: 'detailFile_page', // 指向存放分页的容器，值可以是容器ID、DOM对象。如：1. elem: 'id' 注意：这里不能加 # 号 2. elem: document.getElementById('id')
+                    theme: '#009688', // 自定义主题
+                    count: data.totalCount,   // 数据总数
+                    limit: detailPageSize,           // 每页显示的条数
+                    curr: pageNum || 1,           // 当前页
+                    layout: ['count', 'prev', 'page', 'next', 'skip'], //自定义排版。可选值有：count（总条目输区域）、prev（上一页区域）、page（分页区域）、next（下一页区域）、limit（条目选项区域）、refresh（页面刷新区域。注意：layui 2.3.0 新增） 、skip（快捷跳页区域）
+                    jump: function (obj, first) { //触发分页后的回调
+                        if (!first) { //点击跳页触发函数自身，并传递当前页：obj.curr
+                            detailFileCnt = obj.curr;
+                            loadDetailFile(detailFileCnt);
+                        }
+                    }
+                });
+            }
+        }
+    });
+}
+
+// 上传附件绑定
+function initUpload(){
+    //上传附件绑定
+    layui.upload.render({
+        elem: '#uploadBtn',
+        url: '../project/upload',       // 请求url
+        accept: 'file',      	   // 指定允许上传时校验的文件类型，可选值有：images（图片）、file（所有文件）、video（视频）、audio（音频）
+        size: 51200,  		       // 设置文件最大可允许上传的大小，单位 KB， 不支持ie8/9
+        data: {
+            businessId: function(){
+                return $("#detailId").val()
+            }
+        },
+        done: function(res, index, upload){ // 请求成功后的回调
+            if(res.flag){
+                // 附件列表刷新
+                loadDetailFile(1);
+                Public.alert(1,"上传成功");
+            }else{
+                Public.alert(2,data.message);
+            }
+        },
+        error: function(index, upload){
+            Public.alert(2, "上传异常");
+        }
+    });
+}
+
+// 工程明细附件下载
+function downloadDetailFile(id) {
+    window.location.href="../project/download/" + id;
+}
+
+// 删除工程明细附件
+function deleteDetailFile(id) {
+    Public.confirm('您确定要删除附件吗?', function(){
+        $.ajax({
+            type: "GET",
+            url:"../project/deleteFile/"+id ,
+            async: false,
+            error: function(request) {
+                Public.alert(2,"请求失败！");
+            },
+            success: function(data) {
+                if(data.flag){
+                    Public.alert(1,"删除成功！");
+                    loadDetailFile(detailFileCnt);
+                }else{
+                    Public.alert(2,"删除失败！");
+                }
+            }
+        });
     });
 }

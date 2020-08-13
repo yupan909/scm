@@ -7,10 +7,12 @@ import com.java.scm.bean.so.FileSO;
 import com.java.scm.dao.FileMapper;
 import com.java.scm.service.FileService;
 import com.java.scm.util.AssertUtils;
+import com.java.scm.util.FileUtils;
 import com.java.scm.util.RequestUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import tk.mybatis.mapper.entity.Example;
 
 /**
@@ -65,6 +67,12 @@ public class FileServiceImpl implements FileService {
     @Override
     public void deleteFile(String id) {
         AssertUtils.notEmpty(id, "附件id不能为空！");
+        // 1、删除服务器附件
+        File file = getFile(id);
+        if (file != null) {
+            FileUtils.deleteFile(file.getUrl());
+        }
+        // 2、删除附件表
         fileMapper.deleteByPrimaryKey(id);
     }
 
@@ -74,6 +82,16 @@ public class FileServiceImpl implements FileService {
     @Override
     public void deleteFileByBusinessId(String businessId) {
         AssertUtils.notEmpty(businessId, "业务id不能为空！");
+        // 1、删除服务器附件
+        FileSO fileSO = new FileSO();
+        fileSO.setBusinessId(businessId);
+        PageInfo<File> pageInfo = listFile(fileSO);
+        if (!CollectionUtils.isEmpty(pageInfo.getList())) {
+            pageInfo.getList().forEach(p -> {
+                FileUtils.deleteFile(p.getUrl());
+            });
+        }
+        // 2、删除附件表
         Example example = new Example(File.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("businessId", businessId);

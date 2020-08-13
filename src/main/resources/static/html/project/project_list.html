@@ -212,7 +212,7 @@
                                 <th class="col-md-1">经手人</th>
                                 <th class="col-md-1">备注</th>
                                 <th class="col-md-1">创建时间</th>
-                                <th class="col-md-1">操作</th>
+                                <th class="col-md-2">操作</th>
                             </tr>
                             </thead>
                             <tbody id = "tdetailbody">
@@ -368,6 +368,47 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" id="editDetail-close-btn" data-dismiss="modal">关闭</button>
                 <button type="button" class="btn btn-primary" onclick="editDetail()">修改</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 工程明细附件列表 -->
+<div class="modal fade" id="detailFileModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width: 55%">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title">
+                    附件列表
+                </h4>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="detailId" name="detailId">
+                <div class="row">
+                    <div class="col-md-12 listDIV">
+                        <table class="table table-striped table-bordered table-hover">
+                            <thead style="background-color: #EEEEEE;">
+                            <tr>
+                                <th class="col-md-1">序号</th>
+                                <th class="col-md-5">附件名</th>
+                                <th class="col-md-2">创建时间</th>
+                                <th class="col-md-2">操作</th>
+                            </tr>
+                            </thead>
+                            <tbody id = "detailFile_tbody">
+                            </tbody>
+                        </table>
+                        <div id="detailFile_page" style="float: right;"></div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" id="uploadBtn">上传附件</button>
+                <button type="button" class="btn btn-default" id = "detailFile-close-btn" data-dismiss="modal">关闭</button>
             </div>
         </div>
     </div>

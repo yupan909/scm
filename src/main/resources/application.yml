@@ -10,6 +10,12 @@ spring:
   main:
     allow-bean-definition-overriding: true
 
+  # 上传文件大小限制
+  servlet:
+    multipart:
+      max-file-size: 50MB   # 单个文件大小
+      max-request-size: 50MB # 请求总体大小
+
 
   # ========= 数据源配置
   datasource:

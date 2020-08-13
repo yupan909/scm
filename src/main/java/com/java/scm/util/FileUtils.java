@@ -165,7 +165,7 @@ public class FileUtils {
      */
     public static void deleteFile(String fileUrl) {
         if (StringUtil.isEmpty(fileUrl)) {
-            throw new BusinessException("文件存储路径不能为空！");
+            return;
         }
 
         // 文件保存路径
