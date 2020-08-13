@@ -4,13 +4,11 @@ import com.github.pagehelper.Page;
 import com.java.scm.bean.Stock;
 import com.java.scm.bean.so.StockSO;
 import com.java.scm.tk.TkMapper;
-import org.apache.ibatis.annotations.Mapper;
 
 /**
  * @author hujunhui
  * @date 2020/6/28
  */
-@Mapper
 public interface StockMapper extends TkMapper<Stock> {
 
     /**

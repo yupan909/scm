@@ -250,7 +250,7 @@ public class InoutStockServiceImpl implements InoutStockService {
                 } else if (p.getInCount() != null) {
                     sumCount = p.getInCount();
                 } else if (p.getOutCount() != null) {
-                    sumCount = p.getInCount() * (-1);
+                    sumCount = p.getOutCount() * (-1);
                 }
                 p.setSumCount(sumCount);
             });

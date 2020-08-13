@@ -4,7 +4,6 @@ import com.github.pagehelper.Page;
 import com.java.scm.bean.ProjectRecord;
 import com.java.scm.bean.so.ProjectRecordSO;
 import com.java.scm.tk.TkMapper;
-import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -13,7 +12,6 @@ import java.util.List;
  * @author hujunhui
  * @date 2020/6/28
  */
-@Mapper
 public interface ProjectRecordMapper extends TkMapper<ProjectRecord> {
 
     /**
