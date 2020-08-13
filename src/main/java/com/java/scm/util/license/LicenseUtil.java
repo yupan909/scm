@@ -1,7 +1,7 @@
-package com.java.scm.util;
+package com.java.scm.util.license;
 
-import com.java.scm.bean.base.BaseResult;
 import com.java.scm.config.exception.BusinessException;
+import com.java.scm.util.StringUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.system.ApplicationHome;
 

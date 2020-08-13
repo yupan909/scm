@@ -1,4 +1,4 @@
-package com.java.scm.util;
+package com.java.scm.util.license;
 
 import com.java.scm.config.exception.BusinessException;
 import lombok.extern.slf4j.Slf4j;

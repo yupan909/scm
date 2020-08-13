@@ -3,7 +3,7 @@ package com.java.scm.service.impl;
 import com.java.scm.bean.base.BaseResult;
 import com.java.scm.config.exception.BusinessException;
 import com.java.scm.service.LicenseService;
-import com.java.scm.util.LicenseUtil;
+import com.java.scm.util.license.LicenseUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 

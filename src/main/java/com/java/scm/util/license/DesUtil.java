@@ -1,4 +1,4 @@
-package com.java.scm.util;
+package com.java.scm.util.license;
 
 import javax.crypto.*;
 import javax.crypto.spec.DESKeySpec;
