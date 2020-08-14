@@ -408,6 +408,15 @@ var Public = {
 			if (value == null) {
 				value = "";
 			}
+			if (value != "") {
+				// 只有一位小数，补充一个0
+				if(/\.\d$/.test(value)) {
+					value += '0';
+					// 不包含小数，补充两个0
+				} else if (!/\./.test(value)) {
+					value += '.00';
+				}
+			}
 			var regExpInfo = /(\d{1,3})(?=(\d{3})+(?:$|\.))/g;
 			var val = value.toString().replace(regExpInfo, "$1,");
 			return val;
