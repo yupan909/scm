@@ -181,6 +181,15 @@ function deleteById(id){
     });
 }
 
+
+/**
+ * 导出工程
+ */
+function exportExcel(){
+    var name = encodeURI($("#nameQuery").val());
+    window.location.href="../project/exportProject?name="+name;
+}
+
 /**
  * 打开编辑工程页面
  * @param id

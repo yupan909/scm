@@ -5,6 +5,7 @@ import com.java.scm.bean.File;
 import com.java.scm.bean.Project;
 import com.java.scm.bean.ProjectRecord;
 import com.java.scm.bean.base.BaseResult;
+import com.java.scm.bean.excel.ProjectExportTemplate;
 import com.java.scm.bean.excel.ProjectRecordExportTemplate;
 import com.java.scm.bean.so.FileSO;
 import com.java.scm.bean.so.ProjectRecordSO;
@@ -155,11 +156,42 @@ public class ProjectController {
     }
 
     /**
+     * 导出工程
+     * @throws Exception
+     */
+    @GetMapping("/exportProject")
+    public void exportProject(@RequestParam("name") String name,
+                            HttpServletResponse response) throws Exception {
+        // 查询数据
+        ProjectSO projectSO = new ProjectSO();
+        if (StringUtil.isNotEmpty(name)) {
+            projectSO.setName(URLDecoder.decode(name, "utf-8"));
+        }
+        PageInfo<Project> pageInfo = projectService.listProject(projectSO);
+        List<ProjectExportTemplate> exportList = new ArrayList<>();
+        if (!CollectionUtils.isEmpty(pageInfo.getList())) {
+            for(int i = 0; i < pageInfo.getList().size(); i++) {
+                Project project = pageInfo.getList().get(i);
+                ProjectExportTemplate template = new ProjectExportTemplate();
+                BeanUtils.copyProperties(project, template);
+                template.setNum(String.valueOf(i+1));
+                template.setContractMoney(project.getContractMoney() != null ? project.getContractMoney().stripTrailingZeros().toPlainString() : "");
+                template.setFinalMoney(project.getFinalMoney() != null ? project.getFinalMoney().stripTrailingZeros().toPlainString() : "");
+                template.setInMoney(project.getInMoney() != null ? project.getInMoney().stripTrailingZeros().toPlainString() : "");
+                template.setOutMoney(project.getOutMoney() != null ? project.getOutMoney().stripTrailingZeros().toPlainString() : "");
+                template.setSumMoney(project.getSumMoney() != null ? project.getSumMoney().stripTrailingZeros().toPlainString() : "");
+                exportList.add(template);
+            }
+        }
+        ExcelUtils.exportExcel(exportList, ProjectExportTemplate.class, "工程管理", "工程管理", response);
+    }
+
+    /**
      * 导出工程明细
      * @throws Exception
      */
     @GetMapping("/exportProjectDetail")
-    public void exportStock(@RequestParam("projectId") String projectId,
+    public void exportProjectDetail(@RequestParam("projectId") String projectId,
                             @RequestParam("type") Byte type,
                             @RequestParam("digest") String digest,
                             HttpServletResponse response) throws Exception {
@@ -182,7 +214,6 @@ public class ProjectController {
                 template.setNum(String.valueOf(i+1));
                 template.setType(projectRecord.getTypeInfo());
                 template.setMoney(projectRecord.getMoney() != null ? projectRecord.getMoney().stripTrailingZeros().toPlainString() : "");
-                template.setCreateTime(DateUtils.formatDateTime(projectRecord.getCreateTime()));
                 exportList.add(template);
             }
         }

@@ -29,10 +29,10 @@ public class ProjectRecordExportTemplate {
     @Excel(name = "金额", orderNum = "4")
     private String money;
 
-    @Excel(name = "备注", orderNum = "5", width = 20.0D)
-    private String remark;
+    @Excel(name = "经手人", orderNum = "5", width = 20.0D)
+    private String handle;
 
-    @Excel(name = "创建时间", orderNum = "6",  width = 20.0D)
-    private String createTime;
+    @Excel(name = "备注", orderNum = "6", width = 20.0D)
+    private String remark;
 
 }
