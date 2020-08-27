@@ -4,22 +4,30 @@
 
   <select id="listProject" resultType="com.java.scm.bean.Project">
     SELECT
-    p.id,
-    p.name,
-    p.content,
-    p.contract_money as contractMoney,
-    p.final_money as finalMoney,
-    p.state
-    FROM project p
+    id,
+    name,
+    content,
+    customer,
+    progress,
+    contract_money as contractMoney,
+    final_money as finalMoney,
+    state
+    FROM project
     <where>
+      <if test="customer != null and customer != ''">
+        AND customer LIKE CONCAT('%', #{customer}, '%')
+      </if>
       <if test="name != null and name != ''">
-        AND p.name LIKE CONCAT('%', #{name}, '%')
+        AND name LIKE CONCAT('%', #{name}, '%')
+      </if>
+      <if test="progress != null and progress != ''">
+        AND progress LIKE CONCAT('%', #{progress}, '%')
       </if>
       <if test="state != null">
-        AND p.state = #{state}
+        AND state = #{state}
       </if>
     </where>
-    order by p.create_time desc
+    order by create_time desc
   </select>
 
 </mapper>

@@ -33,6 +33,11 @@ public class Project {
     private String id;
 
     /**
+     * 客户名称
+     */
+    private String customer;
+
+    /**
      * 工程名称
      */
     private String name;
@@ -41,6 +46,11 @@ public class Project {
      * 工程内容
      */
     private String content;
+
+    /**
+     * 工程进度
+     */
+    private String progress;
 
     /**
      * 合同金额

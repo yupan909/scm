@@ -15,9 +15,19 @@ import lombok.Setter;
 public class ProjectSO extends PageCondition {
 
     /**
+     * 客户名称
+     */
+    private String customer;
+
+    /**
      * 工程名称
      */
     private String name;
+
+    /**
+     * 工程进度
+     */
+    private String progress;
 
     /**
      * 状态 0：启用 1：禁用

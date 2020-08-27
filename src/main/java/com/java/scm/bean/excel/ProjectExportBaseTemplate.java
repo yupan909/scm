@@ -5,14 +5,14 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * 工程模型（导出）
+ * 工程模型（导出）（普通仓库人员）
  *
  * @author yupan
  * @date 2020-06-25 23:34
  */
 @Getter
 @Setter
-public class ProjectExportTemplate {
+public class ProjectExportBaseTemplate {
 
     @Excel(name = "序号", orderNum = "0")
     private String num;
@@ -29,22 +29,7 @@ public class ProjectExportTemplate {
     @Excel(name = "工程进度", orderNum = "4", width = 15.0D)
     private String progress;
 
-    @Excel(name = "合同金额", orderNum = "5", width = 15.0D)
-    private String contractMoney;
-
-    @Excel(name = "结算金额", orderNum = "6", width = 15.0D)
-    private String finalMoney;
-
-    @Excel(name = "收入金额", orderNum = "7", width = 15.0D)
-    private String inMoney;
-
-    @Excel(name = "支出金额", orderNum = "8", width = 15.0D)
-    private String outMoney;
-
-    @Excel(name = "合计金额", orderNum = "9", width = 15.0D)
-    private String sumMoney;
-
-    @Excel(name = "状态", orderNum = "10")
+    @Excel(name = "状态", orderNum = "5")
     private String stateInfo;
 
 }

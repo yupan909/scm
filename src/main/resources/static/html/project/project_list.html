@@ -12,23 +12,36 @@
         <div class="row">
             <div class="col-md-2 titleDIV">工 程 管 理</div>
             <div class="col-md-10 optionDIV">
-                <button type="button" class="btn btn-info admin" onclick="exportExcel();"><span class="glyphicon glyphicon-save"></span> 导出</button>
+                <button type="button" class="btn btn-success admin super_admin" onclick="openSave();"><span class="glyphicon glyphicon-plus"></span> 新增</button>
+                <button type="button" class="btn btn-info" onclick="exportExcel();"><span class="glyphicon glyphicon-save"></span> 导出</button>
             </div>
         </div>
     </div>
 
     <div class="mainDIV">
         <div class="row ">
-            <div class="col-md-12 queryDIV form-inline">
-                <div style=" float: left;" class="admin">
-                    <button class="btn btn-success" onclick="openSave()">
-                        <span class="glyphicon glyphicon-plus"></span> 新增工程
-                    </button>
-                </div>
-                <div  style=" float: right;">
-                    <input type="text" class="form-control" id="nameQuery" name="nameQuery" placeholder="按工程名称搜索">
-                    <button type="button" class="btn btn-primary" onclick="load('1')"><span class="glyphicon glyphicon-search"></span> 查询</button>
-                </div>
+            <div class="col-md-12 queryDIV">
+                <form class="form-inline">
+                    <div class="form-group col-md-4">
+                        <label for="customerQuery" class="t1">客户名称</label>
+                        <input type="text" class="form-control t2" id="customerQuery" placeholder="输入要查询的客户名称">
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="nameQuery" class="t1">工程名称</label>
+                        <input type="text" class="form-control t2" id="nameQuery" placeholder="输入要查询的工程名称">
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="progressQuery" class="t1">工程进度</label>
+                        <input type="text" class="form-control t2" id="progressQuery" placeholder="输入要查询的工程进度">
+                    </div>
+
+                    <div class="clearfix"></div>
+
+                    <div class="buttonDIV">
+                        <button type="button" class="btn btn-primary" onclick="load('1')"><span class="glyphicon glyphicon-search"></span> 查询</button>
+                        <button type="reset" class="btn btn-default"><span class="glyphicon glyphicon-trash"></span> 清空</button>
+                    </div>
+                </form>
             </div>
         </div>
         <div class="row">
@@ -37,15 +50,17 @@
                     <thead>
                     <tr>
                         <th class="number">序号</th>
+                        <th class="col-md-2">客户名称</th>
                         <th class="col-md-2">工程名称</th>
                         <th class="">工程内容</th>
-                        <th class="col-md-1 admin">合同金额</th>
-                        <th class="col-md-1 admin">结算金额</th>
-                        <th class="col-md-1 admin">收入金额</th>
-                        <th class="col-md-1 admin">支出金额</th>
-                        <th class="col-md-1 admin">合计金额</th>
+                        <th class="col-md-1">工程进度</th>
+                        <th class="number-2 admin super_admin">合同金额</th>
+                        <th class="number-2 admin super_admin">结算金额</th>
+                        <th class="number-2 admin super_admin">收入金额</th>
+                        <th class="number-2 admin super_admin">支出金额</th>
+                        <th class="number-2 admin super_admin">合计金额</th>
                         <th class="number">状态</th>
-                        <th class="col-md-2 admin">操作</th>
+                        <th class="col-md-2 admin super_admin">操作</th>
                     </tr>
                     </thead>
                     <tbody id = "tbody">
@@ -73,6 +88,13 @@
                 <form id = "save-form"  class="form-horizontal" style="margin-right: 10%;">
 
                     <div class="form-group">
+                        <label for="customer" class="col-md-3 control-label">客户名称</label>
+                        <div class="col-md-9">
+                            <input type="text" class="form-control" id="customer" name="customer" placeholder="客户名称">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
                         <label for="name" class="col-md-3 control-label">工程名称</label>
                         <div class="col-md-9">
                             <input type="text" class="form-control" id="name" name="name" placeholder="工程名称">
@@ -83,6 +105,13 @@
                         <label for="content" class="col-md-3 control-label">工程内容</label>
                         <div class="col-md-9">
                             <textarea class="form-control" id="content" name="content" placeholder="工程内容"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="progress" class="col-md-3 control-label">工程进度</label>
+                        <div class="col-md-9">
+                            <input type="text" class="form-control" id="progress" name="progress" placeholder="工程进度">
                         </div>
                     </div>
 
@@ -127,6 +156,13 @@
                     <input type="hidden" id = "id_e">
 
                     <div class="form-group">
+                        <label for="customer_e" class="col-md-3 control-label">客户名称</label>
+                        <div class="col-md-9">
+                            <input type="text" class="form-control" id="customer_e" name="customer_e" placeholder="客户名称">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
                         <label for="name_e" class="col-md-3 control-label">工程名称</label>
                         <div class="col-md-9">
                             <input type="text" class="form-control" id="name_e" name="name_e" placeholder="工程名称">
@@ -137,6 +173,13 @@
                         <label for="content_e" class="col-md-3 control-label">工程内容</label>
                         <div class="col-md-9">
                             <textarea class="form-control" id="content_e" name="content_e" placeholder="工程内容"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="progress_e" class="col-md-3 control-label">工程进度</label>
+                        <div class="col-md-9">
+                            <input type="text" class="form-control" id="progress_e" name="progress_e" placeholder="工程进度">
                         </div>
                     </div>
 

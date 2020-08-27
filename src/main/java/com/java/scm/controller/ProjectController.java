@@ -4,19 +4,19 @@ import com.github.pagehelper.PageInfo;
 import com.java.scm.bean.File;
 import com.java.scm.bean.Project;
 import com.java.scm.bean.ProjectRecord;
+import com.java.scm.bean.User;
 import com.java.scm.bean.base.BaseResult;
+import com.java.scm.bean.excel.ProjectExportBaseTemplate;
 import com.java.scm.bean.excel.ProjectExportTemplate;
 import com.java.scm.bean.excel.ProjectRecordExportTemplate;
 import com.java.scm.bean.so.FileSO;
 import com.java.scm.bean.so.ProjectRecordSO;
 import com.java.scm.bean.so.ProjectSO;
 import com.java.scm.config.exception.BusinessException;
+import com.java.scm.enums.RoleEnum;
 import com.java.scm.service.FileService;
 import com.java.scm.service.ProjectService;
-import com.java.scm.util.AssertUtils;
-import com.java.scm.util.DateUtils;
-import com.java.scm.util.FileUtils;
-import com.java.scm.util.StringUtil;
+import com.java.scm.util.*;
 import com.java.scm.util.excel.ExcelUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +28,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * 工程
@@ -161,29 +162,53 @@ public class ProjectController {
      */
     @GetMapping("/exportProject")
     public void exportProject(@RequestParam("name") String name,
+                              @RequestParam("customer") String customer,
+                              @RequestParam("progress") String progress,
                             HttpServletResponse response) throws Exception {
         // 查询数据
         ProjectSO projectSO = new ProjectSO();
         if (StringUtil.isNotEmpty(name)) {
             projectSO.setName(URLDecoder.decode(name, "utf-8"));
         }
-        PageInfo<Project> pageInfo = projectService.listProject(projectSO);
-        List<ProjectExportTemplate> exportList = new ArrayList<>();
-        if (!CollectionUtils.isEmpty(pageInfo.getList())) {
-            for(int i = 0; i < pageInfo.getList().size(); i++) {
-                Project project = pageInfo.getList().get(i);
-                ProjectExportTemplate template = new ProjectExportTemplate();
-                BeanUtils.copyProperties(project, template);
-                template.setNum(String.valueOf(i+1));
-                template.setContractMoney(project.getContractMoney() != null ? project.getContractMoney().stripTrailingZeros().toPlainString() : "");
-                template.setFinalMoney(project.getFinalMoney() != null ? project.getFinalMoney().stripTrailingZeros().toPlainString() : "");
-                template.setInMoney(project.getInMoney() != null ? project.getInMoney().stripTrailingZeros().toPlainString() : "");
-                template.setOutMoney(project.getOutMoney() != null ? project.getOutMoney().stripTrailingZeros().toPlainString() : "");
-                template.setSumMoney(project.getSumMoney() != null ? project.getSumMoney().stripTrailingZeros().toPlainString() : "");
-                exportList.add(template);
-            }
+        if (StringUtil.isNotEmpty(customer)) {
+            projectSO.setCustomer(URLDecoder.decode(customer, "utf-8"));
         }
-        ExcelUtils.exportExcel(exportList, ProjectExportTemplate.class, "工程管理", "工程管理", response);
+        if (StringUtil.isNotEmpty(progress)) {
+            projectSO.setProgress(URLDecoder.decode(progress, "utf-8"));
+        }
+        PageInfo<Project> pageInfo = projectService.listProject(projectSO);
+
+        User user = RequestUtil.getCurrentUser();
+        if (Objects.equals(user.getRole(), RoleEnum.仓库普通人员.getType())) {
+            List<ProjectExportBaseTemplate> exportList = new ArrayList<>();
+            if (!CollectionUtils.isEmpty(pageInfo.getList())) {
+                for(int i = 0; i < pageInfo.getList().size(); i++) {
+                    Project project = pageInfo.getList().get(i);
+                    ProjectExportBaseTemplate template = new ProjectExportBaseTemplate();
+                    BeanUtils.copyProperties(project, template);
+                    template.setNum(String.valueOf(i+1));
+                    exportList.add(template);
+                }
+            }
+            ExcelUtils.exportExcel(exportList, ProjectExportBaseTemplate.class, "工程管理", "工程管理", response);
+        } else {
+            List<ProjectExportTemplate> exportList = new ArrayList<>();
+            if (!CollectionUtils.isEmpty(pageInfo.getList())) {
+                for(int i = 0; i < pageInfo.getList().size(); i++) {
+                    Project project = pageInfo.getList().get(i);
+                    ProjectExportTemplate template = new ProjectExportTemplate();
+                    BeanUtils.copyProperties(project, template);
+                    template.setNum(String.valueOf(i+1));
+                    template.setContractMoney(project.getContractMoney() != null ? project.getContractMoney().stripTrailingZeros().toPlainString() : "");
+                    template.setFinalMoney(project.getFinalMoney() != null ? project.getFinalMoney().stripTrailingZeros().toPlainString() : "");
+                    template.setInMoney(project.getInMoney() != null ? project.getInMoney().stripTrailingZeros().toPlainString() : "");
+                    template.setOutMoney(project.getOutMoney() != null ? project.getOutMoney().stripTrailingZeros().toPlainString() : "");
+                    template.setSumMoney(project.getSumMoney() != null ? project.getSumMoney().stripTrailingZeros().toPlainString() : "");
+                    exportList.add(template);
+                }
+            }
+            ExcelUtils.exportExcel(exportList, ProjectExportTemplate.class, "工程管理", "工程管理", response);
+        }
     }
 
     /**

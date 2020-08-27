@@ -450,16 +450,16 @@ var Public = {
         initRoleAuth: function(role){
             if(role == "0"){
 		        // 普通仓库人员
-                $(".admin").remove();
-                $(".super_admin").remove();
+                $("[class!='normal'][class='admin']").remove();
+                $("[class!='normal'][class='super_admin']").remove();
             }else if(role == "1"){
                 // 仓库管理员
-                $(".normal").remove();
-                $(".super_admin").remove();
+				$("[class!='admin'][class='normal']").remove();
+				$("[class!='admin'][class='super_admin']").remove();
             } else if(role == "2") {
                 // 超级管理员
-                $(".normal").remove();
-                $(".admin").remove();
+				$("[class!='super_admin'][class='normal']").remove();
+				$("[class!='super_admin'][class='admin']").remove();
             } else {
                 Public.alert(2, "加载角色权限失败！");
             }

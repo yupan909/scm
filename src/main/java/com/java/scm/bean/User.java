@@ -69,7 +69,7 @@ public class User{
     private String stateInfo;
 
     /**
-     * 角色 0：仓库普通人员 1：仓库管理员
+     * 角色 0：仓库普通人员 1：仓库管理员 2: 超级管理员
      */
     private Byte role;
 

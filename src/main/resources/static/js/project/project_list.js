@@ -39,14 +39,18 @@ $(function(){
 
 // 列表
 function load(pageNum){
+    var customer = $("#customerQuery").val();
     var name = $("#nameQuery").val();
+    var progress = $("#progressQuery").val();
     $.ajax({
         url: "../project/list",
         dataType: "json",
         type: "POST",
         data: JSON.stringify({ "pageNum":pageNum,
             "pageSize":pageSize,
-            "name":name
+            "customer":customer,
+            "name":name,
+            "progress":progress
         }),
         success: function (data) {
             var html= "";
@@ -55,19 +59,20 @@ function load(pageNum){
                     var handel = "";
                     var money = "";
                     // 管理员
-                    if(user.role == "1"){
-                        var stopStyle
-                        var stopName ;
-                        if(item.state == "0"){
-                            stopStyle = " btn-warning";
-                            stopName = "停用"
-                        }else{
-                            stopStyle = "btn-success";
-                            stopName = "启用"
+                    if(user.role == "1" || user.role == "2"){
+                        handel = "<td>";
+                        // 超级管理员才可修改
+                        if (user.role == "2") {
+                            var stopStyle = "btn-success";
+                            var stopName = "启用";
+                            if(item.state == "0"){
+                                stopStyle = " btn-warning";
+                                stopName = "停用"
+                            }
+                            handel += "<button class= \"btn btn-primary btn-xs\" onclick=\"edit('"+item.id+"');\">修改</button> " +
+                                      "<button class= \"btn btn-primary btn-xs "+stopStyle+"\" onclick=\"stopUsing('"+item.id+"');\">"+stopName+"</button> ";
                         }
-                        handel = "<td> <button class= \"btn btn-primary btn-xs\" onclick=\"edit('"+item.id+"');\">修改</button> " +
-                            "<button class= \"btn btn-primary btn-xs "+stopStyle+"\" onclick=\"stopUsing('"+item.id+"');\">"+stopName+"</button> " +
-                            "<button class= \"btn btn-success btn-xs\" onclick=\"detail('"+item.id+"');\">流水账</button></td>";
+                        handel += "<button class= \"btn btn-success btn-xs\" onclick=\"detail('"+item.id+"');\">流水账</button></td>";
 
                         // 金额
                         money = "<td>"+Public.moenyFormat(item.contractMoney)+"</td>"+
@@ -78,15 +83,17 @@ function load(pageNum){
                     }
                     html +="<tr>"+
                         "<td>"+(i+1)+"</td>"+
+                        "<td>"+Public.ifNull(item.customer)+"</td>"+
                         "<td>"+Public.ifNull(item.name)+"</td>"+
                         "<td>"+Public.ifNull(item.content)+"</td>"+
+                        "<td>"+Public.ifNull(item.progress)+"</td>"+
                         money+
                         "<td>"+Public.ifNull(item.stateInfo)+"</td>"+
                         handel+
                         "</tr>";
                 });
                 if(html == ""){
-                    if(user.role == "1"){
+                    if(user.role == "1" || user.role == "2"){
                         html = "<tr><td colspan=\"12\">暂无数据</td></tr>";
                     } else {
                         html = "<tr><td colspan=\"7\">暂无数据</td></tr>";
@@ -130,11 +137,13 @@ function save(){
     if(!validate){
         return;
     }
+    var customer = $("#customer").val();
     var name = $("#name").val();
     var content = $("#content").val();
+    var progress = $("#progress").val();
     var contractMoney = $("#contractMoney").val();
     var finalMoney = $("#finalMoney").val();
-    var data = '{"name":"'+name+'","content":"'+content+'","contractMoney":"'+contractMoney+'","finalMoney":"'+finalMoney+'"}';
+    var data = '{"customer":"'+customer+ '","name":"'+name+'","content":"'+content+'","progress":"'+progress+'","contractMoney":"'+contractMoney+'","finalMoney":"'+finalMoney+'"}';
     $.ajax({
         url: "../project/save",
         dataType: "json",
@@ -186,8 +195,10 @@ function deleteById(id){
  * 导出工程
  */
 function exportExcel(){
+    var customer = encodeURI($("#customerQuery").val());
     var name = encodeURI($("#nameQuery").val());
-    window.location.href="../project/exportProject?name="+name;
+    var progress = encodeURI($("#progressQuery").val());
+    window.location.href="../project/exportProject?name="+name+"&customer="+customer+"&progress="+progress;
 }
 
 /**
@@ -216,8 +227,10 @@ function loadOneProject(id){
         success: function(data) {
             if(data.flag){
                 $("#id_e").val(data.data.id);
+                $("#customer_e").val(data.data.customer);
                 $("#name_e").val(data.data.name);
                 $("#content_e").val(data.data.content);
+                $("#progress_e").val(data.data.progress);
                 $("#contractMoney_e").val(data.data.contractMoney);
                 $("#finalMoney_e").val(data.data.finalMoney);
             }else{
@@ -235,11 +248,13 @@ function editSave(){
         return;
     }
     var id = $("#id_e").val();
+    var customer = $("#customer_e").val();
     var name = $("#name_e").val();
     var content = $("#content_e").val();
+    var progress = $("#progress_e").val();
     var contractMoney = $("#contractMoney_e").val();
     var finalMoney = $("#finalMoney_e").val();
-    var data = '{"name":"'+name+'","content":"'+content+'","id":"'+id+'","contractMoney":"'+contractMoney+'","finalMoney":"'+finalMoney+'"}';
+    var data = '{"id":"'+id+'","customer":"'+customer+'","name":"'+name+'","content":"'+content+'","progress":"'+progress+'","contractMoney":"'+contractMoney+'","finalMoney":"'+finalMoney+'"}';
     $.ajax({
         url: "../project/modify",
         dataType: "json",
@@ -292,16 +307,27 @@ function validate(){
         },
         live : 'enabled', //enabled代表当表单控件内容发生变化时就触发验证，默认提交时验证，
         fields: {
+            customer: {
+                validators: {
+                    notEmpty: {message: '请输入客户名称'},
+                    stringLength: { max: 100, message: '不能超过100个字符'}
+                }
+            },
             name: {
                 validators: {
                     notEmpty: {message: '请输入工程名称'},
-                    stringLength: { max: 50, message: '不能超过50个字符'}
+                    stringLength: { max: 100, message: '不能超过100个字符'}
                 }
             },
             content: {
                 validators: {
                     notEmpty: {message: '请输入工程内容'},
                     stringLength: { max: 500, message: '不能超过500个字符'}
+                }
+            },
+            progress: {
+                validators: {
+                    stringLength: { max: 100, message: '不能超过100个字符'}
                 }
             },
             contractMoney: {
@@ -334,16 +360,27 @@ function validate(){
         },
         live : 'enabled', //enabled代表当表单控件内容发生变化时就触发验证，默认提交时验证，
         fields: {
+            customer_e: {
+                validators: {
+                    notEmpty: {message: '请输入客户名称'},
+                    stringLength: { max: 100, message: '不能超过100个字符'}
+                }
+            },
             name_e: {
                 validators: {
                     notEmpty: {message: '请输入工程名称'},
-                    stringLength: { max: 50, message: '不能超过50个字符'}
+                    stringLength: { max: 100, message: '不能超过100个字符'}
                 }
             },
             content_e: {
                 validators: {
                     notEmpty: {message: '请输入工程内容'},
                     stringLength: { max: 500, message: '不能超过500个字符'}
+                }
+            },
+            progress_e: {
+                validators: {
+                    stringLength: { max: 100, message: '不能超过100个字符'}
                 }
             },
             contractMoney_e: {
@@ -401,6 +438,13 @@ function loadDetail(pageNum){
             var html= "";
             if(data.flag){
                 $.each(data.data, function (i, item) {
+                    var button = "<td>";
+                    if(user.role == "2"){
+                        button += "<button class= \"btn btn-primary btn-xs\" onclick=\"openEditDetail('"+item.id+"');\">修改</button> " +
+                                  "<button class= \"btn btn-danger btn-xs\" onclick=\"deleteDetail('"+item.id+"');\">删除</button> ";
+                    }
+                    button += "<button class= \"btn btn-info btn-xs\" onclick=\"openDetailFile('"+item.id+"');\">附件</button></td>";
+
                     html +="<tr>"+
                         "<td>"+(i+1)+"</td>"+
                         "<td>"+Public.ifNull(item.typeInfo)+"</td>"+
@@ -410,11 +454,7 @@ function loadDetail(pageNum){
                         "<td>"+Public.ifNull(item.handle)+"</td>"+
                         "<td>"+Public.ifNull(item.remark)+"</td>"+
                         "<td>"+Public.ifNull(item.createTime)+"</td>"+
-                        "<td>" +
-                        "<button class= \"btn btn-primary btn-xs\" onclick=\"openEditDetail('"+item.id+"');\">修改</button> " +
-                        "<button class= \"btn btn-danger btn-xs\" onclick=\"deleteDetail('"+item.id+"');\">删除</button> "+
-                        "<button class= \"btn btn-info btn-xs\" onclick=\"openDetailFile('"+item.id+"');\">附件</button> " +
-                        "</td>"+
+                        button +
                         "</tr>";
                 });
                 if(html == ""){
@@ -730,14 +770,17 @@ function loadDetailFile(pageNum){
             var html= "";
             if(data.flag){
                 $.each(data.data, function (i, item) {
+                    var button = "<td><button class= \"btn btn-info btn-xs\" onclick=\"downloadDetailFile('"+item.id+"');\">下载</button>";
+                    if(user.role == "2"){
+                        button += " <button class= \"btn btn-danger btn-xs\" onclick=\"deleteDetailFile('"+item.id+"');\">删除</button>";
+                    }
+                    button += "</td>";
+
                     html +="<tr>"+
                         "<td>"+(i+1)+"</td>"+
                         "<td>"+Public.ifNull(item.name)+"</td>"+
                         "<td>"+Public.ifNull(item.createTime)+"</td>"+
-                        "<td>" +
-                        "<button class= \"btn btn-info btn-xs\" onclick=\"downloadDetailFile('"+item.id+"');\">下载</button> "+
-                        "<button class= \"btn btn-danger btn-xs\" onclick=\"deleteDetailFile('"+item.id+"');\">删除</button> "+
-                        "</td>"+
+                        button +
                         "</tr>";
                 });
                 if(html == ""){
