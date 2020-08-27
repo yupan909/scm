@@ -205,7 +205,6 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public PageInfo<ProjectRecord> listProjectRecord(ProjectRecordSO projectRecordSO){
         AssertUtils.notNull(projectRecordSO, "工程明细列表参数不能为空");
-        AssertUtils.notNull(projectRecordSO.getProjectId(), "工程id不能为空");
         Page<ProjectRecord> projectRecordPage = projectRecordMapper.listProjectRecord(projectRecordSO);
         // 类型
         if (!CollectionUtils.isEmpty(projectRecordPage.toPageInfo().getList())) {

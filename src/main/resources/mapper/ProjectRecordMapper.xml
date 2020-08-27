@@ -13,12 +13,16 @@
     pr.handle,
     pr.remark,
     pr.create_time as createTime,
-    pr.create_user_id as createUserId
+    pr.create_user_id as createUserId,
+    p.name as project
     FROM project_record pr
     INNER JOIN project p on pr.project_id = p.id
     <where>
       <if test="projectId != null and projectId != ''">
         AND pr.project_id = #{projectId}
+      </if>
+      <if test="project != null and project != ''">
+        AND p.name LIKE CONCAT('%', #{project}, '%')
       </if>
       <if test="type != null">
         AND pr.type = #{type}
@@ -26,8 +30,14 @@
       <if test="digest != null and digest != ''">
         AND pr.digest LIKE CONCAT('%', #{digest}, '%')
       </if>
+      <if test="startTime != null and startTime != ''">
+        AND pr.record_date >= #{startTime}
+      </if>
+      <if test="endTime != null and endTime != ''">
+        AND pr.record_date <![CDATA[ <= ]]> #{endTime}
+      </if>
     </where>
-    order by pr.create_time desc
+    order by p.name, pr.record_date desc, pr.create_time desc
   </select>
 
   <select id="getProjectRecordMoney" resultType="com.java.scm.bean.ProjectRecord">

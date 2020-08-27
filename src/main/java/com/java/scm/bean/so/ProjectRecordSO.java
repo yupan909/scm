@@ -20,6 +20,11 @@ public class ProjectRecordSO extends PageCondition {
     private String projectId;
 
     /**
+     * 工程名称
+     */
+    private String project;
+
+    /**
      * 流水帐类型 0：收入 1：支出
      */
     private Byte type;
@@ -28,4 +33,14 @@ public class ProjectRecordSO extends PageCondition {
      * 摘要
      */
     private String digest;
+
+    /**
+     * 开始时间
+     */
+    private String startTime;
+
+    /**
+     * 结束时间
+     */
+    private String endTime;
 }

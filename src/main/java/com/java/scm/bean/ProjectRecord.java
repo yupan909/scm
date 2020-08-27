@@ -98,4 +98,10 @@ public class ProjectRecord {
     @Transient
     private String createUser;
 
+    /**
+     * 工程名称
+     */
+    @Transient
+    private String project;
+
 }

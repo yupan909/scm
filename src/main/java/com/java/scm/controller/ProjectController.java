@@ -9,6 +9,7 @@ import com.java.scm.bean.base.BaseResult;
 import com.java.scm.bean.excel.ProjectExportBaseTemplate;
 import com.java.scm.bean.excel.ProjectExportTemplate;
 import com.java.scm.bean.excel.ProjectRecordExportTemplate;
+import com.java.scm.bean.excel.ProjectRecordReportExportTemplate;
 import com.java.scm.bean.so.FileSO;
 import com.java.scm.bean.so.ProjectRecordSO;
 import com.java.scm.bean.so.ProjectSO;
@@ -243,6 +244,41 @@ public class ProjectController {
             }
         }
         ExcelUtils.exportExcel(exportList, ProjectRecordExportTemplate.class, "工程流水账", "工程流水账", response);
+    }
+
+    /**
+     * 导出工程流水帐统计
+     * @throws Exception
+     */
+    @GetMapping("/exportProjectDetailReport")
+    public void exportProjectDetailReport(@RequestParam("project") String project,
+                                    @RequestParam("type") Byte type,
+                                    @RequestParam("startTime") String startTime,
+                                    @RequestParam("endTime") String endTime,
+                                    HttpServletResponse response) throws Exception {
+        // 查询数据
+        ProjectRecordSO projectRecordSO = new ProjectRecordSO();
+        projectRecordSO.setType(type);
+        projectRecordSO.setStartTime(startTime);
+        projectRecordSO.setEndTime(endTime);
+        if (StringUtil.isNotEmpty(project)) {
+            projectRecordSO.setProject(URLDecoder.decode(project, "utf-8"));
+        }
+        PageInfo<ProjectRecord> pageInfo = projectService.listProjectRecord(projectRecordSO);
+
+        List<ProjectRecordReportExportTemplate> exportList = new ArrayList<>();
+        if (!CollectionUtils.isEmpty(pageInfo.getList())) {
+            for(int i = 0; i < pageInfo.getList().size(); i++) {
+                ProjectRecord projectRecord = pageInfo.getList().get(i);
+                ProjectRecordReportExportTemplate template = new ProjectRecordReportExportTemplate();
+                BeanUtils.copyProperties(projectRecord, template);
+                template.setNum(String.valueOf(i+1));
+                template.setType(projectRecord.getTypeInfo());
+                template.setMoney(projectRecord.getMoney() != null ? projectRecord.getMoney().stripTrailingZeros().toPlainString() : "");
+                exportList.add(template);
+            }
+        }
+        ExcelUtils.exportExcel(exportList, ProjectRecordReportExportTemplate.class, "工程流水账统计", "工程流水账统计", response);
     }
 
     /**
