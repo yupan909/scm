@@ -25,10 +25,12 @@ CREATE TABLE `scm`.`user`(
 -- 工程表
 CREATE TABLE `scm`.`project`(
     `id` varchar(32) PRIMARY KEY COMMENT '工程id',
-    `name` varchar(50) DEFAULT NULL COMMENT '工程名称',
+    `name` varchar(100) DEFAULT NULL COMMENT '工程名称',
     `content` varchar(500) DEFAULT NULL COMMENT '工程内容',
     `contract_money` decimal(14,2) DEFAULT 0 COMMENT '合同金额',
     `final_money` decimal(14,2) DEFAULT 0 COMMENT '结算金额',
+    `customer` varchar(100) DEFAULT NULL COMMENT '客户名称',
+    `progress` varchar(100) DEFAULT NULL COMMENT '工程进度',
     `state` tinyint(1) DEFAULT 0 COMMENT '状态 0：启用 1：禁用',
     `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `create_user_id` varchar(32) DEFAULT NULL COMMENT '创建人id',
@@ -58,7 +60,7 @@ CREATE TABLE `scm`.`project_record`(
 CREATE TABLE `scm`.`stock`(
    `id` varchar(32) PRIMARY KEY COMMENT '库存id',
    `warehouse_id` varchar(32) DEFAULT NULL COMMENT '仓库id',
-   `product` varchar(50) DEFAULT NULL COMMENT '物资名称',
+   `product` varchar(100) DEFAULT NULL COMMENT '物资名称',
    `model` varchar(50) DEFAULT NULL COMMENT '物资型号',
    `unit` varchar(50) DEFAULT NULL COMMENT '单位',
    `count` int(11) DEFAULT NULL COMMENT '库存数量',
@@ -92,7 +94,7 @@ CREATE TABLE `scm`.`inout_stock`(
   `stock_id` varchar(32) DEFAULT NULL COMMENT '库存id',
   `count` int(11) DEFAULT NULL COMMENT '数量',
   `price` decimal(10,2) DEFAULT 0 COMMENT '物资单价（元）',
-  `source` varchar(50) DEFAULT NULL COMMENT '物资来源',
+  `source` varchar(100) DEFAULT NULL COMMENT '物资来源',
   `handle` varchar(50) DEFAULT NULL COMMENT '经手人',
   `remark` varchar(500) DEFAULT NULL COMMENT '备注',
   `type` tinyint(1) DEFAULT 0 COMMENT '类别 0：入库 1：出库',
