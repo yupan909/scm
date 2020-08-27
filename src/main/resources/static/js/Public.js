@@ -463,5 +463,21 @@ var Public = {
             } else {
                 Public.alert(2, "加载角色权限失败！");
             }
+        },
+
+        // 开始日期格式化
+        startDateFormat: function(val) {
+            if (!Public.isEmpty(val)) {
+                val += " 00:00:00";
+            }
+            return val;
+        },
+
+        // 结束日期格式化
+        endDateFormat: function(val) {
+            if (!Public.isEmpty(val)) {
+                val += " 23:59:59";
+            }
+            return val;
         }
 }

@@ -45,8 +45,8 @@ function load(pageNum){
 	var product = $("#product").val();
     var model = $("#model").val();
     var source = $("#source").val();
-	var startDate = $("#startDate").val();
-	var endDate = $("#endDate").val();
+    var startDate = Public.startDateFormat($("#startDate").val());
+    var endDate = Public.endDateFormat($("#endDate").val());
 	var type = $("#type").val();
 	var warehouseId = $("#warehouseId").val();
 	$.ajax({
@@ -122,7 +122,7 @@ function exportExcel(){
     var product = encodeURI($("#product").val());
     var model = encodeURI($("#model").val());
     var source = encodeURI($("#source").val());
-    var startDate = $("#startDate").val();
-    var endDate = $("#endDate").val();
+    var startDate = Public.startDateFormat($("#startDate").val());
+    var endDate = Public.endDateFormat($("#endDate").val());
     window.location.href="../inoutStock/exportInoutStockReport?type="+type+"&warehouseId="+warehouseId+"&project="+project+"&product="+product+"&model="+model+"&source="+source+"&startTime="+startDate+"&endTime="+endDate;
 }

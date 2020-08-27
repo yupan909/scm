@@ -35,8 +35,8 @@ function load(pageNum){
 	var product = $("#productQuery").val();
 	var model = $("#modelQuery").val();
 	var source = $("#sourceQuery").val();
-	var startDate = $("#startDateQuery").val();
-	var endDate = $("#endDateQuery").val();
+	var startDate = Public.startDateFormat($("#startDateQuery").val());
+	var endDate = Public.endDateFormat($("#endDateQuery").val());
 	$.ajax({
         url: "../inoutStock/list",
         type: "POST",
@@ -154,8 +154,8 @@ function exportExcel(){
     var product = encodeURI($("#productQuery").val());
     var model = encodeURI($("#modelQuery").val());
     var source = encodeURI($("#sourceQuery").val());
-    var startDate = $("#startDateQuery").val();
-    var endDate = $("#endDateQuery").val();
+    var startDate = Public.startDateFormat($("#startDateQuery").val());
+    var endDate = Public.endDateFormat($("#endDateQuery").val());
     window.location.href="../inoutStock/exportInoutStock?type="+stockType+"&project="+project+"&product="+product+"&model="+model+"&source="+source+"&startTime="+startDate+"&endTime="+endDate;
 }
 
