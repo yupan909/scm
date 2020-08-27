@@ -199,8 +199,8 @@ function save(){
         Public.alert(2, "请输入工程名称");
         return;
     }
-    if (Public.isMaxLen(project, 50)) {
-        Public.alert(2, "工程名称不能超过50个字符");
+    if (Public.isMaxLen(project, 100)) {
+        Public.alert(2, "工程名称不能超过100个字符");
         return;
     }
 
@@ -209,8 +209,8 @@ function save(){
         Public.alert(2, "请输入物资名称");
         return;
     }
-    if (Public.isMaxLen(product, 50)) {
-        Public.alert(2, "物资名称不能超过50个字符");
+    if (Public.isMaxLen(product, 100)) {
+        Public.alert(2, "物资名称不能超过100个字符");
         return;
     }
 
@@ -257,18 +257,6 @@ function validate(){
         },
         live : 'enabled', //enabled代表当表单控件内容发生变化时就触发验证，默认提交时验证，
         fields: {
-            // project: {
-            //     validators: {
-            //         notEmpty: {message: '请输入工程名称'},
-            //         stringLength: { max: 50, message: '不能超过50个字符'}
-            //     }
-            // },
-            // product: {
-            //     validators: {
-            //         notEmpty: {message: '请输入物资名称'},
-            //         stringLength: { max: 50, message: '不能超过50个字符'}
-            //     }
-            // },
             model: {
                 validators: {
                     notEmpty: {message: '请输入物资型号'},
@@ -304,7 +292,7 @@ function validate(){
             source: {
                 validators: {
                     notEmpty: {message: '请输入物资来源'},
-                    stringLength: { max: 50, message: '不能超过50个字符'}
+                    stringLength: { max: 100, message: '不能超过100个字符'}
                 }
             },
             handle: {

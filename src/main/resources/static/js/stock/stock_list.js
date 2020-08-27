@@ -398,7 +398,7 @@ function validate(){
             product: {
                 validators: {
                     notEmpty: {message: '请输入物资名称'},
-                    stringLength: { max: 50, message: '不能超过50个字符'}
+                    stringLength: { max: 100, message: '不能超过100个字符'}
                 }
             },
             model: {
@@ -444,7 +444,7 @@ function validate(){
             product_e: {
                 validators: {
                     notEmpty: {message: '请输入物资名称'},
-                    stringLength: { max: 50, message: '不能超过50个字符'}
+                    stringLength: { max: 100, message: '不能超过100个字符'}
                 }
             },
             model_e: {
