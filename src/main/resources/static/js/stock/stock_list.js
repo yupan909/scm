@@ -351,6 +351,12 @@ function loadDetail(pageNum){
             var html= "";
             if(data.flag){
                 $.each(data.data, function (i, item) {
+                    var buttonInfo = "";
+                    // 超级管理员
+                    if(user.role == "2"){
+                        buttonInfo = "<td><button class= \"btn btn-danger btn-xs\" onclick=\"deleteDetail('"+item.id+"');\">删除</button></td>";
+                    }
+
                     html +="<tr>"+
                         "<td>"+(i+1)+"</td>"+
                         "<td>"+Public.ifNull(item.typeInfo)+"</td>"+
@@ -358,10 +364,15 @@ function loadDetail(pageNum){
                         "<td>"+Public.ifNull(item.project)+"</td>"+
                         "<td>"+Public.ifNull(item.createUser)+"</td>"+
                         "<td>"+Public.ifNull(item.createTime)+"</td>"+
+                        buttonInfo +
                         "</tr>";
                 });
                 if(html == ""){
-                    html = "<tr><td colspan=\"6\">暂无数据</td></tr>";
+                    if(user.role == "2"){
+                        html = "<tr><td colspan=\"7\">暂无数据</td></tr>";
+                    } else {
+                        html = "<tr><td colspan=\"6\">暂无数据</td></tr>";
+                    }
                 }
                 $("#tdetailbody").html(html);
                 // 分页
@@ -383,6 +394,31 @@ function loadDetail(pageNum){
         }
     });
 
+}
+
+// 删除库存变更明细
+function deleteDetail(id) {
+    Public.confirm('您确定要删除吗?', function(){
+        $.ajax({
+            cache: true,
+            type: "GET",
+            url:".../stock/deteleDetail/"+id ,
+            async: false,
+            error: function(request) {
+                Public.alert(2,"请求失败！");
+            },
+            success: function(data) {
+                if(data.flag){
+                    Public.alert(1,"删除成功！");
+                    loadDetail(detailCnt);
+                    // 刷新库存列表
+                    load(curr);
+                }else{
+                    Public.alert(2,"删除失败！");
+                }
+            }
+        });
+    });
 }
 
 function validate(){

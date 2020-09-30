@@ -65,6 +65,11 @@ public interface StockService {
     PageInfo<StockRecord> getChangeDetail(StockRecordSO stockRecordSO);
 
     /**
+     * 删除变更记录
+     */
+    void deteleDetail(String id);
+
+    /**
      * 出入库变更库存
      */
     void changeStock(List<InoutStock> inoutStockList);

@@ -37,4 +37,9 @@ public interface InoutStockService {
      */
     PageInfo<InoutStock> listInoutStockGroupByProject(InoutStockSO inoutStockSO);
 
+    /**
+     * 删除出入库
+     */
+    void deleteInoutStock(String id);
+
 }

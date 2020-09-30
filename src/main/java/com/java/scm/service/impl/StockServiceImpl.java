@@ -10,6 +10,7 @@ import com.java.scm.config.exception.BusinessException;
 import com.java.scm.dao.StockMapper;
 import com.java.scm.dao.StockRecordMapper;
 import com.java.scm.enums.StockRecordTypeEnum;
+import com.java.scm.service.InoutStockService;
 import com.java.scm.service.StockService;
 import com.java.scm.service.WarehouseService;
 import com.java.scm.util.AssertUtils;
@@ -20,6 +21,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 import tk.mybatis.mapper.entity.Example;
 
 import javax.annotation.Resource;
@@ -43,6 +45,9 @@ public class StockServiceImpl implements StockService {
 
     @Resource
     private WarehouseService warehouseService;
+
+    @Resource
+    private InoutStockService inoutStockService;
 
     /**
      * 初始化库存
@@ -155,6 +160,38 @@ public class StockServiceImpl implements StockService {
 
         }
         return stockRecordPage.toPageInfo();
+    }
+
+    /**
+     * 删除变更记录
+     */
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public void deteleDetail(String id) {
+        AssertUtils.notNull(id, "库存变更记录id不能为空");
+        StockRecord stockRecord = stockRecordMapper.selectByPrimaryKey(id);
+        if (stockRecord == null) {
+            throw new BusinessException("库存变更记录不存在" + id);
+        }
+        // 1、变更库存
+        Stock oldStock = stockMapper.selectByPrimaryKey(stockRecord.getStockId());
+        if (oldStock == null) {
+            throw new BusinessException("找不到库存" + stockRecord.getStockId());
+        }
+        User user = RequestUtil.getCurrentUser();
+        Stock stock = new Stock();
+        stock.setId(oldStock.getId());
+        stock.setCount(oldStock.getCount() - stockRecord.getCount());
+        stock.setUpdateUserId(user.getId());
+        stockMapper.updateByPrimaryKeySelective(stock);
+
+        // 2、删除变更记录
+        stockRecordMapper.deleteByPrimaryKey(id);
+
+        // 3、删除对应出入库
+        if (!StringUtils.isEmpty(stockRecord.getInoutStockId())) {
+            inoutStockService.deleteInoutStock(stockRecord.getInoutStockId());
+        }
     }
 
     /**

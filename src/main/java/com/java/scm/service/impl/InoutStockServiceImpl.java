@@ -258,5 +258,14 @@ public class InoutStockServiceImpl implements InoutStockService {
         return pageInfo;
     }
 
+    /**
+     * 删除出入库
+     */
+    @Override
+    public void deleteInoutStock(String id) {
+        AssertUtils.notNull(id, "出入库id不能为空！");
+        inoutStockMapper.deleteByPrimaryKey(id);
+    }
+
 
 }

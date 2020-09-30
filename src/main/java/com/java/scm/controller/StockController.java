@@ -117,6 +117,17 @@ public class StockController {
     }
 
     /**
+     * 删除库存变更记录
+     * @param id
+     * @return
+     */
+    @GetMapping("/deteleDetail/{id}")
+    public BaseResult deteleDetail(@PathVariable("id") String id){
+        stockService.deteleDetail(id);
+        return BaseResult.successResult();
+    }
+
+    /**
      * 导入
      * @throws Exception
      */
