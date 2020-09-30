@@ -402,7 +402,7 @@ function deleteDetail(id) {
         $.ajax({
             cache: true,
             type: "GET",
-            url:".../stock/deteleDetail/"+id ,
+            url:"../stock/deteleDetail/"+id,
             async: false,
             error: function(request) {
                 Public.alert(2,"请求失败！");
